@@ -11,9 +11,9 @@ Typically, when a user visits a website, their browser downloads every reference
 A CDN distributes files to servers around the globe, reducing the time needed to access a file. For example, users in Japan could download files from a nearby server in Asia instead of one in North America.
 
 ## CDN Building Blocks
-* CDN PoPs (Points of Presence) are strategically located data centers responsible for communicating with users in their geographic vicinity. Their main function is to reduce round trip time by bringing the content closer to the website’s visitor. Each CDN PoP typically contains numerous caching servers.
-* Caching servers are responsible for the storage and delivery of cached files. Their main function is to accelerate website load times and reduce bandwidth consumption. Each CDN caching server typically holds multiple storage drives and high amounts of RAM resources. 
-* Inside CDN caching servers, cached files are stored on solid-state and hard-disk drives (SSD and HDD) or in random-access memory (RAM), with the more commonly-used files hosted on the more speedy mediums. Being the fastest of the three, RAM is typically used to store the most frequently-accessed items. 
+* _PoPs_ : CDN PoPs (Points of Presence) are strategically located data centers responsible for communicating with users in their geographic vicinity. Their main function is to reduce round trip time by bringing the content closer to the website’s visitor. Each CDN PoP typically contains numerous caching servers.
+* _Caching servers_ : Caching servers are responsible for the storage and delivery of cached files. Their main function is to accelerate website load times and reduce bandwidth consumption. Each CDN caching server typically holds multiple storage drives and high amounts of RAM resources. 
+* _SSD/HDD + RAM_ : Inside CDN caching servers, cached files are stored on solid-state and hard-disk drives (SSD and HDD) or in random-access memory (RAM), with the more commonly-used files hosted on the more speedy mediums. Being the fastest of the three, RAM is typically used to store the most frequently-accessed items. 
 
 Here’s a step-by-step description of how a CDN works:
 1. The website administrator for example.com (the origin server) signs up with a CDN provider. The CDN provider gives the administrator a url for the CDN such as example.some-cdn.com.
