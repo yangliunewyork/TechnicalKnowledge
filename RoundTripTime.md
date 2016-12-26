@@ -21,15 +21,21 @@ Knowing Initial RTT is necessary to calculate the optimum TCP window size of a c
 
 ### How to check RTT
 ```
-$ ping -c 10 -i 0.5 -s 16 -w 3 google.com
+$ ping -c 10 -i 0.5 -s 16  google.com
 PING google.com (172.217.4.46) 16(44) bytes of data.
-24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=2 ttl=55 time=3.75 ms
-24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=3 ttl=55 time=3.77 ms
-24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=4 ttl=55 time=3.87 ms
-24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=5 ttl=55 time=3.87 ms
-24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=6 ttl=55 time=3.75 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=1 ttl=55 time=3.82 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=2 ttl=55 time=3.94 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=3 ttl=55 time=3.80 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=4 ttl=55 time=3.83 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=5 ttl=55 time=3.82 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=6 ttl=55 time=3.81 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=7 ttl=55 time=3.79 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=8 ttl=55 time=3.81 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=9 ttl=55 time=3.82 ms
+24 bytes from lga15s46-in-f14.1e100.net (172.217.4.46): icmp_seq=10 ttl=55 time=3.78 ms
 
 --- google.com ping statistics ---
-6 packets transmitted, 5 received, 16% packet loss, time 3000ms
-rtt min/avg/max/mdev = 3.751/3.805/3.873/0.078 ms
+10 packets transmitted, 10 received, 0% packet loss, time 4516ms
+rtt min/avg/max/mdev = 3.789/3.826/3.941/0.092 ms
+
 ```
