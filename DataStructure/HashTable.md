@@ -19,6 +19,7 @@ Well-known probe sequences include:
 * Double hashing, in which the interval between probes is computed by a second hash function
 * Open Hashing (Separate Chaining): In open hashing, keys are stored in linked lists attached to cells of a hash table.
 * Closed Hashing (Open Addressing): In closed hashing, all keys are stored in the hash table itself without the use of linked lists.
+
 ### Meaning of Open hashing and Closed hashing
 The use of "closed" vs. "open" reflects whether or not we are locked in to using a certain position or data structure (this is an extremely vague description, but hopefully the rest helps).
 For instance, the "open" in "open addressing" tells us the index (aka. address) at which an object will be stored in the hash table is not completely determined by its hash code. Instead, the index may vary depending on what's already in the hash table.
