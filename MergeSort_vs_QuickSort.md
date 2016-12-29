@@ -1,5 +1,5 @@
 
-Short answer:
+### Short answer:
 
 
 
@@ -11,7 +11,8 @@ Short answer:
 Both are sorting algorithms based on the divide and conquer strategy.
 Top-down Merge-sort needs an extra array for merge operations, so its space complexity is O(n), while bottom-up merge-sort can have constant space complexity. Merge-sort has O(n*log(n)) time complexity no matter in best/average/worst scenarioes.
 Quick-sort has O(n*log(n)) time complexity in best/average scenario but O(n^2) in worst scenario. Regarding space complexity, the space complexity of quicksort is O(log n), taking into account the stack space used for recursion. Also, quicksort cannot be implemented iteratively, unlike mergesort, where an iterative implementation, sometimes called bottom-up mergesort, is possible.
-Long answer:
+
+### Long answer:
 
 Mergesort
 The real work of mergesort is done by the merge operation. Given two sorted sub-arrays, together having a total of n elements,  the merge operation uses an auxiliary array of size n to merge them together into a single sorted array in linear time i.e. O(n) in Big Oh notation.
