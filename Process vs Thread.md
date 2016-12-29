@@ -1,25 +1,22 @@
-## Process vs Thread
-Processes are the abstraction of running programs.Threads are the unit of execution in a process.Put another way, processes are running binaries and threads are the smallest unit of execution schedulable by an operating system's process scheduler.
-### Process
-* A process has a self-contained execution environment. An instance of program called Process.
-* Each Process has its own address space.
-* Process have to use Inter Process Communication (IPC) resource like pipes and sockets to communicate with other process.
-* New processes require duplication of the parent process.
-* Processes have considerable overhead.
-* Process have their own copy of data segment of the parent process.
-* Process have control over its child processes.
-* Any change in the parent process does not affect child processes.
-* Process is controlled by the operating system.
-* Processes are independent.
+Processes and threads are related to each other but are fundamentally different.
 
-### Thread
-* Threads are sometimes called lightweight processes. It runs within the Process.
-* Thread(s) shares the address space of Process that created it.
-* Threads can directly communicate with other Threads of its process.
-* New threads can be created easily.
-* Threads have almost no overhead.
-* Threads have direct access to data segment of its Process.
-* Threads have considerable control over threads of the same process.
-* Any change in main thread (cancellation, priority change, etc...) may affect the behavior of the other threads of the process.
-* Threads are controlled by programmer in a program.
-* Threads are dependent.
+A process can be thought of as an instance of a running program. Each process is an independent entity to which system resources such as CPU time, memory, etc. are allocated and each process is executed in a separate address space. If we want to access another process' resources, inter-process communications have to be used such as pipes, files, sockets etc. See more on Linux process.
+
+Process provides each program with two key abstractions:
+
+1. Logical control flow
+Each process seems to have exclusive use of the CPU
+2. Private virtual address space
+Each process seems to have exclusive use of main memory
+
+A thread uses the same address space of a process. A process can have multiple threads. A key difference between processes and threads is that multiple threads share parts of their state. Typically, multiple threads can read from and write to the same memory (no process can directly access the memory of another process). However, each thread still has its own stack of activation records and its own copy of CPU registers, including the stack pointer and the program counter, which together describe the state of the thread's execution.
+
+A thread is a particular execution path of a process. When one thread modifies a process resource, the change is immediately visible to sibling threads.
+
+* Processes are independent while thread is within a process.
+* Processes have separate address spaces while threads share their address spaces.
+* Processes communicate each other through inter-process communication.
+* Processes carry considerable state (e.g., ready, running, waiting, or stopped) information, whereas multiple threads within a process share state as well as memory and other resources.
+* Context switching between threads in the same process is typically faster than context switching between processes.
+* Multithreading has some advantages over multiple processes. Threads require less overhead to manage than processes, and intraprocess thread communication is less expensive than interprocess communication.
+* Multiple process concurrent programs do have one advantage: Each process can execute on a different machine (distribute program). Examples of distributed programs are file servers (NFS), file transfer clients and servers (FTP), remote log-in clients and servers (Telnet), groupware programs, and Web browsers and servers.
