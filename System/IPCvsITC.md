@@ -1,6 +1,7 @@
-### IPC vs ITC (Inter-Process Communication vs Inter-Thread Communications) 
+## IPC vs ITC (Inter-Process Communication vs Inter-Thread Communications) 
 
-#### IPC 
+### IPC
+
 * File : A record stored on disk, or a record synthesized on demand by a file server, which can be accessed by multiple processes. 
 * Socket : A data stream sent over a network interface, either to a different process on the same computer or to another computer on the network. Typically byte-oriented, sockets rarely preserve message boundaries. Data written through a socket requires formatting to preserve message boundaries. 
 * Message Queue : A data stream similar to a socket, but which usually preserves message boundaries. Typically implemented by the operating system, they allow multiple processes to read and write to the message queue without being directly connected to each other. 
@@ -9,7 +10,7 @@ Example: Publish/Subscribe, Observer
 * Shared memory : Multiple processes are given access to the same block of memory which creates a shared buffer for the processes to communicate with each other. 
 * Semaphore : A simple structure that synchronizes multiple processes acting on shared resources.
 
-#### ITC 
+### ITC 
 
 * Synchronization primitives, like locks and semaphores 
 * Through Events: wait, notify 
