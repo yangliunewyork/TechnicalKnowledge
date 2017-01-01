@@ -66,9 +66,9 @@ Main table:
 
 
 Key Switches For The Top Command:
--h - Show the current version
--c - This toggles the command column between showing command and program name
--d - Specify the delay time between refreshing the screen
--o - Sorts by the named field
--p - Only show processes with specified process IDs
--u - Show only processes by the specified user
+* -h - Show the current version
+* -c - This toggles the command column between showing command and program name
+* -d - Specify the delay time between refreshing the screen
+* -o - Sorts by the named field
+* -p - Only show processes with specified process IDs
+* -u - Show only processes by the specified user
