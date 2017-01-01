@@ -7,6 +7,16 @@ CDN nodes are usually deployed in multiple locations, often over multiple backbo
 Performance, reliability and bandwidth are major factors for online service providers that directly impact profitability and customer satisfaction.
 A CDN is a distributed group of servers that can withstand high amounts of traffic, provide inexpensive data transfer costs, and provide reliability. Many websites and online services rely on CDNs as a cost-effective way to improve uptime and performance.
 
+### What performance problem does a CDN solve?
+
+While content delivery networks also solve ancillary problems such as improving global availability and reducing bandwidth, the main problem they address is latency: the amount of time it takes for the host server to receive, process, and deliver on a request for a page resource (images, CSS files, etc.). Latency depends largely on how far away the user is from the server, and it’s compounded by the number of resources a web page contains.
+
+For example, if all your resources are hosted in San Francisco, and a user is visiting your page in London, then each request has to make a long round trip from London to SF and back to London. If your web page contains 100 objects (which is at the low end of normal), then your user’s browser has to make 100 individual requests to your server in order to retrieve those objects.
+
+Typically, latency is in the 75-140ms range, but it can be significantly higher, especially for mobile users accessing a site over a 3G network. This can easily add up to 2 or 3 seconds of load time, which is a big deal when you consider that this is just one factor among many that can slow down your pages.
+
+A CDN caches static resources in distributed servers (AKA edge caches, points of presence, or PoPs) across a region or worldwide, thereby bringing resources closer to users and reducing round trip time.
+
 ## How a CDN works?
 Typically, when a user visits a website, their browser downloads every referenced asset (images, videos, CSS/Javascript) from a single origin server. If the origin is in New York and the user is in Japan, each asset must be downloaded from across the world. In a case like this, users experience longer page load times due to higher latency.
 A CDN distributes files to servers around the globe, reducing the time needed to access a file. For example, users in Japan could download files from a nearby server in Asia instead of one in North America.
