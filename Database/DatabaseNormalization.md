@@ -35,8 +35,9 @@ Student	Age	Subject
 Adam	15	Biology, Maths
 Alex	14	Maths
 Stuart	17	Maths
-In First Normal Form, any row must not have a column in which more than one value is saved, like separated with commas. Rather than that, we must separate such data into multiple rows.
 ```
+In First Normal Form, any row must not have a column in which more than one value is saved, like separated with commas. Rather than that, we must separate such data into multiple rows.
+
 Student Table following 1NF will be :
 ```
 Student	Age	Subject
