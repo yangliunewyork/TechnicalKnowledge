@@ -34,3 +34,30 @@ Communicating local and remote sockets are called socket pairs. Each socket pair
 * /proc/net/tcp -a list of open tcp sockets
 * /proc/net/udp -a list of open udp sockets
 * /proc/net/raw -a list all the 'raw' sockets
+
+Also you can use ss utility to dump sockets statistics.
+```
+ss -s
+
+Total: 91 (kernel 0)
+TCP:   18 (estab 11, closed 0, orphaned 0, synrecv 0, timewait 0/0), ports 0
+
+Transport Total     IP        IPv6
+*         0         -         -        
+RAW       0         0         0        
+UDP       4         2         2        
+TCP       18        16        2        
+INET      22        18        4        
+FRAG      0         0         0
+```
+You can use netstat command
+```
+netstat --listen
+```
+To display open ports and established TCP connections,
+```
+netstat -vatn
+```
+To display only open UDP ports try the following command:
+
+netstat -vaun
