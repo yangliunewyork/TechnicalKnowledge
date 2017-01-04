@@ -9,3 +9,11 @@ Example:
 An assembly line is manufacturing cars. It takes eight hours to manufacture a car and that the factory produces one hundred and twenty cars per day.
 The latency is: 8 hours.
 The throughput is: 120 cars / day or 5 cars / hour.
+
+
+#### Bandwidth vs Throughput
+Bandwidth is the raw capability of a communications channel to move data through that channel. Typically measured in bits or bytes per second (or some, possibly large, multiple thereof). May also be measured in hertz.
+
+Throughput is the total capability of a processing system to move product through that system. It can be measured in any quantifiable unit and may be measured in units relevant to the business process that the system supports (e.g. transactions or documents) rather than in technical units. 
+
+Bandwidth is but one of several factors that will limit the throughput of a system. Others include things like processing speed, latency, jitter, and reliability.
