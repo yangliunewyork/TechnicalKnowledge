@@ -29,3 +29,8 @@ A server may create several concurrently established TCP sockets with the same l
 A UDP socket cannot be in an established state, since UDP is connectionless. Therefore, netstat does not show the state of a UDP socket. A UDP server does not create new child processes for every concurrently served client, but the same process handles incoming data packets from all remote clients sequentially through the same socket. It implies that UDP sockets are not identified by the remote address, but only by the local address, although each message has an associated remote address.</br>
 #### Socket pairs
 Communicating local and remote sockets are called socket pairs. Each socket pair is described by a unique 4-tuple consisting of source and destination IP addresses and port numbers, i.e. of local and remote socket addresses.[3][4] As seen in the discussion above, in the TCP case, each unique socket pair 4-tuple is assigned a socket number, while in the UDP case, each unique local socket address is assigned a socket number.
+
+#### Related commands
+* /proc/net/tcp -a list of open tcp sockets
+* /proc/net/udp -a list of open udp sockets
+* /proc/net/raw -a list all the 'raw' sockets
