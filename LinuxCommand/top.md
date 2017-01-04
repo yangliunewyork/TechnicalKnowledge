@@ -72,3 +72,16 @@ Key Switches For The Top Command:
 * -o - Sorts by the named field
 * -p - Only show processes with specified process IDs
 * -u - Show only processes by the specified user
+
+#### About CPU line
+```
+Cpu(s): 87.3%us,  1.2%sy,  0.0%ni, 27.6%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+```
+> us: user cpu time (or) % CPU time spent in user space
+sy: system cpu time (or) % CPU time spent in kernel space
+ni: user nice cpu time (or) % CPU time spent on low priority processes
+id: idle cpu time (or) % CPU time spent idle
+wa: io wait cpu time (or) % CPU time spent in wait (on disk)
+hi: hardware irq (or) % CPU time spent servicing/handling hardware interrupts
+si: software irq (or) % CPU time spent servicing/handling software interrupts
+st: steal time - - % CPU time in involuntary wait by virtual cpu while hypervisor is servicing another processor (or) % CPU time stolen from a virtual machine
