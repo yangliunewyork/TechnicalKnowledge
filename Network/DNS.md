@@ -5,6 +5,9 @@ DNS is like a phone book for the Internet. If you know a person’s name but don
 When you visit http://dyn.com in a browser, your computer uses DNS to retrieve the website’s IP address of 204.13.248.115. Without DNS, you would only be able to visit our website (or any website) by visiting its IP address directly, such as http://204.13.248.115.
 
 ### How does DNS work?
+
+![alt](http://ecoupon.io/wp-content/uploads/2016/05/how-dns-works-wm.png)
+
 When you visit a domain such as dyn.com, your computer follows a series of steps to turn the human-readable web address into a machine-readable IP address. This happens every time you use a domain name, whether you are viewing websites, sending email or listening to Internet radio stations like Pandora.
 
 Step 1: Request information
