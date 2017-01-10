@@ -1,5 +1,25 @@
 ### What is Web Server ?
+
+![alt](http://www.ibm.com/support/knowledgecenter/SSAW57_8.5.5/com.ibm.websphere.nd.multiplatform.doc/ae/images/inst_was_nd_sa_2nodes_en.gif)
+
 A web server is a computer system that processes requests via HTTP, the basic network protocol used to distribute information on the World Wide Web. The term can refer to the entire system, or specifically to the software that accepts and supervises the HTTP requests.
+
+So, a Web Server to start with is any source which provides a service on a Client-Server based model, typically over HTTP protocol. The whole and sole task of the web server is to continuously listen to the incoming requests and understand the specifics of the request as per the knowledge of the protocol(HTTP) and dispatch the response back, again with the specifics of the protocol.
+
+How and from where this response is computed has to be the understanding of the another application, which takes care of opening and reading files, making database connections, running algorithms and to do all that understanding the specifics and implications of the programming platform. This part or module or engine computes the response and does all the hard part and communicates back to the web server for the dispatch. Essentially this needs not to be a server, but a computational engine alone. But more often it ends up being a server to coordinate with the front heading web server.
+### Web Server vs Application Server
+
+#### Web Server
+* Processes HTTP requests by responding with HTML pages
+* Servers static content(html,images,etc)
+* No server side programming
+* No database or dynamic generation of HTML
+* No fore functionality
+
+#### Application Server
+* Serves business logic to application programs through various protocols
+* Handles all application operations between users and an organization's backend business applications or databases
+* Deploy applications
 
 ### Overview
 
