@@ -17,10 +17,10 @@ Well-known probe sequences include:
 * Linear probing, in which the interval between probes is fixed (usually 1)
 * Quadratic probing, in which the interval between probes is increased by adding the successive outputs of a quadratic polynomial to the starting value given by the original hash computation
 * Double hashing, in which the interval between probes is computed by a second hash function
-* Open Hashing (Separate Chaining): In open hashing, keys are stored in linked lists attached to cells of a hash table.
-* Closed Hashing (Open Addressing): In closed hashing, all keys are stored in the hash table itself without the use of linked lists.
 
 ### Meaning of Open hashing and Closed hashing
+* Open Hashing (Separate Chaining): In open hashing, keys are stored in linked lists attached to cells of a hash table.
+* Closed Hashing (Open Addressing): In closed hashing, all keys are stored in the hash table itself without the use of linked lists.
 The use of "closed" vs. "open" reflects whether or not we are locked in to using a certain position or data structure (this is an extremely vague description, but hopefully the rest helps).
 For instance, the "open" in "open addressing" tells us the index (aka. address) at which an object will be stored in the hash table is not completely determined by its hash code. Instead, the index may vary depending on what's already in the hash table.
 The "closed" in "closed hashing" refers to the fact that we never leave the hash table; every object is stored directly at an index in the hash table's internal array. Note that this is only possible by using some sort of open addressing strategy. This explains why "closed hashing" and "open addressing" are synonyms.
