@@ -17,3 +17,15 @@ Bandwidth is the raw capability of a communications channel to move data through
 Throughput is the total capability of a processing system to move product through that system. It can be measured in any quantifiable unit and may be measured in units relevant to the business process that the system supports (e.g. transactions or documents) rather than in technical units. 
 
 Bandwidth is but one of several factors that will limit the throughput of a system. Others include things like processing speed, latency, jitter, and reliability.
+
+
+### Network Latency and Throughput
+
+Here's what Glenn Paulley has to say on the subject in the "Measuring network performance" section of Optimizing Adaptive Server Anywhere Performance Over a WAN:
+
+Latency and throughput can be used together to describe the performance of a network. Latency refers to the time delay between when one machine sends a packet of data and the second machine receives the data (for example, if the second machine receives the data 10 ms later than the first machine sent it, the latency is 10 ms). Throughput refers to the amount of data that can be transferred in a given time (for example, if a one machine sends 1000 KB of data, and it takes 5 seconds for all of it to be received by the second machine, the throughput is 200 KB/s). On a LAN, latency is typically less than 1 ms, and throughput is typically more than 1 MB/s. On a WAN, the latency is typically significantly higher (perhaps 5 ms to 500 ms), and the throughput is typically significantly lower (perhaps 4 KB/s to 200 KB/s).
+
+You can measure network latency between two machines by the round trip time reported by the system’s ping utility. The round trip time is the latency to transfer data from one machine to a second machine plus the latency to transfer data from the second machine back to the first machine. You can measure network throughput by copying a file of a known size of at least 200 KB from one machine to a second machine and timing the copy. This copy could be performed as a regular file copy, using FTP, or by downloading a file using an Internet browser.
+
+To get reasonable Adaptive Server Anywhere performance on a network that has high latency, but reasonable throughput, the number of requests made by the client must be minimized. If a network has reasonable latency, but low throughput, the amount of data transferred between the client and server must be minimized.
+
