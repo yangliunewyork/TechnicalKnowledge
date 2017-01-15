@@ -29,3 +29,8 @@ You can measure network latency between two machines by the round trip time repo
 
 To get reasonable Adaptive Server Anywhere performance on a network that has high latency, but reasonable throughput, the number of requests made by the client must be minimized. If a network has reasonable latency, but low throughput, the amount of data transferred between the client and server must be minimized.
 
+### Example
+
+Latency – In simplest terms this is Remote Response time. For instance, you want to invoke a web service or access a web page. Apart from the processing time that is needed on the server to process your request, there is a delay involved for your request to reach to server. While referring to Latency, it’s that delay we are talking about. This becomes a big issue for a remote data center which is hosting your service/page. Imagine your data center in US, and accessing it from India. If ignored, latency can trigger your SLA’s. Though it’s quite difficult to improve latency it’s important to measure it. 
+
+Throughput – transactions per second your application can handle (motivation / result of load testing). A typical enterprise application will have lots of users performing lots of different transactions. You should ensure that your application meets the required capacity of enterprise before it hits production. Load testing is the solution for that. Strategy here is to pick up a mix of transactions (frequent, critical, and intensive) and see how many pass successfully in an acceptable time frame governed by your SLAs. 
