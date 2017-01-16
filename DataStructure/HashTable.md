@@ -74,3 +74,19 @@ Like linear probing, it uses one hash value as a starting point and then repeate
 
 Given two randomly, uniformly, and independently selected hash functions {\displaystyle h_{1}} h_{1} and {\displaystyle h_{2}} h_{2}, the ith location in the bucket sequence for value k in a hash table {\displaystyle T} T is: {\displaystyle h(i,k)=(h_{1}(k)+i\cdot h_{2}(k))\mod |T|.} h(i,k)=(h_1(k) + i \cdot h_2(k))\mod |T|. Generally, {\displaystyle h_{1}} h_{1} and {\displaystyle h_{2}} h_{2} are selected from a set of universal hash functions.
 
+#### What's recommended ? Separated chaining or open addressing?
+
+Wikipedia's article on hash tables gives a distinctly better explanation and overview of different hash table schemes that people have used than I'm able to off the top of my head. In fact you're probably better off reading that article than asking the question here. :)
+
+That said...
+
+A chained hash table indexes into an array of pointers to the heads of linked lists. Each linked list cell has the key for which it was allocated and the value which was inserted for that key. When you want to look up a particular element from its key, the key's hash is used to work out which linked list to follow, and then that particular list is traversed to find the element that you're after. If more than one key in the hash table has the same hash, then you'll have linked lists with more than one element.
+
+The downside of chained hashing is having to follow pointers in order to search linked lists. The upside is that chained hash tables only get linearly slower as the load factor (the ratio of elements in the hash table to the length of the bucket array) increases, even if it rises above 1.
+
+An open-addressing hash table indexes into an array of pointers to pairs of (key, value). You use the key's hash value to work out which slot in the array to look at first. If more than one key in the hash table has the same hash, then you use some scheme to decide on another slot to look in instead. For example, linear probing is where you look at the next slot after the one chosen, and then the next slot after that, and so on until you either find a slot that matches the key you're looking for, or you hit an empty slot (in which case the key must not be there).
+
+Open-addressing is usually faster than chained hashing when the load factor is low because you don't have to follow pointers between list nodes. It gets very, very slow if the load factor approaches 1, because you end up usually having to search through many of the slots in the bucket array before you find either the key that you were looking for or an empty slot. Also, you can never have more elements in the hash table than there are entries in the bucket array.
+
+To deal with the fact that all hash tables at least get slower (and in some cases actually break completely) when their load factor approaches 1, practical hash table implementations make the bucket array larger (by allocating a new bucket array, and copying elements from the old one into the new one, then freeing the old one) when the load factor gets above a certain value (typically about 0.7).
+
