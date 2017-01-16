@@ -26,3 +26,5 @@ For instance, the "open" in "open addressing" tells us the index (aka. address) 
 The "closed" in "closed hashing" refers to the fact that we never leave the hash table; every object is stored directly at an index in the hash table's internal array. Note that this is only possible by using some sort of open addressing strategy. This explains why "closed hashing" and "open addressing" are synonyms.
 Contrast this with open hashing - in this strategy, none of the objects are actually stored in the hash table's array; instead once an object is hashed, it is stored in a list which is separate from the hash table's internal array. "open" refers to the freedom we get by leaving the hash table, and using a separate list. By the way, "separate list" hints at why open hashing is also known as "separate chaining".
 In short, "closed" always refers to some sort of strict guarantee, like when we guarantee that objects are always stored directly within the hash table (closed hashing). Then, the opposite of "closed" is "open", so if you don't have such guarantees, the strategy is considered "open".
+
+
