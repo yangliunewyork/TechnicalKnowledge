@@ -82,7 +82,7 @@ Like linear probing, it uses one hash value as a starting point and then repeate
 
 Given two randomly, uniformly, and independently selected hash functions {\displaystyle h_{1}} h_{1} and {\displaystyle h_{2}} h_{2}, the ith location in the bucket sequence for value k in a hash table {\displaystyle T} T is: {\displaystyle h(i,k)=(h_{1}(k)+i\cdot h_{2}(k))\mod |T|.} h(i,k)=(h_1(k) + i \cdot h_2(k))\mod |T|. Generally, {\displaystyle h_{1}} h_{1} and {\displaystyle h_{2}} h_{2} are selected from a set of universal hash functions.
 
-#### What's recommended ? Separated chaining or open addressing?
+## What's recommended ? Separated chaining or open addressing?
 
 Wikipedia's article on hash tables gives a distinctly better explanation and overview of different hash table schemes that people have used than I'm able to off the top of my head. In fact you're probably better off reading that article than asking the question here. :)
 
