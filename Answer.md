@@ -86,19 +86,25 @@ Typical difference is,
 * context switching between threads in the same process is typically faster than context switching between processes.
 
 ## IPC vs ITC (Inter-Process Communication vs Inter-Thread Communications) 
+### IPC
+Many processes operate independently of each other. Some processes, however, cooperate to achieve their intended purposes, and these processes need methods of communicating with one another and synchronizing their actions. One way for processes to communicate is by reading and writing information in disk files. However, for many applications, this is too slow and inflexible.Therefore, Operating System usually provides a rich set of mechanisms for interprocess communication (IPC), including the following
 
 IPC: 
-- File 
-A record stored on disk, or a record synthesized on demand by a file server, which can be accessed by multiple processes. 
-- Socket 
-A data stream sent over a network interface, either to a different process on the same computer or to another computer on the network. Typically byte-oriented, sockets rarely preserve message boundaries. Data written through a socket requires formatting to preserve message boundaries. 
-- Message Queue 
-A data stream similar to a socket, but which usually preserves message boundaries. Typically implemented by the operating system, they allow multiple processes to read and write to the message queue without being directly connected to each other. 
-- Pipe 
-A unidirectional data channel. Data written to the write end of the pipe is buffered by the operating system until it is read from the read end of the pipe. Two-way data streams between processes can be achieved by creating two pipes utilizing standard input and output. Like when we are using arrow symbol in command line. - Shared memory 
-Multiple processes are given access to the same block of memory which creates a shared buffer for the processes to communicate with each other. 
-- Semaphore 
-A simple structure that synchronizes multiple processes acting on shared resources. 
+* Signals 
+  * Basically, one process can "raise" a signal and have it delivered to another process. The destination process's signal handler (just a function) is invoked and the process can handle it. For example, one process might want to stop another one, and this can be done by sending the signal SIGSTOP to that process. To continue, the process has to receive signal SIGCONT. Many signals are predefined and the process has a default signal handler to deal with it.Take the ever popular SIGKILL, signal #9. Have you ever typed "kill -9 nnnn" to kill a runaway process? You were sending it SIGKILL. Now you might also remember that no process can get out of a "kill -9", and you would be correct. SIGKILL is one of the signals you can't add your own signal handler for. The aforementioned SIGSTOP is also in this category.
+
+* Pipe
+  * A unidirectional data channel. Data written to the write end of the pipe is buffered by the operating system until it is read from the read end of the pipe. Two-way data streams between processes can be achieved by creating two pipes utilizing standard input and output. Like when we are using arrow symbol in command line.
+* File Locking
+  * There are two types of (advisory!) locks: read locks and write locks (also referred to as shared locks and exclusive locks, respectively.) The way read locks work is that they don't interfere with other read locks. For instance, multiple processes can have a file locked for reading at the same. However, when a process has an write lock on a file, no other process can activate either a read or write lock until it is relinquished. One easy way to think of this is that there can be multiple readers simultaneously, but there can only be one writer at a time.
+* Message Queue 
+  * A data stream similar to a socket, but which usually preserves message boundaries. Typically implemented by the operating system, they allow multiple processes to read and write to the message queue without being directly connected to each other.  
+* Socket 
+  * A data stream sent over a network interface, either to a different process on the same computer or to another computer on the network. Typically byte-oriented, sockets rarely preserve message boundaries. Data written through a socket requires formatting to preserve message boundaries.  
+* Shared memory 
+  * Multiple processes are given access to the same block of memory which creates a shared buffer for the processes to communicate with each other. 
+* Semaphore 
+  * A simple structure that synchronizes multiple processes acting on shared resources. 
 
 ITC: 
 - Synchronization 
