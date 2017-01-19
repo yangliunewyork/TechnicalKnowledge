@@ -192,11 +192,8 @@ Many processes operate independently of each other. Some processes, however, coo
 
 
 ### ITC: 
-* Synchronization 
- * primitives, like locks and semaphores 
-* contidional variable/(Through Events)
- * notify_one : Unblocks one of the threads currently waiting for this condition.
- * notify_all: Unblocks all threads currently waiting for this condition.
- * wait: The execution of the current thread (which shall have locked lck's mutex) is blocked until notified.
+* Synchronization primitives
+ * Mutex, event, conditional variables and semaphores are all synchronization primitives.
+ * Shared and exclusive locks. 
 * Shared memory*
  * Cause typically threads of the same process all live in the same process. Each thread has a private stack, which it can quickly add and remove items from. T\ All threads share a common heap. Since all threads share the same heap, access to the allocator/deallocator must be synchronized. There are various methods and libraries for avoiding allocator contention. Some languages allow you to create private pools of memory, or individual heaps, which you can assign to a single thread. every thread would be allocated its own memory space in stack while typically there is only one heap within one process. This means heap space is shared among all threads. Since it is global, it is faster in speed. But also, this causes synchronization issues, which could possibly slow the whole system down. Some languages or OS my support allocating heaps for each thread.
