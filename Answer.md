@@ -154,12 +154,13 @@ Network throughput is the amount of data that can traverse through a given mediu
 
 ## Process vs Thread
 
-Processes are the abstraction of running programs: A binary image, virtualized memory, various kernel resources, an associated security context, and so on. Threads are the unit of execution in a process: A virtualized processor, a stack, and program state. Put another way, processes are running binaries and threads are the smallest unit of execution schedulable by an operating system's process scheduler.
+### Process
+When an executable program is read into system memory by the kernel and executed, it becomes a process. A process is an instance of a computer program that is being executed. It contains the program code and its current activity. 
 
-Each process provides the resources needed to execute a program. A process has a virtual address space, executable code, open handles to system objects, a security context, a unique process identifier, environment variables, a priority class, minimum and maximum working set sizes, and at least one thread of execution. Each process is started with a single thread, often called the primary thread, but can create additional threads from any of its threads. 
+### Thread
+A thread of execution is the smallest sequence of programmed instructions that can be managed independently by a schedulerA thread is the entity within a process that can be scheduled for execution. All threads of a process share its virtual address space and system resources. In addition, each thread maintains exception handlers, a scheduling priority, thread local storage, a unique thread identifier, and a set of structures the system will use to save the thread context until it is scheduled. 
 
-A thread is the entity within a process that can be scheduled for execution. All threads of a process share its virtual address space and system resources. In addition, each thread maintains exception handlers, a scheduling priority, thread local storage, a unique thread identifier, and a set of structures the system will use to save the thread context until it is scheduled. 
-
+### Process vs Thread
 Typical difference is, 
 * processes run in separated memory while threads run in shared memory. 
 * processes are typically independent, while threads exist as subsets of a process 
@@ -167,18 +168,27 @@ Typical difference is,
 * processes have separate address spaces, whereas threads share their address space processes interact only through system-provided inter-process communication mechanisms 
 * context switching between threads in the same process is typically faster than context switching between processes.
 
+### Process memory layout
+
+A process is logically divided into the following parts, known as segments:
+
+* Text: the instructions of the program.
+* Data: the static variables used by the program.
+* Heap: an area from which programs can dynamically allocate extra memory.
+* Stack: a piece of memory that grows and shrinks as functions are called and return and that is used to allocate storage for local variables and function call linkage information.
+
 ## IPC vs ITC (Inter-Process Communication vs Inter-Thread Communications) 
 ### IPC
 Many processes operate independently of each other. Some processes, however, cooperate to achieve their intended purposes, and these processes need methods of communicating with one another and synchronizing their actions. One way for processes to communicate is by reading and writing information in disk files. However, for many applications, this is too slow and inflexible.Therefore, Operating System usually provides a rich set of mechanisms for interprocess communication (IPC), including the following
 
-IPC: 
-* Signals 
-  * Basically, one process can "raise" a signal and have it delivered to another process. The destination process's signal handler (just a function) is invoked and the process can handle it. For example, one process might want to stop another one, and this can be done by sending the signal SIGSTOP to that process. To continue, the process has to receive signal SIGCONT. Many signals are predefined and the process has a default signal handler to deal with it.Take the ever popular SIGKILL, signal #9. Have you ever typed "kill -9 nnnn" to kill a runaway process? You were sending it SIGKILL. Now you might also remember that no process can get out of a "kill -9", and you would be correct. SIGKILL is one of the signals you can't add your own signal handler for. The aforementioned SIGSTOP is also in this category.
+* Shared memory permits processes to communicate by simply reading and writing to a specified memory location. Shared memory allows two or more processes to access the same memory as if they all called malloc and were returned pointers to the same actual memory.When one process changes the memory, all the other processes see the modification.Shared memory is the fastest form of interprocess communication because all processes share the same piece of memory.Access to this shared memory is as fast as accessing a process’s nonshared memory, and it does not require a system call or entry to the kernel. It also avoids copying data unnecessarily.
+* Mapped memory is similar to shared memory, except that it is associated with a file in the filesystem.Mapped memory forms an association between a file and a process’s memory. Linux splits the file into page-sized chunks and then copies them into virtual memory pages so that they can be made available in a process’s address space.Thus, the process can read the file’s contents with ordinary memory access. It can also modify the file’s contents by writing to memory.This permits fast access to files. You can think of mapped memory as allocating a buffer to hold a file’s entire contents, and then reading the file into the buffer and (if the buffer is modified) writing the buffer back out to the file afterward. Linux handles the file reading and writing operations for you.
+* Pipes permit sequential communication from one process to a related process.It is a unidirectional data channel. Data written to the write end of the pipe is buffered by the operating system until it is read from the read end of the pipe. Pipes areserial devices; the data is always read from the pipe in the same order it was written.Typically, a pipe is used to communicate between two threads in a single process or between parent and child processes. A pipe’s data capacity is limited. If the writer process writes faster than the reader process consumes the data, and if the pipe cannot store more data, the writer process blocks until more capacity becomes available. If the reader tries to read but no data is available, it blocks until data becomes available.Thus, the pipe automatically synchronizes the two processes.
+ * In a shell, the symbol | creates a pipe. For example, this shell command causes the shell to produce two child processes, one for ls and one for less: ```% ls | less``` .The shell also creates a pipe connecting the standard output of the ls subprocess with the standard input of the less process.The filenames listed by ls are sent to less in exactly the same order as if they were sent directly to the terminal.
+* FIFOs are similar to pipes, except that unrelated processes can communicate because the pipe is given a name in the filesystem.
+* Sockets support communication between unrelated processes even on different computers.
+  
 
-* Pipe
-  * A unidirectional data channel. Data written to the write end of the pipe is buffered by the operating system until it is read from the read end of the pipe. Two-way data streams between processes can be achieved by creating two pipes utilizing standard input and output. Like when we are using arrow symbol in command line.
-* File Locking
-  * There are two types of (advisory!) locks: read locks and write locks (also referred to as shared locks and exclusive locks, respectively.) The way read locks work is that they don't interfere with other read locks. For instance, multiple processes can have a file locked for reading at the same. However, when a process has an write lock on a file, no other process can activate either a read or write lock until it is relinquished. One easy way to think of this is that there can be multiple readers simultaneously, but there can only be one writer at a time.
 * Message Queue 
   * A data stream similar to a socket, but which usually preserves message boundaries. Typically implemented by the operating system, they allow multiple processes to read and write to the message queue without being directly connected to each other.  
 * Socket 
