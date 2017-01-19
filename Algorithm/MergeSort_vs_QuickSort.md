@@ -6,7 +6,7 @@
 | Algorithm | Average	Time | Best Time | Worst Time | Space | Stability |
 | ------------- |:-------------:| -----:|  -----:|  -----:|  -----:| 
 | Merge Sort | O(n*log(n)) | O(n*log(n)) |	O(n*log(n))	| Bottom-up O(1), Top-down O(n)	| Stable |
-| Quicksort	| O(n*log(n)) |	O(n*log(n)) |	O(n^2)	| O(log n) taking into account the stack space used for recursion	| Stable	|
+| Quicksort	| O(n*log(n)) |	O(n*log(n)) |	O(n^2)	| O(log n) taking into account the stack space used for recursion	| Unstable	|
 
 Both are sorting algorithms based on the divide and conquer strategy.
 Top-down Merge-sort needs an extra array for merge operations, so its space complexity is O(n), while bottom-up merge-sort can have constant space complexity. Merge-sort has O(n*log(n)) time complexity no matter in best/average/worst scenarioes.
