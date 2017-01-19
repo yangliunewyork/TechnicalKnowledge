@@ -87,23 +87,51 @@ Software design pattern is a general reusable solution to a commonly occurring p
 (3)In addition, patterns allow developers to communicate using well-known, well understood names for software interactions. Common design patterns can be improved over time, making them more robust than ad-hoc designs.
 
 ### Familiar design patterns:
-Singleton: A class of which only a single instance can exist. Ensure a class only has one instance, and provide a global point of access to it.This is useful when exactly one object is needed to coordinate actions across the system. Examples: Singleton pattern is used for logging, drivers objects, caching and thread pool.
+Singleton: A class of which only a single instance can exist. Ensure a class only has one instance, and provide a global point of access to it.This is useful when exactly one object is needed to coordinate actions across the system. Examples: Singleton pattern is used for logging, caching and thread pool.
 
 Observer: A way of notifying change to a number of classes. Define a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically.Example: Following a question on quora which notifies any new answers. 
+Benefits of Observer Pattern
+* The Observer Pattern provides an object design where subjects and observers are loosely coupled.Which means they can interact, but have very little knowledge of each other.The only thing the subject knows about an observer is that it implements a certain interface (the Observer interface). It doesn’t need to know the concrete class of the observer, what it does, or anything else about it.
+* We can add new observers at any time. 
+* We never need to modify the subject to add new types of observers.
+* We can reuse subjects or observers independently of each other.
 
-Interpreter: A way to include language elements in a program. Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language.Examples: Any mechanism for interpreting formal languages suites this pattern perfectly, it can be anything: from a simple calculator to a C# parser.
+
+
+Interpreter: Interpreter pattern provides a way to evaluate language grammar or expression. This pattern involves implementing an expression interface which tells to interpret a particular context. This pattern is used in calculator, SQL parsing, symbol processing engine etc. Any mechanism for interpreting formal languages suites this pattern perfectly.
+Benefits of Interpreter
+* Representing each grammar rule in a class makes the language easy to implement.
+* Because the grammar is represented by classes, you can easily change or extend the language.
+* By adding additional methods to the class structure, you can add new behaviors beyond interpretation, like pretty printing and more sophisticated program validation.
 
 Template: Defer the exact steps of an algorithm to a subclass. Define the skeleton of an algorithm in an operation, deferring some steps to subclasses. Template Method lets subclasses redefine certain steps of an algorithm without changing the algorithm’s structure. Example: LoadData(csv,word)=>ParseAndFormatInto(XML,JSON)=>SaveToDatabase(Sql,Mongo,ES)
 
-Adapter: Match interfaces of different classes.Convert the interface of a class into another interface clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces. Examples: C++ Stack(deque),Queue(deque),PriorityQueue(vector).
+Benefits of Template pattern:
+* defines the steps of an algorithm, deferring to subclasses for the implementation of those steps.
+* put decision-making in high-level modules that can decide how and when to call low level modules
+
+Adapter: Adapter pattern is used when you want to adapt an existing class's interface to another interface that a client expects to work with.  Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces. Examples: C++ Stack(deque),Queue(deque),PriorityQueue(vector).
+
 
 Builder : Separate the construction of a complex object from its representation so that the same construction process can create different representations.Use the Builder pattern when 
 * the algorithm for creating a complex object should be independent of the parts that make up the object and how they're assembled.
 * the construction process must allow different representations for the object that's constructed.
 
+Benefits of Builder Pattern
+* Encapsulates the way a complex object is constructed.
+* Allows objects to be constructed in a multistep and varying process (as opposed to one step factories).
+* Hides the internal representation of the product from the client.
+* Product implementations can be swapped in and out because the client only sees an abstract interface.
+
+
 Iterator Pattern: provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.It also places the task of traversal on the iterator object, not on the aggregate, which simplifies the aggregate interface and implementation, and places the responsibility where it should be. Example: STL iterators.
 
 Factory Method: Creates an instance of several derived classes. Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.
+
+Benefits of Factory Method
+* encapsulate object creation,decouple your clients from concrete classes
+* a powerful technique for coding to abstractions, not concrete classes
+* The places that need an implementation of the product do not need to know how to construct one. The factory holds that information.
 
 ## Quick sort vs merge sort
 Both are sorting algorithms based on the divide and conquer strategy. Top-down Merge-sort needs an extra array for merge operations, so its space complexity is O(n), while bottom-up merge-sort can have constant space complexity. Merge-sort has O(nlog(n)) time complexity no matter in best/average/worst scenarios. Quick-sort has O(nlog(n)) time complexity in best/average scenario but O(n^2) in worst scenario. Regarding space complexity, the space complexity of quicksort is O(log n), taking into account the stack space used for recursion. Also, quicksort cannot be implemented iteratively, unlike mergesort, where an iterative implementation, sometimes called bottom-up mergesort, is possible. 
