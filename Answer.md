@@ -127,7 +127,20 @@ Benefits of Factory Method
 * a powerful technique for coding to abstractions, not concrete classes
 * The places that need an implementation of the product do not need to know how to construct one. The factory holds that information.
 
-## Quick sort vs merge sort
+## Quick sort &  merge sort
+### QuickSort (Unstable in general, in-place in general)
+Quicksort first divides a large array into two smaller sub-arrays: the low elements and the high elements. Quicksort can then recursively sort the sub-arrays.
+The steps are:
+* Pick an element, called a pivot, from the array.
+* Partitioning: reorder the array so that all elements with values less than the pivot come before the pivot, while all elements with values greater than the pivot come after it (equal values can go either way). After this partitioning, the pivot is in its final position. This is called the partition operation.
+* Recursively apply the above steps to the sub-array of elements with smaller values and separately to the sub-array of elements with greater values.
+
+### MergeSort (Stable in general, NOT in-place in general)
+Conceptually, a merge sort works as follows:
+* Divide the unsorted list into n sublists, each containing 1 element (a list of 1 element is considered sorted).
+* Repeatedly merge sublists to produce new sorted sublists until there is only 1 sublist remaining. This will be the sorted list.
+
+### Quick sort vs  Merge sort
 Both are sorting algorithms based on the divide and conquer strategy. Top-down Merge-sort needs an extra array for merge operations, so its space complexity is O(n), while bottom-up merge-sort can have constant space complexity. Merge-sort has O(nlog(n)) time complexity no matter in best/average/worst scenarios. Quick-sort has O(nlog(n)) time complexity in best/average scenario but O(n^2) in worst scenario. Regarding space complexity, the space complexity of quicksort is O(log n), taking into account the stack space used for recursion. Also, quicksort cannot be implemented iteratively, unlike mergesort, where an iterative implementation, sometimes called bottom-up mergesort, is possible. 
 
 ## Throughput vs Latency
@@ -136,10 +149,10 @@ Throughput is the number of such actions executed or results produced per unit o
 Example:
 Latency and throughput can be used together to describe the performance of a network. Latency refers to the time delay between when one machine sends a packet of data and the second machine receives the data (for example, if the second machine receives the data 10 ms later than the first machine sent it, the latency is 10 ms). Throughput refers to the amount of data that can be transferred in a given time (for example, if a one machine sends 1000 KB of data, and it takes 5 seconds for all of it to be received by the second machine, the throughput is 200 KB/s).
 
-Network Latency
+### Network Latency
 In data network, latency means time when a particular packet takes to reach the destination from source. The term delay is similar to latency. The latency or delay can be low if there is high congestion in the traffic or can be because of errors and distance as well.
 
-Network Throughput
+### Network Throughput
 Network throughput is the amount of data that can traverse through a given medium. The network throughput is measured in bits per second (bps). Throughput can be high or low depending on your network infrastructure. Devices such as routers, switches, firewalls, cables, network cards can have significant impact on the network throughput. High speed devices and cables will definitely increase your network throughput.
 
 
@@ -156,7 +169,7 @@ Typical difference is,
 * processes run in separated memory while threads run in shared memory. 
 * processes are typically independent, while threads exist as subsets of a process 
 * processes carry considerably more state information than threads, whereas multiple threads within a process share process state as well as memory and other resources 
-* processes have separate address spaces, whereas threads share their address space processes interact only through system-provided inter-process communication mechanisms 
+* processes have separate address spaces, whereas threads share their address space ，processes interact only through system-provided inter-process communication mechanisms 
 * context switching between threads in the same process is typically faster than context switching between processes.
 
 ### Process memory layout
