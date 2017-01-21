@@ -25,7 +25,7 @@ When the hash function causes a collision by mapping a new key to a cell of the 
 The insertion algorithm is as follows:
 
 * use hash function to find index for a record
-* If that spot is already use use next available spot in a "higher" index. Treat the hash table as if it is round, if you hit the end of the hash table, go back to the front
+* If that spot is already occupied, use next available spot in a "higher" index. Treat the hash table as if it is round, if you hit the end of the hash table, go back to the front
 
 Each contiguous group of records (groups of record in adjacent indices without any empty spots) in the table is called a cluster.
 
@@ -40,6 +40,7 @@ NOTE: it is important not to search the whole array till you get back to the sta
 #### Removal
 
 1. The removal algorithm is a bit trickier because after an object is removed, records in same cluster with a higher index than the removed object has to be adjusted. Otherwise the empty spot left by the removal will cause valid searches to fail.
+
 The algorithm is as follows:
 * find record and remove it making the spot empty
 * For all records that follow it in the cluster, do the following:
@@ -183,7 +184,7 @@ A process is logically divided into the following parts, known as segments:
 
 ## IPC vs ITC (Inter-Process Communication vs Inter-Thread Communications) 
 ### IPC
-Many processes operate independently of each other. Some processes, however, cooperate to achieve their intended purposes, and these processes need methods of communicating with one another and synchronizing their actions. One way for processes to communicate is by reading and writing information in disk files. However, for many applications, this is too slow and inflexible.Therefore, Operating System usually provides a rich set of mechanisms for interprocess communication (IPC), including the following
+Many processes operate independently of each other. Some processes, however, cooperate to achieve their intended purposes, and these processes need methods of communicating with one another and synchronizing their actions. 
 
 * Shared memory permits processes to communicate by simply reading and writing to a specified memory location. Shared memory allows two or more processes to access the same memory as if they all called malloc and were returned pointers to the same actual memory.When one process changes the memory, all the other processes see the modification.Shared memory is the fastest form of interprocess communication because all processes share the same piece of memory.Access to this shared memory is as fast as accessing a process’s nonshared memory, and it does not require a system call or entry to the kernel. It also avoids copying data unnecessarily.
 * Mapped memory is similar to shared memory, except that it is associated with a file in the filesystem.Mapped memory forms an association between a file and a process’s memory. Linux splits the file into page-sized chunks and then copies them into virtual memory pages so that they can be made available in a process’s address space.Thus, the process can read the file’s contents with ordinary memory access. It can also modify the file’s contents by writing to memory.This permits fast access to files. You can think of mapped memory as allocating a buffer to hold a file’s entire contents, and then reading the file into the buffer and (if the buffer is modified) writing the buffer back out to the file afterward. Linux handles the file reading and writing operations for you.
