@@ -74,7 +74,7 @@ Quadratic probing is an open addressing scheme in computer programming for resol
 
 * __If quadratic probing is used, and the table size is prime, then a new elment can always be insteredi if the table is at least half empty.__
 
-*__Although quadratic probing eliminates primary clustering, elements that hash to the same position will probe the same alternative cells. This is known as secondary clustering. Secondary clustering is a slight theoretical blemish. Simulation results suggest that it generally causes less than an extra half probe per search.__
+* __Although quadratic probing eliminates primary clustering, elements that hash to the same position will probe the same alternative cells. This is known as secondary clustering. Secondary clustering is a slight theoretical blemish. Simulation results suggest that it generally causes less than an extra half probe per search.__
 
 ## Double hashing
 Double hashing is a computer programming technique used in hash tables to resolve hash collisions, in cases when two different values to be searched for produce the same hash key. It is a popular collision-resolution technique in open-addressed hash tables. Double hashing is implemented in many popular libraries.
