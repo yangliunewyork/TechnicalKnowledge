@@ -26,6 +26,7 @@ It is worth noting that computers have traps other than the instruction for exec
 
 
 
+## Wiki definition
 
 A common property of computer programs is locality of reference, which refers to accessing the same values repeatedly and holding frequently used values in registers to improve performance; this makes fast registers and caches meaningful.[1] Allocating frequently used variables to registers can be critical to a program's performance; this register allocation is performed either by a compiler in the code generation phase, or manually by an assembly language programmer.Traditionally, the term "CPU" refers to a processor, more specifically to its processing unit and control unit (CU), distinguishing these core elements of a computer from external components such as main memory and I/O circuitry.
 
