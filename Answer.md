@@ -5,8 +5,8 @@ Hash table is a data structure used to implement an associative array, by interp
 Hash table uses hash function to transform the search key into an array index. Ideally, different keys should map to different indices. However, in practical, we generally have to face the possibility that different keys may hash to the same array index. 
 
 ### Collision Resolution
-* Separate Chaining : build a linked-list of the key-value pairs whose keys hash to that index. It is called separate chaining because items that collide are chained together in separate linked lists.
-* Open addressing : unlike separate chaining, open addressing tells us that we never use other data structure to store the objects, all entry records are stored in the bucket array itself.  When a new entry has to be inserted, the buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found.
+* Separate Chaining : Each bucket is independent, and has some sort of list of entries with the same index. The time for hash table operations is the time to find the bucket (which is constant) plus the time for the list operation. It is called separate chaining because items that collide are chained together in separate linked lists.
+* Open addressing :  When a new entry has to be inserted, the buckets are examined, starting with the hashed-to slot and proceeding in some probe sequence, until an unoccupied slot is found. When searching for an entry, the buckets are scanned in the same sequence, until either the target record is found, or an unused array slot is found, which indicates that there is no such key in the table. Unlike separate chaining, open addressing tells us that we never use other data structure to store the objects, all entry records are stored in the bucket array itself. 
 
 ### Probe sequences
 * Linear probing, in which the interval between probes is fixed (usually 1)
@@ -18,6 +18,7 @@ When the hash function causes a collision by mapping a new key to a cell of the 
 
 ### Pros and Cons
 * Linear probing provides good locality of reference, which causes it to require few uncached memory accesses per operation. Because of this, for low to moderate load factors, it can provide very high performance. However, compared to some other open addressing strategies, its performance degrades more quickly at high load factors because of primary clustering, a tendency for one collision to cause more nearby collisions. Primary Clustering is the tendency for a collision resolution scheme such as linear probing to create long runs of filled slots near the hash position of keys.If the primary hash index is x, subsequent probes go to x+1, x+2, x+3 and so on, this results in Primary Clustering. Once the primary cluster forms, the bigger the cluster gets, the faster it grows. And it reduces the performance.
+
 * Additionally, achieving good performance with this method requires a higher-quality hash function than for some other collision resolution schemes. When used with low-quality hash functions that fail to eliminate nonuniformities in the input distribution, linear probing can be slower than other open-addressing strategies such as double hashing, which probes a sequence of cells whose separation is determined by a second hash function, or quadratic probing, where the size of each step varies depending on its position within the probe sequence.
 
 #### Insertion
@@ -27,32 +28,31 @@ The insertion algorithm is as follows:
 * use hash function to find index for a record
 * If that spot is already occupied, use next available spot in a "higher" index. Treat the hash table as if it is round, if you hit the end of the hash table, go back to the front
 
-Each contiguous group of records (groups of record in adjacent indices without any empty spots) in the table is called a cluster.
-
 #### Searching
 
 The search algorithm is as follows:
 * use hash function to find index of where an item should be.
 * If it isn't there search records that records after that hash location (remember to treat table as cicular) until either it found, or until an empty record is found. If there is an empty spot in the table before record is found, it means that the the record is not there.
 
-NOTE: it is important not to search the whole array till you get back to the starting index. As soon as you see an empty spot, your search needs to stop. If you don't, your search will be incredibly slow
+NOTE: 
+* It is important not to search the whole array till you get back to the starting index. 
+* As soon as you see an empty spot, your search needs to stop, which means that the record is not there.
 
 #### Removal
 
 1. The removal algorithm is a bit trickier because after an object is removed, records in same cluster with a higher index than the removed object has to be adjusted. Otherwise the empty spot left by the removal will cause valid searches to fail.
 
 The algorithm is as follows:
-* find record and remove it making the spot empty
-* For all records that follow it in the cluster, do the following:
- * determine the hash index of the record
- * determine if empty spot is between current location of record and the hash index.
- * move record to empty spot if it is, the record's location is now the empty spot.
+when a cell i is emptied, it is necessary to search forward through the following cells of the table until finding either another empty cell or __a key that can be moved to cell i (that is, a key whose hash value is equal to or earlier than i)__. When an empty cell is found, then emptying cell i is safe and the deletion process terminates. But, when the search finds a key that can be moved to cell i, it performs this move. This has the effect of speeding up later searches for the moved key, but it also empties out another cell, later in the same block of occupied cells. The search for a movable key continues for the new emptied cell, in the same way, until it terminates by reaching a cell that was already empty. In this process of moving keys to earlier cells, each key is examined only once. Therefore, the time to complete the whole process is proportional to the length of the block of occupied cells containing the deleted key, matching the running time of the other hash table operations.
 
 2. Alternatively, it is possible to use a lazy deletion strategy in which a key–value pair is removed by replacing the value by a special flag value indicating a deleted key. However, these flag values will contribute to the load factor of the hash table. With this strategy, it may become necessary to clean the flag values out of the array and rehash all the remaining key–value pairs once too large a fraction of the array becomes occupied by deleted keys.
 
 
 ## Quadratic Probing
-Quadratic probing,  is similar to Linear probing. The difference is that if you were to try to insert into a space that is filled you would first check 1^2 = 1 element away then 2^2 = 4 elements away, then  3^2 =9 elements away then 4^2=16 elements away and so on.
+Quadratic probing,  is similar to Linear probing. The difference is that quadratic probing operates by taking the original hash index and adding successive values of an arbitrary quadratic polynomial until an open slot is found. 
+
+For a given hash value, the indices generated by linear probing are as follows:
+H+1,H+2,H+3,H+4,...,H+k
 
 With linear probing we know that we will always find an open spot if one exists (It might be a long search but we will find it). However, this is not the case with quadratic probing unless you take care in the choosing of the table size. 
 
