@@ -118,6 +118,7 @@ Benefits of Builder Pattern
 * Hides the internal representation of the product from the client.
 * Product implementations can be swapped in and out because the client only sees an abstract interface.
 
+e.g. SqlQueryBuilder, ElasticSearchQueryBuilder
 
 Iterator Pattern: provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.It also places the task of traversal on the iterator object, not on the aggregate, which simplifies the aggregate interface and implementation, and places the responsibility where it should be. Example: STL iterators.
 
