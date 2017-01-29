@@ -149,7 +149,7 @@ Both are sorting algorithms based on the divide and conquer strategy. Top-down M
 Latency is the time required to perform some action or to produce some result. Latency is measured in units of time.
 Throughput is the number of such actions executed or results produced per unit of time. This is measured in units of whatever is being produced per unit of time.
 Example:
-Latency and throughput can be used together to describe the performance of a network. Latency refers to the time delay between when one machine sends a packet of data and the second machine receives the data (for example, if the second machine receives the data 10 ms later than the first machine sent it, the latency is 10 ms). Throughput refers to the amount of data that can be transferred in a given time (for example, if a one machine sends 1000 KB of data, and it takes 5 seconds for all of it to be received by the second machine, the throughput is 200 KB/s).
+Latency and throughput can be used together to describe the performance of a network. Latency refers to the time delay between when one machine sends a packet of data and the second machine receives the data (for example, if the second machine receives the data 10 ms later than the first machine sent it, the latency is 10 ms). Throughput refers to the amount of data that can be transferred in a given time for a given medium (for example, if a one cable can pass 1000 bits per second, then throughput is 1000 bit/s).
 
 ### Network Latency
 In data network, latency means time when a particular packet takes to reach the destination from source. The term delay is similar to latency. The latency or delay can be low if there is high congestion in the traffic or can be because of errors and distance as well.
@@ -157,6 +157,15 @@ In data network, latency means time when a particular packet takes to reach the 
 ### Network Throughput
 Network throughput is the amount of data that can traverse through a given medium. The network throughput is measured in bits per second (bps). Throughput can be high or low depending on your network infrastructure. Devices such as routers, switches, firewalls, cables, network cards can have significant impact on the network throughput. High speed devices and cables will definitely increase your network throughput.
 
+
+### Relation between Latency and Throughput
+High latency does not have to mean low throughput and vice versa.
+
+For instance, in an internet connection, latency is generally measured by how long it takes for a request to get from your computer to a given server. Cable or DSL tends to have low latency, while Satellite tends to have high latency. 
+
+However,the throughput  for these different connections are generally similar, even when the latency are not. Satellite internet, for instance, tends to have quite a bit of bandwidth. They are able to transmit a very large amount of information from the satellite to you over a short period of time. It just takes a long time to make the round trip from your computer to the server, to the satellite, and back to you again.
+
+The reason that latency and throughput are not necessarily correlated is because of __data density__. It's not so much a matter of how quickly information can make the trip. It's more a matter of how much information can make the trip each time.
 
 ## Process vs Thread
 
