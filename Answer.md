@@ -147,6 +147,19 @@ Conceptually, a merge sort works as follows:
 ### Quick sort vs  Merge sort
 Both are sorting algorithms based on the divide and conquer strategy. Top-down Merge-sort needs an extra array for merge operations, so its space complexity is O(n), while bottom-up merge-sort can have constant space complexity. Merge-sort has O(nlog(n)) time complexity no matter in best/average/worst scenarios. Quick-sort has O(nlog(n)) time complexity in best/average scenario but O(n^2) in worst scenario. Regarding space complexity, the space complexity of quicksort is O(log n), taking into account the stack space used for recursion. Also, quicksort cannot be implemented iteratively, unlike mergesort, where an iterative implementation, sometimes called bottom-up mergesort, is possible. Usually, MergeSort is stable sorting, while QuickSort is not stable sorting. 
 
+### Most people use QuickSort than MergeSort, why is that?
+
+1. Its cache performance is higher than other sorting algorithms. This is because of its in-place characteristic. 
+2. If Quick sort is implemented well, it will be around 2-3 times faster than merge sort and heap sort. This is mainly because that the operations in the innermost loop  are simpler. ( I read this from Algorithm Design Manual Book). 
+3. No extra memory.
+
+In practice, many modern implementations of quicksort (in particular libstdc++’s std::sort) are actually __introsort__, whose theoretical worst-case is O(nlogn), same as merge sort. It achieves this by limiting the recursion depth, and switching to a different algorithm (heapsort) once it exceeds logn.
+
+### why is merge sort preferred over quick sort for sorting linked lists?
+Mergesort is a stable sort, unlike quicksort and heapsort, and can be easily adapted to operate on linked lists and very large lists stored on slow-to-access media such as disk storage or network attached storage. Although quicksort can be written to operate on linked lists, it will often suffer from poor pivot choices without random access. 
+
+In external sorting it will on disks, outside main memory. It can be because the data is huge and cannot be stored in main memory. While sorting the data will pulled over in chunks from disk to main memory. Later all the sorted data will be merged and stored back to disk, where it can fit. External merge sort can be used here.
+
 ## Throughput vs Latency
 Latency is the time required to perform some action or to produce some result. Latency is measured in units of time.
 Throughput is the number of such actions executed or results produced per unit of time. This is measured in units of whatever is being produced per unit of time.
