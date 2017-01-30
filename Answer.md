@@ -1,5 +1,5 @@
 ## Hash Table
-Hash table is a data structure used to implement an associative array, by interpreting the key as an array index so that we can store the value associated with key in array entry. On average, its time complexity is constant(amortized).
+Hash table is a data structure used to implement an associative array, by interpreting the key as an array index so that we can store the value associated with key in array entry. On average, its time complexity is constant(amortized), in worst cases, its operations's time complexity is O(n).
 
 ### Hash collision
 Hash table uses hash function to transform the search key into an array index. Ideally, different keys should map to different indices. However, in practical, we generally have to face the possibility that different keys may hash to the same array index. 
