@@ -48,3 +48,17 @@ Quick Sort is also tail recursive, therefore tail call optimizations is done.
 #### Why is Merge Sort preferred for Linked Lists?
 In case of linked lists the case is different mainly due to difference in memory allocation of arrays and linked lists. Unlike arrays, linked list nodes may not be adjacent in memory. Unlike array, in linked list, we can insert items in the middle in O(1) extra space and O(1) time. Therefore merge operation of merge sort can be implemented without extra space for linked lists.
 In arrays, we can do random access as elements are continuous in memory. Let us say we have an integer (4-byte) array A and let the address of A[0] be x then to access A[i], we can directly access the memory at (x + i*4). Unlike arrays, we can not do random access in linked list. Quick Sort requires a lot of this kind of access. In linked list to access i’th index, we have to travel each and every node from the head to i’th node as we don’t have continuous block of memory. Therefore, the overhead increases for quick sort. Merge sort accesses data sequentially and the need of random access is low.
+
+
+## Most people use QuickSort than MergeSort, why is that?
+
+Its cache performance is higher than other sorting algorithms. This is because of its in-place characteristic.
+If Quick sort is implemented well, it will be around 2-3 times faster than merge sort and heap sort. This is mainly because that the operations in the innermost loop are simpler. ( I read this from Algorithm Design Manual Book).
+No extra memory.
+In practice, many modern implementations of quicksort (in particular libstdc++’s std::sort) are actually introsort, whose theoretical worst-case is O(nlogn), same as merge sort. It achieves this by limiting the recursion depth, and switching to a different algorithm (heapsort) once it exceeds logn.
+
+## why is merge sort preferred over quick sort for sorting linked lists?
+
+Mergesort is a stable sort, unlike quicksort and heapsort, and can be easily adapted to operate on linked lists and very large lists stored on slow-to-access media such as disk storage or network attached storage. Although quicksort can be written to operate on linked lists, it will often suffer from poor pivot choices without random access.
+
+In external sorting it will on disks, outside main memory. It can be because the data is huge and cannot be stored in main memory. While sorting the data will pulled over in chunks from disk to main memory. Later all the sorted data will be merged and stored back to disk, where it can fit. External merge sort can be used here.
