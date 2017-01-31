@@ -61,3 +61,22 @@ We maintain that three simple rules can help you scale nearly everything.There a
 * __Scale by splitting different things__ —Use nouns or verbs to identify data and services to separate. If done properly, both transactions and data sets can be scaled efficiently. 
 * __Scale by splitting similar things__ —Typically these are customer data sets. Set customers up into unique and separated shards or swimlanes to enable transaction and data scaling.
 
+## Rule 10: Design Your Solution to Scale Out—Not Just Up
+Scaling out is the duplication of services or databases to spread transaction load and is the alternative to buying larger hardware, known as scaling up. Any system, service, or database expected to grow rapidly. Plan for success and design your systems to scale out. Don’t get caught in the trap of expecting to scale up only to find out that you’ve run out of faster and larger systems to purchase.
+
+## Rule 11—Use Commodity Systems (Goldfish Not Thoroughbreds)
+Use small, inexpensive systems where possible. Use this approach in your production environment when going through hyper growth. Stay away from very large systems in your production environment. Build your systems to be capable of relying on commodity hardware and don’t get caught in the trap of using high-margin, high-end servers.
+
+## Rule 12—Scale Out Your Data Centers
+Design your systems to have three or more live data centers to reduce overall cost, increase availability, and implement disaster recovery. Any rapidly growing business that is considering adding a disaster recovery (cold site) data center.Split up your data to spread across data centers and spread transaction load across those data centers in a “multiple live” configuration. Use spare capacity for peak periods of the year. The cost of data center failure can be disastrous to your business. Design to have three or more as the cost is often less than having two data centers. Make use of idle capacity for peak periods rather than slowing down your transactions. When implementing disaster recovery, lower your cost of disaster recovery by designing your systems to leverage three or more live data centers. Use the spare capacity for spiky demand when necessary.
+
+
+
+
+
+
+
+
+
+
+
