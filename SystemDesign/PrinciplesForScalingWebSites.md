@@ -70,6 +70,16 @@ Use small, inexpensive systems where possible. Use this approach in your product
 ## Rule 12—Scale Out Your Data Centers
 Design your systems to have three or more live data centers to reduce overall cost, increase availability, and implement disaster recovery. Any rapidly growing business that is considering adding a disaster recovery (cold site) data center.Split up your data to spread across data centers and spread transaction load across those data centers in a “multiple live” configuration. Use spare capacity for peak periods of the year. The cost of data center failure can be disastrous to your business. Design to have three or more as the cost is often less than having two data centers. Make use of idle capacity for peak periods rather than slowing down your transactions. When implementing disaster recovery, lower your cost of disaster recovery by designing your systems to leverage three or more live data centers. Use the spare capacity for spiky demand when necessary.
 
+## Rule 13—Design to Leverage the Cloud
+This is the purposeful utilization of cloud technologies to scale on demand.When demand is temporary, spiky, and inconsistent
+and when response time is not a core issue in the product.Make use of third-party cloud environments for temporary demands, such as large batch jobs or QA environments during testing cycles.Design your application to service some requests from a
+third-party cloud when demand exceeds a certain peak level. Provisioning of hardware in a cloud environment takes a few minutes as compared to days or weeks for physical servers in your own collocation facility. When utilized temporarily this is also very cost effective. Design to leverage virtualization and the cloud to meet unexpected spiky demand.
+
+While cost is certainly an important factor in your decision to use a cloud, another distinct advantage of the cloud is that provisioning of the hardware typically takes minutes as compared to days or weeks with physical hardware.The approval process required in your company for additional hardware, the steps of ordering, receiving, racking, and loading a server, can easily take weeks. In a cloud environment, additional servers can be brought into service in minutes.
+
+## Summary
+While scaling up is an appropriate choice for slow to moderate growth companies, those companies whose growth consistently exceeds Moore’s Law will find themselves hitting the computational capacity limits of high-end, very expensive systems with little notice. Nearly all the high-profile services failures about which we’ve all read have been a result of products simply outgrowing their “britches.”We believe it is always wise to plan to scale out early such that when the demand comes, you can easily split up systems. Follow our rules of scaling out both your systems and your data centers, leveraging the cloud for unexpected demand and relying on inexpensive commodity hardware and you will be ready for hyper growth when it comes!
+
 
 
 
