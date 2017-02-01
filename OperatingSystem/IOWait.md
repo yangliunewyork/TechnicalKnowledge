@@ -1,3 +1,9 @@
+https://blog.pregos.info/wp-content/uploads/2010/09/iowait.txt
+## What is IO Wait?
+I/O wait is the total time that working processes are blocked, waiting for the I/O operation to complete. Do not confuse I/O wait with the duration time of I/O operations. An I/O operation is a request to retrieve or write data to the storage. The total time that it takes to complete all I/O operations is I/O operation time. To calculate the I/O wait, we need to understand how much time the application was blocked, waiting for all I/O operation to complete.
+
+
+
 ### Answering whether or not I/O is causing system slowness
 To identify whether I/O is causing system slowness you can use several commands but the easiest is the unix command top.
 ```
@@ -12,6 +18,8 @@ From the CPU(s) line you can see the current percentage of CPU in I/O Wait; The 
 
 wa -- iowait
  Amount of time the CPU has been waiting for I/O to complete.
+ 
+ 
 
 ### Finding which disk is being written to
 The above top command shows I/O Wait from the system as a whole but it does not tell you what disk is being affected; for this we will use the iostat command.
