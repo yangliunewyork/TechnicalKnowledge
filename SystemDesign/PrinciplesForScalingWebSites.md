@@ -126,4 +126,17 @@ The one property that makes scaling an RDBMS in a distributed manner difficult i
 
 
 
+## Rule 20—Leverage Content Delivery Networks
+Use CDNs (content delivery networks) to offload traffic from your site. Ensure it is cost justified and then choose which content is most suitable. Most CDNs leverage DNS (Domain Name Services or Domain Name Servers) to serve content on your site’s behalf. CDNs help offload traffic spikes and are often economical ways to scale parts of a site’s traffic. CDNs are a fast and simple way to offset spikiness of traffic as well as traffic growth in general. Make sure you perform a cost-benefit analysis and monitor the CDN usage.
 
+CDNs are a collection of computers, called nodes or edge servers, connected via a network, called a backbone, that have duplicate copies of their customers’ data or content (images, Web pages, and so on) on them. By strategically placing edge servers on different Tier 1 networks and employing a myriad of technologies and algorithms the CDN can direct requests to nodes that are optimally suited to respond.This optimization could be based on such things as the fewest network hops, highest availability, or fewest requests.The focus of this optimization is most often the reduction of response times as perceived by the end user, requesting person, or service.
+
+The benefit of using a CDN in front of our own blog server is that the CDN takes all the requests (possibly hundreds or thousands per hour) and only requests from our server when checking for updated cache.This requires you to purchase fewer servers, less power, and smaller amounts of bandwidth, as well as fewer people required to maintain that infrastructure.This aid in scale, availability, and response time isn’t free—it typically comes at a premium to your public peering (Internet peering) traffic costs. 
+
+Whether you have dynamic or static pages on your site, consider adding a CDN into the mix of caches.This layer provides the benefit of faster delivery, typically very high availability, and less traffic on your site’s servers.
+
+## Rule 21—Use Expires Headers
+Use Expires headers to reduce requests and improve the scalability and performance of your system. Headers can be set on Web servers or through application code. The reduction of object requests increases the page performance for the user and decreases the number of requests your system must handle per user. For each object type (IMAGE, HTML, CSS, PHP, and so on) consider how long the object can be cached for and implement the appropriate header for that timeframe.
+
+## Rule 22—Cache Ajax Calls
+Use appropriate HTTP response headers to ensure cacheability of Ajax calls. Every Ajax call but those absolutely requiring real time data that are likely to have been recently updated. Modify Last-Modified, Cache-Control, and Expires headers appropriately.Leverage Ajax and cache Ajax calls as much as possible to increase user satisfaction and increase scalability.
