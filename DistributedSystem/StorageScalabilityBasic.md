@@ -1,3 +1,14 @@
+## Pre-requisites
+We assume in this section that you :
+
+*  Have some experience working with a relational DB ( like MySQL ).
+*  Have a basic idea about NoSQL DBs.
+*  Understand the basics of the following : 
+
+  -  Concurrency : Do you understand threads, deadlock, and starvation? What happens when multiple processes / threads are trying to modify the same data? A basic understanding of read and write locks.
+  -  Networking : Do you roughly understand basic networking protocols like TCP and UDP? Do you understand the role of switches and routers?
+  -  File systems : You should understand the systems you’re building upon. Do you know roughly how an OS, file system, and database work? Do you know about the various levels of caching in a modern OS?
+
 ## Basic terminologies
 
 We try to explain some of the terminologies in simple words. Lookup wiki for a more formal definition.
@@ -17,3 +28,35 @@ Another way of scaling would be to open new branches of the restaurant ( horizon
 Source : http://stackoverflow.com/questions/5401992/what-does-scale-horizontally-and-scale-vertically-mean
 
 Sharding : With most huge systems, data does not fit on a single machine. In such cases, sharding refers to splitting the very large database into smaller, faster and more manageable parts called data shards.
+
+## CAP Theorem
+CAP Theorem states that in a distributed system, it is impossible to simultaneously guarantee all of the following:
+
+•  Consistency
+•  Availability
+•  Partition Tolerance
+http://ksat.me/a-plain-english-introduction-to-cap-theorem/ does an awesome job of explaining it in simple english.
+
+## Steps to approach a problem
+It is recommended you follow the following steps to solving 
+
+1. Feature expectations ( First 2 mins ) : 
+As said earlier, there is no wrong design. There are just good and bad designs and the same solution can be a good design for one use case and a bad design for the other. It is extremely important hence to get a very clear understanding of whats the requirement for the question.
+2. Estimations ( 2-5 mins ) 
+Next step is usually to estimate the scale required for the system. The goal of this step is to understand the level of sharding required ( if any ) and to zero down on the design goals for the system. 
+For example, if the total data required for the system fits on a single machine, we might not need to go into sharding and the complications that go with a distributed system design. 
+OR if the most frequently used data fits on a single machine, in which case caching could be done on a single machine.
+
+3. Design Goals ( 1 mins ) 
+Figure out what are the most important goals for the system. It is possible that there are systems which are latency systems in which case a solution that does not account for it, might lead to bad design.
+Skeleton of the design ( 4 - 5 mins ) 
+30-40 mins is not enough time to discuss every single component in detail. As such, a good strategy is to discuss a very high level with the interviewer and go into a deep dive of components as enquired by the interviewer.
+
+4. Deep dive ( 20-30 mins ) 
+This is an extension of the previous section.
+
+## Useful reads
+
+*  Master Slave : https://www.quora.com/What-are-Master-and-Slave-databases-and-how-does-pairing-them-make-web-apps-faster
+*  Real life example of scaling using MySQL :https://engineering.pinterest.com/blog/sharding-pinterest-how-we-scaled-our-mysql-fleet/
+*  https://en.wikipedia.org/wiki/Paxos_(computer_science)
