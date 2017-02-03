@@ -1,3 +1,5 @@
+## Reference
+http://ksat.me/a-plain-english-introduction-to-cap-theorem/
 ## What Is CAP Theorem ?
 In theoretical computer science, the CAP theorem states that it is impossible for a distributed computer system to simultaneously provide more than two out of three of the following guarantees:
 * Consistency	 
