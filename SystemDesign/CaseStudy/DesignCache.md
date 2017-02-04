@@ -96,9 +96,16 @@ As is the case with most concurrent systems, writes compete with reads and other
 We can accommodate 72G of data on every single machine ( We have neglected process memory overheads for the time being ). With that, we would need 420 machines. 
 With that config, every machine would handle around 23000 QPS.
 
+The way QPS is calculated is as follows : Earlier we mentioned that each machine would have a RAM of 72 GB of RAM. For serving 30TB of cache, the number of machines required would be 30 TB / 72G which is close to 420. Assume that we have 420 machines to server 30 TB of distributed cache. Now regarding the QPS the requirement was 10 M.
+
+Now per machine the QPS would be 10M / 420 = Approximately 23000 QPS. So this meant per machine should be able to handle 23,00 QPS. The approach is similar to how we decided on the number of machines based on the per machine RAM and the total cache size. Similarly for the QPS, it is based on the total QPS / number of machines.
+
+Next assuming that a machine has to serve 23,000 QPS then we look at each machine has 4 core, then each core need to handle 5730 QPS, and then we calculate the per request time as - CPU time available per query = 1 * 1000 * 1000 / 5730 microseconds = 174us (Note everything is converted to milliseconds.) So the machines have to return the query in 174 us. This is the way the QPS is derived. Then based on the read / write traffic and the latency numbers as per the https://gist.github.com/jboner/2841832, the QPS is further refined by increasing the number of machines.
+
 * Q: Will our machines be able to handle qps of 23000? 6
 * A: CPU time available for 23k queries : 1 second * 4 = 4 seconds 
 CPU time available per query = 4 * 1000 * 1000 / 23000 microseconds = 174us. Can we handle entries into a hashmap of size 72G with a CPU time of 174us ( Do note that context switches has its own overhead. So, even with a perfectly written asynchronous server, we would have much less than 174us on our hand ). Make sure you know about the latency numbers from here : https://gist.github.com/jboner/2841832. The actual answer depends on the distribution of read vs write traffic, the size of the value being read, the throughput capacity of our server.
+
 
 * Q: What if we shard among machines with 16GB of RAM? 3
 * A: Number of shards = 30 * 1000 / 16 = 1875 
