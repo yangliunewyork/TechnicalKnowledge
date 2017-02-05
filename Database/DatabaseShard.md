@@ -17,7 +17,7 @@ In practice, sharding is complex. Although it has been done for a long time by h
 
 Where __distributed computing__ is used to separate load between multiple servers (either for performance or reliability reasons), a shard approach may also be useful.
 
-## hards compared to horizontal partitioning
+## Shards compared to horizontal partitioning
 Horizontal partitioning splits one or more tables by row, usually within a single instance of a schema and a database server. It may offer an advantage by reducing index size (and thus search effort) provided that there is some obvious, robust, implicit way to identify in which partition a particular row will be found, without first needing to search the index, e.g., the classic example of the 'CustomersEast' and 'CustomersWest' tables, where their zip code already indicates where they will be found.
 
 Sharding goes beyond this: it partitions the problematic table(s) in the same way, but it does this across potentially multiple instances of the schema. The obvious advantage would be that search load for the large partitioned table can now be split across multiple servers (logical or physical), not just multiple indexes on the same logical server.
@@ -36,5 +36,21 @@ Sharding a database table before it has been optimized locally causes premature 
 * Failover servers more complex - Failover servers must themselves have copies of the fleets of database shards.
 * Backups more complex - Database backups of the individual shards must be coordinated with the backups of the other shards.
 * Operational complexity added - Adding/removing indexes, adding/deleting columns, modifying the schema becomes much more difficult.
+
+## What's the difference between sharding DB tables and partitioning them?
+__Partitioning is a general term used to describe the act of breaking up your logical data elements into multiple entities for the purpose of performance, availability, or maintainability.__  
+
+__Sharding is the equivalent of "horizontal partitioning".__  When you shard a database, you create replica's of the schema, and then divide what data is stored in each shard based on a shard key.  For example, I might shard my customer database using CustomerId as a shard key - I'd store ranges 0-10000 in one shard and 10001-20000 in a different shard.  When choosing a shard key, the DBA will typically look at data-access patterns and space issues to ensure that they are distributing load and space across shards evenly.  
+__"Vertical partitioning" is the act of splitting up the data stored in one entity into multiple entities - again for space and performance reasons.__  For example, a customer might only have one billing address, yet I might choose to put the billing address information into a separate table with a CustomerId reference so that I have the flexibility to move that information into a separate database, or different security context, etc.    
+
+To summarize - partitioning is a generic term that just means dividing your logical entities into different physical entities for performance, availability, or some other purpose.  "Horizontal partitioning", or sharding, is replicating the schema, and then dividing the data based on a shard key.  "Vertical partitioning" involves dividing up the schema (and the data goes along for the ride).  
+
+__Final note: you can combine both horizontal and vertical partitioning techniques - sometimes required in big data, high traffic environments.__
+
+SOSP paper on DynamoDB mentions:
+> “Data is distributed across multiple servers using partitioning, and each partition is further replicated to provide availability. The technique for distributing (aka partitioning) is consistent hashing”.
+
+MongoDB’s online manual:
+> “Sharding is a method to distribute data across multiple different servers. We achieve horizontal scalability through sharding”.
 
 
