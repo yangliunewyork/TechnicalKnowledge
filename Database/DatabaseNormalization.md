@@ -1,3 +1,7 @@
+### Reference
+
+* http://www.studytonight.com/dbms/database-normalization.php
+
 ### What is database normalization?
 Database normalization is a data design and organization process applied to data structures based on rules that help building relational databases. In relational database design, the process of organizing data to minimize redundancy is called normalization. Normalization usually involves dividing a database into two or more tables and defining relationships between the tables. The objective is to isolate data so that additions, deletions, and modifications of a field can be made in just one table and then propagated through the rest of the database via the defined relationships.
 
