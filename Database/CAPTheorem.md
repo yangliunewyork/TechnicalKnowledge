@@ -1,7 +1,10 @@
 ## Reference
-http://ksat.me/a-plain-english-introduction-to-cap-theorem/
+
+* http://ksat.me/a-plain-english-introduction-to-cap-theorem/
+* http://robertgreiner.com/2014/08/cap-theorem-revisited/
+
 ## What Is CAP Theorem ?
-In theoretical computer science, the CAP theorem states that it is impossible for a distributed computer system to simultaneously provide more than two out of three of the following guarantees:
+In theoretical computer science, the CAP theorem states that it is impossible for a __distributed computer system__ to simultaneously provide more than two out of three of the following guarantees:
 * Consistency	 
   * Every read receives the most recent write or an error. All the servers in the system will have the same data so anyone using the system will get the same copy regardless of which server answers their request.
 * Availability
