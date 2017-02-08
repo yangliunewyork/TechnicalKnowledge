@@ -3,6 +3,8 @@
 * http://ksat.me/a-plain-english-introduction-to-cap-theorem/
 * http://robertgreiner.com/2014/08/cap-theorem-revisited/
 * https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html
+* https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed
+* http://stackoverflow.com/questions/12346326/nosql-cap-theorem-availability-and-partition-tolerance
 
 ## What Is CAP Theorem ?
 In theoretical computer science, the CAP theorem states that it is impossible for a __distributed computer system__ to simultaneously provide more than two out of three of the following guarantees:
