@@ -54,3 +54,18 @@ In principle, authoritative name servers suffice for the operation of the Intern
 
 ### Caching name server
 Caching name servers (DNS caches) store DNS query results for a period of time determined in the configuration (time-to-live) of each domain-name record. DNS caches improve the efficiency of the DNS by reducing DNS traffic across the Internet, and by reducing load on authoritative name-servers, particularly root name-servers. Because they can answer questions more quickly, they also increase the performance of end-user applications that use the DNS. Recursive name servers resolve any query they receive, even if they are not authoritative for the question being asked, by consulting the server or servers that are authoritative for the question. Caching name servers are often also recursive name servers—they perform every step necessary to answer any DNS query they receive. To do this the name server queries each authoritative name-server in turn, starting from the DNS root zone. It continues until it reaches the authoritative server for the zone that contains the queried domain name. That server provides the answer to the question, or definitively says it can't be answered, and the caching resolver then returns this response to the client that asked the question. The authority, resolving and caching functions can all be present in a DNS server implementation, but this is not required: a DNS server can implement any one of these functions alone, without implementing the others. Internet service providers typically provide caching resolvers for their customers.
+
+
+## Recursive DNS
+
+![alt](http://windowsitpro.com/site-files/windowsitpro.com/files/archive/windowsitpro.com/content/content/48527/figure_01.gif)
+
+Recursive DNS is the piece that allows users to find the domain names that companies setup.  Consumers may not realize it, but every time they go on their computers or phones to read the news, access their bank accounts or even read this blog, they are using recursive DNS services.
+
+#### WHAT IS RECURSIVE DNS – AND HOW DOES IT WORK?
+Recursive DNS is the middle-man between the consumer and the Authoritative DNS servers that are hosting a company’s domains and the IP addresses that are associated with a domain name. Recursive DNS does two major tasks:
+
+When a user types in a URL in their web browser, the URL is sent to the recursive DNS server first. The first task the recursive DNS server does is check its cache memory to see if the IP address for the requested URL is already stored. If the IP address information is already in memory, then the recursive DNS server will immediately provide the IP address back to the browser and the user will be taken to the website.
+
+If the recursive DNS server does not have the IP address in memory, it will go through the process of fetching the IP address (called “walking the DNS tree”) and return it to the user. The recursive DNS server will then store the IP address in memory for a certain amount of time - the amount of time that the IP address is stored in memory is defined by the owner of the domain using a setting called “Time To Live” (TTL).
+
