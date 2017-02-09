@@ -12,8 +12,7 @@ When you visit a domain such as dyn.com, your computer follows a series of steps
 
 Step 1: Request information
 
-The process begins when you ask your computer to resolve a hostname, such as visiting http://dyn.com. The first place your computer looks is its local DNS cache, which stores information that your computer has recently retrieved.
-
+The process begins when you ask your computer to resolve a hostname, such as visiting http://dyn.com. The first place your computer looks is its local DNS cache, which stores information that your computer has recently retrieved. Computer's local DNS cache includes browser and operating system's cache. 
 If your computer doesn’t already know the answer, it needs to perform a DNS query to find out.
 
 Step 2: Ask the recursive DNS servers
