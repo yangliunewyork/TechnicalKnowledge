@@ -10,6 +10,8 @@ Protocol layering has conceptual and structural advantages. As we have seen, lay
 
 ![alt](https://www.cs.umd.edu/class/fall2001/cmsc411/proj01/pub/figure5.jpg)
 
+![alt](https://image.slidesharecdn.com/tcpip-150124151829-conversion-gate01/95/tcpip-protocol-architeture-4-638.jpg?cb=1428587653)
+
 #### Application Layer
 The application layer is where network applications and their application-layer protocols reside. The Internet’s application layer includes many protocols, such as the __HTTP__ protocol (which provides for Web document request and transfer), __SMTP__ (which provides for the transfer of e-mail messages), and __FTP__ (which provides for the transfer of files between two end systems). We’ll see that certain network functions, such as the translation of human-friendly names for Internet end systems like www.ietf.org to a 32-bit network address, are also done with the help of a specific application-layer protocol, namely, the __domain name system (DNS)__.
 
@@ -39,6 +41,7 @@ The fact that the Internet lacks two layers found in the OSI reference model pos
 #### Encapsulation
 
 ![alt](https://raw.githubusercontent.com/gaoxiangnumber1/NotesPhotos/master/NET/CNATDA/1-24.png)
+
 
 This Figure illustrates the important concept of encapsulation. At the sending host, an application-layer message (M in Figure) is passed to the transport layer. In the simplest case, the transport layer takes the message and appends additional information (so-called transport-layer header information, Ht in Figure) that will be used by the receiver-side transport layer. The application- layer message and the transport-layer header information together constitute the transport-layer segment. The transport-layer segment thus encapsulates the application-layer message. The added information might include information allowing the receiver-side transport layer to deliver the message up to the appropriate application, and error-detection bits that allow the receiver to determine whether bits in the message have been changed in route. The transport layer then passes the segment to the network layer, which adds network-layer header information (Hn in Figure) such as source and destination end system addresses, creating a network-layer datagram. The datagram is then passed to the link layer, which (of course!) will add its own link-layer header information and create a link-layer frame. Thus, we see that at each layer, a packet has two types of fields: header fields and a payload field. The payload is typically a packet from the layer above.
 
