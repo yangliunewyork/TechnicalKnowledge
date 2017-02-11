@@ -1,7 +1,7 @@
 ## Reference
 
 https://msdn.microsoft.com/en-us/library/bb742455.aspx
-
+http://www.thegeekstuff.com/2016/01/load-balancer-intro/?utm_source=tuicool&utm_medium=referral
 
 ## What is Load Balancer ?
 A load balancer is a device that acts as a reverse proxy and distributes network or application traffic across a number of servers. Load balancers are used to increase capacity (concurrent users) and reliability of applications. They improve the overall performance of applications by decreasing the burden on servers associated with managing and maintaining application and network sessions, as well as by performing application-specific tasks.
@@ -46,3 +46,6 @@ When clients connect to a 2-node cluster in active-passive configuration, they o
 
 If changes are made on the settings of the primary server, those changes must be cascaded to the failover server. So when the failover does take over, the clients won't be able to tell the difference. 
 
+## How does Software and Hardware Load Balancer Work
+
+http://www.thegeekstuff.com/2016/01/load-balancer-intro/?utm_source=tuicool&utm_medium=referral
