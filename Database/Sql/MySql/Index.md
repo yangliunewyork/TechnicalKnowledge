@@ -151,3 +151,227 @@ __NULL values may be used in normal (nonunique) indexes. This is true of all dat
 
 
 To make things just a bit more interesting, a NULL value may appear only once as a primary key. Why? The SQL standard dictates this behavior. It is one of the few ways in which primary keys are different from unique indexes in MySQL. And, in case you're wondering, allowing NULL values in the index really doesn't impact performance.
+
+
+## Indexes and Table Types
+
+###  MyISAM Tables
+MySQL's default table type provides B-tree indexes, and as of Version 4.1.0, it provides R-tree indexes for spatial data. In addition to the standard benefits that come with a good B-tree implementation, MyISAM adds two other important but relatively unknown features prefix compression and packed keys.
+
+Prefix compression is used to factor out common prefixes in string keys. In a table that stores URLs, it would be a waste of space for MySQL to store the "http://" in every node of the B-tree. Because it is common to large number of the keys, it will compress the common prefix so that it takes significantly less space.
+
+Packed keys are best thought of as prefix compression for integer keys. Because integer keys are stored with their high bytes first, it's common for a large group of keys to share a common prefix because the highest bits of the number change far less often. To enable packed keys, simply append:
+```
+PACKED_KEY = 1
+```
+to the CREATE TABLE statement.
+
+MySQL stores the indexes for a table in the table's .MYI file.
+
+#### Delayed key writes
+
+One performance-enhancing feature of MyISAM tables is the ability to delay the writing of index data to disk. Normally, MySQL will flush modified key blocks to disk immediately after making changes to them, but you can override this behavior on a per-table basis or globally. Doing so provides a significant performance boost during heavy INSERT, UPDATE, and DELETE activity.
+
+MySQL's __delay_key_write__ tristate setting controls this behavior. The default, ON, means that MySQL will honor the DELAY_KEY_WRITE option in CREATE TABLE. Setting it to OFF means that MySQL will never delay key writes. And setting it to ALL tells MySQL to delay key writes on all MyISAM tables regardless of the DELAY_KEY_WRITE used when the table was created.
+
+The downside of delayed key writes is that the indexes may be out of sync with the data if MySQL crashes and has unwritten data in its key buffer. A REPAIR TABLE, which rebuilds all indexes and may consume a lot of time, is necessary to correct the problem.
+
+### Heap Tables
+
+MySQL's only in-memory table type was originally built with support just for hash indexes. As of Version 4.1.0, however, you may choose between B-tree and hash indexes in Heap tables. The default is still to use a hash index, but specifying B-tree is simple:
+```
+mysql> create table heap_test (
+
+    -> name varchar(50) not null,
+
+    -> index using btree (name)
+
+    -> ) type = HEAP;
+
+Query OK, 0 rows affected (0.00 sec)
+```
+To verify that the index was created properly, use the SHOW KEYS command:
+```
+mysql> show keys from heap_test \G
+
+*************************** 1. row ***************************
+
+       Table: heap_test
+
+  Non_unique: 1
+
+    Key_name: name
+
+Seq_in_index: 1
+
+ Column_name: name
+
+   Collation: A
+
+ Cardinality: NULL
+
+    Sub_part: NULL
+
+      Packed: NULL
+
+        Null: 
+
+  Index_type: BTREE
+
+     Comment: 
+
+1 row in set (0.00 sec)
+```
+By combining the flexibility of B-tree indexes and the raw speed of an in-memory table, query performance of the temp tables is hard to beat. Of course, if all you need are fast single-key lookups, the default hash indexes in Heap tables will serve you well. They are lightning fast and very space efficient.
+
+The index data for Heap tables is always stored in memory—just like the data.
+
+### BDB Tables
+
+MySQL's Berkeley DB (BDB) tables provide only B-tree indexes. This may come as a surprise to long-time BDB users who may be familiar with its underlying hash-based indexes. The indexes are stored in the same file as the data itself.
+
+BDB's indexes, like those in MyISAM, also provide prefix compression. Like InnoDB, BDB also uses clustered indexes, and BDB tables require a primary key. If you don't supply one, MySQL creates a hidden primary key it uses internally for locating rows. The requirement exists because BDB always uses the primary key to locate rows. Index entries always refer to rows using the primary key rather than the record's physical location. This means that record lookups on secondary indexes are slightly slower then primary-key lookups.
+
+### InnoDB Tables
+
+InnoDB tables provide B-tree indexes. The indexes provide no packing or prefix compression. In addition, InnoDB also requires a primary key for each table. As with BDB, though, if you don't provide a primary key, MySQL will supply a 64-bit value for you.
+
+The indexes are stored in the InnoDB tablespace, just like the data and data dictionary (table definitions, etc.). Furthermore, InnoDB uses clustered indexes. That is, the primary key's value directly affects the physical location of the row as well as its corresponding index node. Because of this, lookups based on primary key in InnoDB are very fast. Once the index node is found, the relevant records are likely to already be cached in InnoDB's buffer pool.
+
+### Full-Text Indexes
+
+A full-text index is a special type of index that can quickly retrieve the locations of every distinct word in a field. MySQL's provides full-text indexing support in MyISAM tables. Full-text indexes are built against one or more text fields (VARCHAR, TEXT, etc.) in a table.
+
+The full-text index is also stored in a table's .MYI file. It is implemented by creating a normal two-part MyISAM B-tree index in which the first field is a VARCHAR, and the second is a FLOAT. The first field contains the indexed word, and the FLOAT is its local weight in the row.
+
+Because they generally contain one record for each word in each indexed field, full-text indexes can get large rather quickly. Luckily, MySQL's B-tree indexes are quite efficient, so space consumed by full-text is well worth the performance boost.
+
+It's not uncommon for a query like:
+```
+select * from articles where body = "%database%"
+```
+to run thousands of times faster when a full-text index is added and the query is re-written as:
+```
+select * from articles (body) match against ('database')
+```
+As with all index types, it's a matter of trading space for speed.
+
+### Index Limitations
+There are many times when MySQL simply can't use an index to satisfy a query. To help you recognize these limitations (and hopefully avoid them), let's look at the four main impediments to using an index.
+
+#### Wildcard matches
+
+A query to locate all records that contain the word "buffy":
+```
+select * from pages where page_text like "%buffy%"
+```
+is bound to be slow. It requires MySQL to scan every row in the table. And it won't even find all occurrences, because "buffy" may be followed by some form of punctuation. The solution, of course, is to build a full-text index on the **page_text** field and query using MySQL's __MATCH AGAINST__ syntax.
+
+When you're dealing with partial words, however, things degenerate quickly. Imagine trying to find the phone number for everyone whose last name contains the string "son", such as Johnson, Ansona, or Bronson. That query would look like this:
+```
+select phone_number from phone_book where last_name like "%son%"
+```
+That seems suspiciously similar to the "buffy" example, and it is. Because you are performing a wildcard search on the field, MySQL will need to read every row, but switching to a full-text index won't help. Full-text indexes deal with complete words, so they're of no help in this situation.
+
+If that's surprising, consider how you'd attempt to locate all those names in a normal phone book. Can you think of an efficient approach? There's really no simple change that can be made to the printed phone book that will facilitate this type of query.
+
+#### Regular expressions
+
+Using a regular expression has similar problems. Imagine trying to find all last names that end with either "ith," such as Smith, or "son" as in Johnson. As any Perl hacker would tell you, that's easy. Build a regular expression that looks something like (son|ith)$.
+
+Translating that into MySQL, you might write this query:
+```
+select last_name from phone_book where last_name rlike "(son|ith)$"
+```
+However, you'd find that it runs slowly, and it does so for the same reasons that wildcard searches are slow. There's simply no generalized and efficient way to build an index that facilitates running arbitrary wildcard or regular-expression searches.
+
+In this specific case, you can work around this limitation by storing reversed last names in a second field. Then you can reverse the sense of the search and use a query like this:
+```
+select last_name from phone_book where rev_last_name like "thi%"
+
+union
+
+select last_name from phone_book where rev_last_name like "nos%"
+```
+But that's efficient only because you're starting at the beginning of the string, which is really the end of the real string before it is reversed. Again, there's no general solution to this problem.
+
+Note that a regular expression still isn't efficient in this case. You might be tempted to write this query:
+```
+select last_name from phone_book where rev_last_name rlike "^(thi|nos)"
+```
+You would be disappointed by its performance. The MySQL optimizer simply never tries to optimize regex-based queries.
+
+#### Poor statistics or corruption
+
+If MySQL's internal index statistics become corrupted or otherwise incorrect (possibly as the result of a crash or accidental server shutdown), MySQL may begin to exhibit very strange behavior. If the statistics are simply wrong, you may find that it no longer uses an index for your query. Or it may use an index only some of the time.
+
+What's likely happened is that MySQL believes that the number of rows that match your query is so high that it would actually be more efficient to perform a full table scan. Because table scans are primarily sequential reads, they're faster than reading a large percentage of the records using an index, which requires far more disk seeks.
+
+If this happens (or you suspect it has), try the index repair and analysis commands explained in the "Index Maintenance" section later in this chapter.
+
+#### Too many matching rows
+
+Similarly, if a table actually does have too many rows that really do match your query, performance can be quite slow. How many rows are too many for MySQL? It depends. But a good rule of thumb is that when MySQL believes more than about 30% of the rows are likely matches, it will resort to a table scan rather than using the index. There are a few exceptions to this rule.
+
+## Index Maintenance
+
+### Obtaining Index Information
+
+If you're ever asked to help debug a slow query or indexing problem against a table (or group of tables) that you haven't seen in quite a while, you'll need to recover some basic information. Which columns are indexed? How many values are there? How large is the index?
+
+Luckily, MySQL makes it relatively easy to gather this information. By using SHOW CREATE TABLE, you can retrieve the complete SQL necessary to (re-)create the table. However, if you care only about indexes, SHOW INDEXES FROM provides a lot more information.
+```
+mysql> SHOW INDEXES FROM access_jeremy_zawodny_com \G
+
+*************************** 1. row ***************************
+
+       Table: access_jeremy_zawodny_com
+
+  Non_unique: 1
+
+    Key_name: time_stamp
+
+Seq_in_index: 1
+
+ Column_name: time_stamp
+
+   Collation: A
+
+ Cardinality: 9434851
+
+    Sub_part: NULL
+
+      Packed: NULL
+
+        Null: YES
+
+  Index_type: BTREE
+
+     Comment:
+
+
+
+1 rows in set (0.00 sec)
+```
+You may substitute KEYS for INDEXES in the query.
+
+The table in the example has a single index named time_stamp. It is a B-tree index with only one component, the time_stamp column (as opposed to a multicolumn index). The index isn't packed and is allowed to contain NULL values. It's a non-unique index, so duplicates are allowed.
+
+#### Refreshing Index Statistics
+
+Over time, a table that sees many changes is likely to develop some inefficiencies in its indexes. Fragmentation due to blocks moving around on disk and inaccurate index statistics are the two most common problems you're likely to see. Luckily, it's easy for MySQL to optimize index data for MyISAM tables.
+
+You can use the OPTIMIZE TABLE command to reindex a table. In doing so, MySQL will reread all the records in the table and reconstruct all of its indexes. The result will be tightly packed indexes with good statistics available.
+
+Keep in mind that reindexing the table can take quite a bit of time if the table is large. During that time, MySQL has a write lock on the table, so data can't be updated.
+
+Using the myisamchk command-line tool, you can perform the analysis offline:
+
+```
+$ cd database-name
+$ myisamchk table-name
+```
+
+Just be sure that MySQL isn't running when you try this, or you run the risk of corrupting your indexes.
+
+BDB and InnoDB tables are less likely to need this sort of tuning. That's a good thing, because the only ways to reindex them are a bit more time consuming. You can manually drop and re-create all the indexes, or you have to dump and reload the tables. However, using ANALYZE TABLE on an InnoDB table causes InnoDB to re-sample the data in an attempt to collect better statistics.
