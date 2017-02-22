@@ -71,3 +71,32 @@ The bulk of MySQL's effort centers around indexes and table join order. These ar
 ### Using EXPLAIN
 
 So, what sort of knowledge can MySQL gather without expending a lot of effort and time? Let's look at a some queries against a news headline table—the sort of thing you might use to build a customizable news web site. The structure of the table is listed next. Rather than guessing what MySQL will probably do, we'll use its under-appreciated EXPLAIN command to help figure that out. In doing so, we'll see how adding an index or simply rephrasing a query can often better use an existing index and greatly improve performance.
+
+### Joins
+
+Things become slightly more complex when you're querying multiple tables. MySQL has to decide which order makes the most sense. Again, the goal it to read as few rows as possible, so it will consider each table and estimate how many rows it must read from each. In doing so, it also needs to understand the relationship among the tables. For example, with a query like this, it's clear that MySQL can't read the table order first:
+```
+SELECT customer.name, order.date_placed, region.name
+FROM customer, order, region
+WHERE order.customer_id = customer.id
+AND customer.region_id = region.id
+AND customer.name = 'John Doe'
+```
+The rows MySQL will need to retrieve from the order table depend on the customer table. So it must read customer before order. In fact, the same is true of region. So in this case, MySQL has to read customer records first. From there it will decide to read the remaining tables in whatever order it chooses.
+
+Unfortunately, finding the optimal join order is one of MySQL's weakest skills. Rather than being clever about this problem, the optimizer simply tries to brute-force its way through. It tries every possible combination before choosing one. That can spell disaster in a some cases. We've seen at least one case in which MySQL took 29 seconds to decide how to execute a multitable join and then 1 second to actually execute it. In this particular case, there were over 10 tables involved. Since MySQL is considering all possible combinations, performance begins to degrade quite drastically as you go beyond a handful of tables. The exact number, of course, depends on how powerful CPUs are this year.
+
+
+##### Execution
+
+There's not a lot to say about query execution. MySQL simply follows its plan, fetching rows from each table in order and joining based on the relevant columns (hopefully using indexes). Along the way, it may need to create a temporary table (in memory or on disk) to store the results. Once all the rows are available, it sends them to the client.
+
+Along the way, MySQL gathers some information and statistics about each query it executes, including:
+
+* Who issued the query
+* How long the process took
+* How many rows were returned
+
+That information will appear in the slow query log (discussed later in this chapter) if the query time exceeds the server's threshold, and the log is enabled. If the query is issued interactively, it will also appear after the query results.
+
+## Optimizer Features and Oddities
