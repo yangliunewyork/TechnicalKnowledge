@@ -2,7 +2,7 @@ A subnet (short for "subnetwork") is an identifiably separate part of an organiz
 
 A mask used to determine what subnet an IP address belongs to. An IP address has two components, the network address and thehost address. For example, consider the IP address150.215.017.009. Assuming this is part of a Class B network, the first two numbers (150.215) represent the Class B network address, and the second two numbers (017.009) identify a particular host on this network.
 
-What is Subnetting?
+#### What is Subnetting?
 
 Subnetting enables the network administrator to further divide the host part of the address into two or more subnets. In this case, a part of the host address is reserved to identify the particular subnet. This is easier to see if we show the IP address in binary format.
 
