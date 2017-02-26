@@ -238,3 +238,22 @@ Distributed applications may provide remote objects with methods for instantiati
 
 ### Implementation of RMI
 
+##### Communication module
+The two cooperating communication modules carry out the request-reply protocol, which transmits request and reply messages between the client and server. The communication module uses only the first three items, which specify the message type, its requestId and the remote reference of the object to be invoked. The operationId and ll the marshalling and unmarshalling are the concern of the RMI software, discussed below. The communication modules are together responsible for providing a specified invocation semantics, for example at-most-once.
+
+The communication module in the server selects the dispatcher for the class of the object to be invoked, passing on its local reference, which it gets from the remote reference module in return for the remote object identifier in the request message. The role of dispatcher is discussed in the forthcoming section on RMI software.
+
+##### Remote reference module
+A remote reference module is responsible for translating between local and remote object references and for creating remote object references. To support its responsibilities, the remote reference module in each process has a remote object table that records the correspondence between local object references in that process and remote object references (which are system-wide). The table includes:
+* An entry for all the remote objects held by the process.
+* An entry for each local proxy.
+
+The role of a proxy is discussed in the subsection on RMI software. The actions of the remote reference module are as follows:
+
+* When a remote object is to be passed as an argument or a result for the first time, the remote reference module is asked to create a remote object reference, which it adds to its table.
+* When a remote object reference arrives in a request or reply message, the remote reference module is asked for the corresponding local object reference, which may refer either to a proxy or to a remote object. In the case that the remote object reference is not in the table, the RMI software creates a new proxy and asks the remote reference module to add it to the table.
+
+This module is called by components of the RMI software when they are marshalling and unmarshalling remote object references. For example, when a request message arrives, the table is used to find out which local object is to be invoked.
+
+
+#### TO BE CONTINUE
