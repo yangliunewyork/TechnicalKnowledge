@@ -33,3 +33,4 @@ The simplest thread-safe data structures typically use mutexes and locks to prot
 ## Lock-based Concurrent Data Structures
 __The design of lock-based concurrent data structures is all about ensuring that the right mutex is locked when accessing the data, and ensuring that the lock is held for the minimum amount of time.__ This is hard enough when there is just one mutex protecting a data structure — we need to ensure that data cannot be accessed outside the protection of the mutex lock, and that there are no race conditions inherent in the interface.If we use separate mutexes to protect separate parts of the data structure then these issues are compounded, and there is now also the possibility of deadlock if the operations on the data structure require more than one mutex to be locked. We therefore need to consider the design of a data structure with multiple mutexes even more carefully than the design of a data structure with a single mutex.
 
+
