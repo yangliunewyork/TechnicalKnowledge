@@ -40,4 +40,61 @@ The core OS components and their responsibilities are:
 
 ## Protection
 
+#### Kernels and protection
+The kernel is a program that is distinguished by the facts that it remains loaded from system initialization and its code is executed with complete access privileges for the physical resources on its host computer. In particular, it can control the memory management unit and set the processor registers so that no other code may access the machine’s physical resources except in acceptable ways.
+
+Most processors have a hardware mode register whose setting determines whether privileged instructions can be executed, such as those used to determine which protection tables are currently employed by the memory management unit. __A kernel process executes with the processor in supervisor (privileged) mode; the kernel arranges that other processes execute in user (unprivileged) mode.__ 
+
+The kernel also sets up address spaces to protect itself and other processes from the accesses of an aberrant process, and to provide processes with their required virtual memory layout. An address space is a collection of ranges of virtual memory locations, in each of which a specified combination of memory access rights applies, such as readonly or read-write. A process cannot access memory outside its address space. The terms user process or user-level process are normally used to describe one that executes in user mode and has a user-level address space (that is, one with restricted memory access rights compared with the kernel’s address space). 
+
+When a process executes application code, it executes in a distinct user-level address space for that application; when the same process executes kernel code, it executes in the kernel’s address space. The process can safely transfer from a user-level address space to the kernel’s address space via an exception such as an interrupt or a system call trap – the invocation mechanism for resources managed by the kernel. __A system call trap is implemented by a machine-level TRAP instruction, which puts the processor into supervisor mode and switches to the kernel address space.__ When the TRAP instruction is executed, as with any type of exception, the hardware forces the processor to execute a kernel-supplied handler function, in order that no process may gain illicit control of the hardware.
+
+__Programs pay a price for protection. Switching between address spaces may take many processor cycles, and a system call trap is a more expensive operation than a simple procedure or method call.__
+
+## Processes and threads
+The solution reached was to enhance the notion of a process so that it could be associated with multiple activities. Nowadays, a process consists of an execution environment together with one or more threads. A thread is the operating system abstraction of an activity (the term derives from the phrase ‘thread of execution’). An execution environment is the unit of resource management: a collection of local kernelmanaged resources to which its threads have access. An execution environment primarily consists of: 
+
+* an address space; 
+* thread synchronization and communication resources such as semaphores and communication interfaces (for example, sockets); 
+* higher-level resources such as open files and windows.
+
+Execution environments are normally expensive to create and manage, but several threads can share them – that is, they can share all resources accessible within them. In other words, an execution environment represents the protection domain in which its threads execute.
+
+Threads can be created and destroyed dynamically, as needed. The central aim of having multiple threads of execution is to maximize the degree of concurrent execution between operations, thus enabling the overlap of computation with input and output, and enabling concurrent processing on multiprocessors. This can be particularly helpful within servers, where concurrent processing of clients’ requests can reduce the tendency for servers to become bottlenecks. For example, one thread can process a client’s request while a second thread servicing another request waits for a disk access to complete.
+
+An execution environment provides protection from threads outside it, so that the data and other resources contained in it are by default inaccessible to threads residing in other execution environments. But certain kernels allow the controlled sharing of resources such as physical memory between execution environments residing at the same computer.
+
+### Address spaces
+An address space, introduced in the previous section, is a unit of management of a process’s virtual memory. It is large (typically up to 232 bytes, and sometimes up to 264 bytes) and consists of one or more regions, separated by inaccessible areas of virtual memory. A region (Figure 7.3) is an area of contiguous virtual memory that is accessible by the threads of the owning process. Regions do not overlap. Note that we distinguish between the regions and their contents. Each region is specified by the following properties:
+* its extent (lowest virtual address and size); 
+* read/write/execute permissions for the process’s threads; 
+* whether it can be grown upwards or downwards.
+
+Note that this model is page-oriented rather than segment-oriented. Regions, unlike segments, would eventually overlap if they were extended in size. Gaps are left between regions to allow for growth. This representation of an address space as a sparse set of disjoint regions is a generalization of the UNIX address space, which has three regions: a fixed, unmodifiable text region containing program code; a heap, part of which is initialized by values stored in the program’s binary file, and which is extensible towards higher virtual addresses; and a stack, which is extensible towards lower virtual addresses.
+
+The provision of an indefinite number of regions is motivated by several factors. One of these is the need to support a separate stack for each thread. Allocating a separate stack region to each thread makes it possible to detect attempts to exceed the stack limits and to control each stack’s growth. Unallocated virtual memory lies beyond each stack region, and attempts to access this will cause an exception (a page fault). The alternative is to allocate stacks for threads on the heap, but then it is difficult to detect when a thread has exceeded its stack limit.
+
+Another motivation is to enable files in general – not just the text and data sections of binary files – to be mapped into the address space. A mapped file is one that is accessed as an array of bytes in memory. The virtual memory system ensures that accesses made in memory are reflected in the underlying file storage.
+
+The need to share memory between processes, or between processes and the kernel, is another factor leading to extra regions in the address space. A shared memory region (or shared region for short) is one that is backed by the same physical memory as one or more regions belonging to other address spaces. Processes therefore access identical memory contents in the regions that are shared, while their non-shared regions remain protected. The uses of shared regions include the following:
+
+* Libraries: Library code can be very large and would waste considerable memory if it was loaded separately into every process that used it. Instead, a single copy of the library code can be shared by being mapped as a region in the address spaces of processes that require it. 
+* Kernel: Often the kernel code and data are mapped into every address space at the same location. When a process makes a system call or an exception occurs, there is no need to switch to a new set of address mappings. 
+* Data sharing and communication: Two processes, or a process and the kernel, might need to share data in order to cooperate on some task. It can be considerably more efficient for the data to be shared by being mapped as regions in both address spaces than by being passed in messages between them.
+
+### Creation of a new process
+The creation of a new process has traditionally been an indivisible operation provided by the operating system. For example, the UNIX fork system call creates a process with an execution environment copied from the caller (except for the return value from fork). The UNIX exec system call transforms the calling process into one executing the code of a named program.
+
+For a distributed system, the design of the process-creation mechanism has to take into account the utilization of multiple computers; consequently, the process-support infrastructure is divided into separate system services.
+
+The creation of a new process can be separated into two independent aspects:
+
+* the choice of a target host, for example, the host may be chosen from among the nodes in a cluster of computers acting as a compute server
+* the creation of an execution environment
+
+
+
+
+
+
 
