@@ -18,4 +18,13 @@ As CPU gets faster, processes tend to not increase in speed in proportion to CPU
 This means that I/O bound processes are slower than non-I/O bound processes, not faster. This is due to increases in the rate of data processing in the core, while the rate at which data is transferred from storage to the processor does not increase with it. As CPU clock speed increases, allowing more instructions to be executed in a given time window, the limiting factor of effective execution is the rate at which instructions can be delivered to the processor from storage, and sent from the processor to their destination. In short, programs naturally shift to being more and more I/O bound.
 
 ### Comparison with CPU-bound
+Many factors make up how a program performs. When something is X-bound, it means that it is the slowest/most important factor with regards to possible performance improvements. If something is CPU-bound, i.e. being limited by the speed of the CPU, adding more memory or I/O bandwidth won't help. If something is I/O bound, adding a faster CPU won't help.
+
+In the lay expression, "you are only as strong as your weakest link", the bound factor is the weakest link.
+
+When something is I/O bound, it means that the program is limited by the rate at which data can flow through the process, be it reading and/or writing, usually to a slow storage mechanism like disk (versus a high speed one like CPU cache or memory)
+
+
+
 Assume we have one CPU-bound process and many I/O-bound processes. As the processes flow around the system, the following scenario may result. The CPU-bound process will get and hold the CPU. During this time, all the other processes will finish their I/O and will move into the ready queue, waiting for the CPU. While the processes wait in the ready queue, the I/O devices are idle. Eventually, the CPU-bound process finishes its CPU burst and moves to an I/O device. All the I/O-bound processes, which have short CPU bursts, execute quickly and move back to the I/O queues. At this point, the CPU sits idle. The CPU-bound process will then move back to the ready queue and be allocated the CPU. Again, all the I/O processes end up waiting in the ready queue until the CPU-bound process is done. There is a convoy effect as all the other processes wait for the one big process to get off the CPU. This effect results in lower CPU and device utilization than might be possible if the shorter processes were allowed to go first.
+
