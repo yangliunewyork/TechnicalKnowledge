@@ -19,3 +19,9 @@ An important difference between remote procedure calls and local calls is that r
 5. The server stub unpacks the parameters from the message. Unpacking the parameters is called __unmarshalling__.
 6. Finally, the server stub calls the server procedure. The reply traces the same steps in the reverse direction.
 
+### RPC vs RMI
+RPC has structured programming semantics, on the other side, RMI is object oriented.
+
+With RPC you can just call remote functions exported into a server, in RMI you can have references to remote objects and invoke their methods, and also pass and return more remote object references that can be distributed among many JVM instances, so it's much more powerful.
+
+RMI stands out when the need to develop something more complex than a pure client-server architecture arises. It's very easy to spread out objects over a network enabling all the clients to communicate without having to stablish individual connections explicitly.
