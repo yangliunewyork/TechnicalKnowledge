@@ -1,0 +1,3 @@
+## Full-text searching
+Back in the days when full-text searching was a term known to a small percentage of engineers, most of us used SQL databases to perform search operations. Of course, it is ok, at least to some extent. However, as you go deeper and deeper, you start to see the limits of such an approach. Just to mention some of them—lack of scalability, not enough flexibility, and lack of language analysis (of course there were additions that introduced full-text searching to SQL databases). These were the reasons why Apache Lucene (http://lucene.apache.org) was created—to provide a library of full text search capabilities. It is very fast, scalable, and provides analysis capabilities for different languages.
+
