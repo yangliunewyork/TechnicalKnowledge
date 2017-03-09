@@ -85,3 +85,8 @@ wa: io wait cpu time (or) % CPU time spent in wait (on disk)
 hi: hardware irq (or) % CPU time spent servicing/handling hardware interrupts
 si: software irq (or) % CPU time spent servicing/handling software interrupts
 st: steal time - - % CPU time in involuntary wait by virtual cpu while hypervisor is servicing another processor (or) % CPU time stolen from a virtual machine
+
+
+## Background Knowledge
+* User time is the amount of time the CPU was busy executing code in user space.
+* System time is the amount of time the CPU was busy executing code in kernel space. If this value is reported for a thread or process, then it represents the amount of time the kernel was doing work on behalf of the executing context, for example, after a thread issued a system call.
