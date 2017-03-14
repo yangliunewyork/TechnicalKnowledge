@@ -75,6 +75,12 @@ It’s useful to visualize some aspects of how things are laid out while the pro
  * __Non-RAM storage__. If data lives completely outside a program, it can exist while the program is not running, outside the control of the program. The two primary examples of this are streamed objects, in which objects are turned into streams of bytes, generally to be sent to another machine, and persistent objects, in which the objects are placed on disk so they will hold their state even when the program is terminated. The trick with these types of storage is turning the objects into something that can exist on the other medium, and yet can be resurrected into a regular RAM-based object when necessary. Java provides support for lightweight persistence, and mechanisms such as JDBC and Hibernate provide more sophisticated support for storing and retrieving object information in databases.
  
 ##### Special case: primitive types
+One group of types, which you’ll use quite often in your programming, gets special treatment. You can think of these as “primitive” types. The reason for the special treatment is that to create an object with new—especially a small, simple variable—isn’t very efficient, because new places objects on the heap. For these types Java falls back on the approach taken by C and C++. That is, instead of creating the variable by using new, an “automatic” variable is created that is not a reference. The variable holds the value directly, and it’s placed on the stack, so it’s much more efficient.
+
+##### High-precision numbers
+Java includes two classes for performing high-precision arithmetic: BigInteger and BigDecimal. Although these approximately fit into the same category as the “wrapper” classes, neither one has a primitive analogue.
+
+##### Arrays in Java
 
 
 
