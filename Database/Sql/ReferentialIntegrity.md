@@ -6,7 +6,7 @@ For referential integrity to hold in a relational database, any column in a base
 
 __The adjective 'referential' describes the action that a foreign key performs, 'referring' to a link column in another table. In simple terms, 'referential integrity' is a guarantee that the target it 'refers' to will be found. A lack of referential integrity in a database can lead relational databases to return incomplete data, usually with no indication of an error.__
 
-Entity integrity referred as primary key. Referential integrity referred as foreign key.
+> Entity integrity referred as primary key. Referential integrity referred as foreign key.
 
 
 
