@@ -61,8 +61,20 @@ With Java, the garbage collector is designed to take care of the problem of rele
 
 
 
+## Everything is an object
+
+Both C++ and Java are hybrid languages, but in Java the designers felt that the hybridization was not as important as it was in C++. A hybrid language allows multiple programming styles; the reason C++ is hybrid is to support backward compatibility with the C language. Because C++ is a superset of the C language, it includes many of that language’s undesirable features, which can make some aspects of C++ overly complicated.
 
 
+### Where storage lives
+It’s useful to visualize some aspects of how things are laid out while the program is running—in particular how memory is arranged. There are five different places to store data:
+ * __Registers__. This is the fastest storage because it exists in a place different from that of other storage: inside the processor. However, the number of registers is severely limited, so registers are allocated as they are needed. You don’t have direct control, nor do you see any evidence in your programs that registers even exist (C & C++, on the other hand, allow you to suggest register allocation to the compiler).
+ * __The stack__. This lives in the general random-access memory (RAM) area, but has direct support from the processor via its stack pointer. The stack pointer is moved down to create new memory and moved up to release that memory. This is an extremely fast and efficient way to allocate storage, second only to registers. The Java system must know, while it is creating the program, the exact lifetime of all the items that are stored on the stack. This constraint places limits on the flexibility of your programs, so while some Java storage exists on the stack—in particular, object references—Java objects themselves are not placed on the stack.
+ * __The heap__. This is a general-purpose pool of memory (also in the RAM area) where all Java objects live. The nice thing about the heap is that, unlike the stack, the compiler doesn’t need to know how long that storage must stay on the heap. Thus, there’s a great deal of flexibility in using storage on the heap. Whenever you need an object, you simply write the code to create it by using new, and the storage is allocated on the heap when that code is executed. Of course there’s a price you pay for this flexibility: It may take more time to allocate and clean up heap storage than stack storage (if you even could create objects on the stack in Java, as you can in C++).
+ * __Constant storage__. Constant values are often placed directly in the program code, which is safe since they can never change. Sometimes constants are cordoned off by themselves so that they can be optionally placed in read-only memory (ROM), in embedded systems.
+ * __Non-RAM storage__. If data lives completely outside a program, it can exist while the program is not running, outside the control of the program. The two primary examples of this are streamed objects, in which objects are turned into streams of bytes, generally to be sent to another machine, and persistent objects, in which the objects are placed on disk so they will hold their state even when the program is terminated. The trick with these types of storage is turning the objects into something that can exist on the other medium, and yet can be resurrected into a regular RAM-based object when necessary. Java provides support for lightweight persistence, and mechanisms such as JDBC and Hibernate provide more sophisticated support for storing and retrieving object information in databases.
+ 
+##### Special case: primitive types
 
 
 
