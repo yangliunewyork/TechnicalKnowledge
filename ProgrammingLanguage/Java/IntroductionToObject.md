@@ -81,9 +81,28 @@ One group of types, which you’ll use quite often in your programming, gets spe
 Java includes two classes for performing high-precision arithmetic: BigInteger and BigDecimal. Although these approximately fit into the same category as the “wrapper” classes, neither one has a primitive analogue.
 
 ##### Arrays in Java
+One of the primary goals of Java is safety, so many of the problems that plague programmers in C and C++ are not repeated in Java. A Java array is guaranteed to be initialized and cannot be accessed outside of its range. The range checking comes at the price of having a small amount of memory overhead on each array as well as verifying the index at run time, but the assumption is that the safety and increased productivity are worth the expense (and Java can sometimes optimize these operations).
 
+#### Name visibility
+To produce an unambiguous name for a library, the Java creators want you to use your Internet domain name in reverse since domain names are guaranteed to be unique. Since my domain name is MindView.net, my utility library of foibles would be named net.mindview.utility.foibles. After your reversed domain name, the dots are intended to represent subdirectories.
 
+This mechanism means that all of your files automatically live in their own namespaces, and each class within a file must have a unique identifier—the language prevents name clashes for you.
 
+#### Using other components
+What about a class that exists in some other file? You might think that the compiler should be smart enough to simply go and find it, but there is a problem. Imagine that you want to use a class with a particular name, but more than one definition for that class exists (presumably these are different definitions). Or worse, imagine that you’re writing a program, and as you’re building it you add a new class to your library that conflicts with the name of an existing class.
+
+To solve this problem, you must eliminate all potential ambiguities. This is accomplished by telling the Java compiler exactly what classes you want by using the import keyword. import tells the compiler to bring in a package, which is a library of classes. (In other languages, a library could consist of functions and data as well as classes, but remember that all code in Java must be written inside a class.)
+
+#### The static keyword
+Ordinarily, when you create a class you are describing how objects of that class look and how they will behave. You don’t actually get an object until you create one using new, and at that point storage is allocated and methods become available.
+
+There are two situations in which this approach is not sufficient. One is if you want to have only a single piece of storage for a particular field, regardless of how many objects of that class are created, or even if no objects are created. The other is if you need a method that isn’t associated with any particular object of this class. That is, you need a method that you can call even if no objects are created.
+
+You can achieve both of these effects with the static keyword. When you say something is static, it means that particular field or method is not tied to any particular object instance of that class. So even if you’ve never created an object of that class you can call a static method or access a static field. With ordinary, non-static fields and methods, you must create an object and use that object to access the field or method, since non-static fields and methods must know the particular object they are working with.
+
+Some object-oriented languages use the terms class data and class methods, meaning that the data and methods exist only for the class as a whole, and not for any particular objects of the class. Sometimes the Java literature uses these terms too.
+
+To make a field or method static, you simply place the keyword before the definition.
 
 
 
