@@ -25,11 +25,48 @@ All activity in the Internet that involves two or more communicating remote enti
 
 > A protocol defines the format and the order of messages exchanged between two or more communicating entities, as well as the actions taken on the transmission and/or receipt of a message or other event.
 
+## The Network Edge
+The computers and other devices connected to the Internet are often referred to as end sys- tems. They are referred to as end systems because they sit at the edge of the Internet. The Internet’s end systems include desktop computers (e.g., desktop PCs, Macs, and Linux boxes), servers (e.g., Web and e-mail servers), and mobile computers (e.g., laptops, smartphones, and tablets). Furthermore, an increasing number of non-traditional devices are being attached to the Internet as end sys- tems (see sidebar).
+
+End systems are also referred to as __hosts__ because they host (that is, run) application programs such as a Web browser program, a Web server program, an e-mail client program, or an e-mail server program. Hosts are sometimes further divided into two categories: __clients__ and __servers__. Informally, clients tend to be desktop and mobile PCs, smartphones, and so on, whereas servers tend to be more powerful machines that store and distribute Web pages, stream video, relay e-mail, and so on. Today, most of the servers from which we receive search results, e-mail, Web pages, and videos reside in large data centers. 
+
+### Access Networks
+
+![alt](http://www.networkinginfoblog.com/contentsimages/DSL%20Internet%20access.JPG)
+
+The network that physically connects an end system to the first router (also known as the “edge router”) on a path from the end system to any other distant end system. 
+
+* Home Access: DSL, Cable, FTTH, Dial-Up, and Satellite
+
+Today, the two most prevalent types of broadband residential access are digital subscriber line (DSL) and cable. A residence typically obtains DSL Internet access from the same local telephone company (telco) that provides its wired local phone access. Thus, when DSL is used, a customer’s telco is also its ISP.  Each customer’s DSL modem uses the existing telephone line  to exchange data with a __digital subscriber line access multiplexer (DSLAM)__ located in the __telco__’s local __central office (CO)__. 
+
+The home’s DSL modem takes digital data and translates it to high- frequency tones for transmission over telephone wires to the CO; the analog signals from many such houses are translated back into digital format at the DSLAM. 
+
+While DSL makes use of the telco’s existing local telephone infrastructure, cable Internet access makes use of the cable television company’s existing cable television infrastructure. A residence obtains cable Internet access from the same company that provides its cable television.
+
+Cable internet access requires special modems, called cable modems. As with a DSL modem, the cable modem is typically an external device and connects to the home PC through an Ethernet port. At the cable head end, the cable modem termination system (CMTS) serves a similar function as the DSL network’s DSLAM—turning the analog signal sent from the cable modems in many downstream homes back into digital format. Cable modems divide the HFC network into two channels, a downstream and an upstream channel. As with DSL, access is typically asymmetric, with the down- stream channel typically allocated a higher transmission rate than the upstream channel. 
 
 
+One important characteristic of cable Internet access is that it is a shared broadcast medium. In particular, every packet sent by the head end travels down- stream on every link to every home and every packet sent by a home travels on the upstream channel to the head end. For this reason, if several users are simultane- ously downloading a video file on the downstream channel, the actual rate at which each user receives its video file will be significantly lower than the aggregate cable downstream rate. On the other hand, if there are only a few active users and they are all Web surfing, then each of the users may actually receive Web pages at the full cable downstream rate, because the users will rarely request a Web page at exactly the same time. Because the upstream channel is also shared, a distributed multiple access protocol is needed to coordinate transmissions and avoid collisions.
+
+#### Access in the Enterprise (and the Home): Ethernet and WiFi
+
+On corporate and university campuses, and increasingly in home settings, a __local area network (LAN)__ is used to connect an end system to the edge router. Although there are many types of LAN technologies, __Ethernet__ is by far the most prevalent access technology in corporate, university, and home networks. Ethernet users use twisted-pair copper wire to connect to an Ethernet switch. The Ethernet switch, or a network of such interconnected switches, is then in turn connected into the larger Internet. 
+
+Increasingly, however, people are accessing the Internet wirelessly from lap- tops, smartphones, tablets, and other devices . In a wireless LAN setting, wireless users transmit/receive packets to/from an access point that is connected into the enterprise’s network (most likely including wired Ethernet), which in turn is connected to the wired Internet. A wireless LAN user must typically be within a few tens of meters of the access point. __Wireless LAN__ access based on IEEE 802.11 technology, more colloquially known as __WiFi__.
+
+Even though Ethernet and WiFi access networks were initially deployed in enter- prise (corporate, university) settings, they have recently become relatively common components of home networks. Many homes combine broadband residential access (that is, cable modems or DSL) with these inexpensive wireless LAN technologies to create powerful home networks. This home network consists of a roaming laptop as well as a wired PC; a base station (the wireless access point), which communicates with the wireless PC; a cable modem, providing broadband access to the Internet; and a router, which interconnects the base station and the stationary PC with the cable modem. This network allows household members to have broadband access to the Internet with one mem- ber roaming from the kitchen to the backyard to the bedrooms.
+
+#### Wide-Area Wireless Access: 3G and LTE
+ Increasingly, devices such as iPhones, BlackBerrys, and Android devices are being used to send email, surf the Web, Tweet, and download music while on the run. These devices employ the same wireless infrastructure used for cellular telephony to send/receive packets through a base station that is operated by the cellular net- work provider. __Unlike WiFi, a user need only be within a few tens of kilometers (as opposed to a few tens of meters) of the base station.__
+ 
+Telecommunications companies have made enormous investments in so-called __third-generation (3G) wireless__, which provides packet-switched wide-area wireless Internet access at speeds in excess of 1 Mbps. But even higher-speed wide-area access technologies—a fourth-generation (4G) of wide-area wireless networks—are already being deployed. LTE ( for “Long-Term Evolution”—a candidate for Bad Acronym of the Year Award) has its roots in 3G technology, and can potentially achieve rates in excess of 10 Mbps. LTE downstream rates of many tens of Mbps have been reported in commercial deployments. 
 
 
+### Physical Media
 
+For each transmitter-receiver pair, the bit is sent by propagating electromagnetic waves or optical pulses across a __physical medium__. Physical media fall into two categories: __guided media__ and __unguided media__. With guided media, the waves are guided along a solid medium, such as a fiber-optic cable, a twisted-pair copper wire, or a coaxial cable. With unguided media, the waves propagate in the atmosphere and in outer space, such as in a wireless LAN or a digital satellite channel.
 
+## The Network Core
 
 
