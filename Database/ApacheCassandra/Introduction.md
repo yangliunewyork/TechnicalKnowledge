@@ -172,9 +172,32 @@ AP : To primarily support Availability and Partition Tolerance, your system may 
 
 ### Row-Oriented
 
+Cassandra is frequently referred to as a “column-oriented” database, which is not in- correct. It’s not relational, and it does represent its data structures in sparse multidimensional hashtables. “Sparse” means that for any given row you can have one or more columns, but each row doesn’t need to have all the same columns as other rows like it (as in a relational model). Each row has a unique key, which makes its data accessible. So although it’s not wrong to say that Cassandra is columnar or column- oriented, it might be more helpful to think of it as an indexed, row-oriented store.
 
+### Schema-Free
 
+Cassandra requires you to define an outer container, called a keyspace, that contains column families. The keyspace is essentially just a logical namespace to hold column families and certain configuration properties. The column families are names for asso- ciated data and a sort order. Beyond that, the data tables are sparse, so you can just start adding data to it, using the columns that you want; there’s no need to define your columns ahead of time. Instead of modeling data up front using expensive data mod- eling tools and then writing queries with complex join statements, Cassandra asks you to model the queries you want, and then provide the data around them.
 
+### High Performance
+Cassandra was designed specifically from the ground up to take full advantage of multiprocessor/multicore machines, and to run across many dozens of these machines housed in multiple data centers. It scales consistently and seamlessly to hundreds of terabytes. Cassandra has been shown to perform exceptionally well under heavy load. It consistently can show very fast throughput for writes per second on a basic com- modity workstation. As you add more servers, you can maintain all of Cassandra’s desirable properties without sacrificing performance.
+
+### Use Cases for Cassandra
+
+##### Large Deployments
+You probably don’t drive a semi truck to pick up your dry cleaning; semis aren’t well suited for that sort of task. Lots of careful engineering has gone into Cassandra’s __high availability, tuneable consistency, peer-to-peer protocol, and seamless scaling, which are its main selling points__. None of these qualities is even meaningful in a single-node deployment, let alone allowed to realize its full potential.
+
+There are, however, a wide variety of situations where a single-node relational database is all we may need. So do some measuring. Consider your expected traffic, throughput needs, and SLAs. There are no hard and fast rules here, but if you expect that you can reliably serve traffic with an acceptable level of performance with just a few relational databases, it might be a better choice to do so, simply because RDBMS are easier to run on a single machine and are more familiar.
+
+##### Lots of Writes, Statistics, and Analysis
+Consider your application from the perspective of the ratio of reads to writes. Cassandra is optimized for excellent throughput on writes.
+
+Many of the early production deployments of Cassandra involve storing user activity updates, social network usage, recommendations/reviews, and application statistics. These are strong use cases for Cassandra because they involve lots of writing with less predictable read operations, and because updates can occur unevenly with sudden spikes. In fact, the ability to handle application workloads that require high perform- ance at significant write volumes with many concurrent client threads is one of the primary features of Cassandra.
+
+##### Geographical Distribution
+Cassandra has out-of-the-box support for geographical distribution of data. You can easily configure Cassandra to replicate data across multiple data centers. If you have a globally deployed application that could see a performance benefit from putting the data near the user, Cassandra could be a great fit.
+
+##### Evolving Applications
+If your application is evolving rapidly and you’re in “startup mode,” Cassandra might be a good fit given its schema-free data model. This makes it easy to keep your database in step with application changes as you rapidly deploy.
 
 
 
