@@ -106,8 +106,54 @@ Circuit switching pre-allocates use of the transmission link regard- less of dem
 
 ### A Network of Networks
 
+![alt](https://image.slidesharecdn.com/chapter1v6-140114160131-phpapp02/95/chapter-1-v61-40-638.jpg)
+
+In summary, today’s Internet—a network of networks—is complex, consisting of a dozen or so tier-1 ISPs and hundreds of thousands of lower-tier ISPs. The ISPs are diverse in their coverage, with some spanning multiple continents and oceans, and others limited to narrow geographic regions. The lower-tier ISPs connect to the higher-tier ISPs, and the higher-tier ISPs interconnect with one another. Users and content providers are customers of lower-tier ISPs, and lower-tier ISPs are customers of higher-tier ISPs. In recent years, major content providers have also created their own networks and connect directly into lower-tier ISPs where possible.
+
+## Delay, Loss, and Throughput in Packet-Switched Networks
+
+### Overview of Delay in Packet-Switched Networks
+Recall that a packet starts in a host (the source), passes through a series of routers, and ends its journey in another host (the destination). As a packet travels from one node (host or router) to the subsequent node (host or router) along this path, the packet suffers from several types of delays at each node along the path. The most important of these delays are the __nodal processing delay__, __queuing delay__, __transmis- sion delay__, and __propagation delay__; together, these delays accumulate to give a total nodal delay.
+
+![alt](http://www.networkinginfoblog.com/contentsimages/the-nodal-delay-at-router-A.bmp)
+
+Note that router A has an outbound link leading to router B. This link is preceded by a queue (also known as a buffer). When the packet arrives at router A from the upstream node, router A examines the packet’s header to determine the appropriate outbound link for the packet and then directs the packet to this link. In this example, the outbound link for the packet is the one that leads to router B. A packet can be transmitted on a link only if there is no other packet currently being transmitted on the link and if there are no other packets preceding it in the queue; if the link is currently busy or if there are other packets already queued for the link, the newly arriving packet will then join the queue.
+
+##### Processing Delay
+The time required to examine the packet’s header and determine where to direct the packet is part of the processing delay. The processing delay can also include other factors, such as the time needed to check for bit-level errors in the packet that occurred in transmitting the packet’s bits from the upstream node to router A. Processing delays in high-speed routers are typically on the order of microseconds or less. After this nodal processing, the router directs the packet to the queue that precedes the link to router B.
+
+##### Queuing Delay
+At the queue, the packet experiences a __queuing delay__ as it waits to be transmitted onto the link. The length of the queuing delay of a specific packet will depend on the num- ber of earlier-arriving packets that are queued and waiting for transmission onto the link. If the queue is empty and no other packet is currently being transmitted, then our packet’s queuing delay will be zero. On the other hand, if the traffic is heavy and many other packets are also waiting to be transmitted, the queuing delay will be long. We will see shortly that the number of packets that an arriving packet might expect to find is a function of the intensity and nature of the traffic arriving at the queue. Queuing delays can be on the order of microseconds to milliseconds in practice.
+
+##### Transmission Delay
+Assuming that packets are transmitted in a first-come-first-served manner, as is com- mon in packet-switched networks, our packet can be transmitted only after all the packets that have arrived before it have been transmitted. Denote the length of the packet by L bits, and denote the transmission rate of the link from router A to router B by R bits/sec. For example, for a 10 Mbps Ethernet link, the rate is R = 10 Mbps; for a 100 Mbps Ethernet link, the rate is R = 100 Mbps. The __transmission delay__ is L/R. This is the amount of time required to push (that is, transmit) all of the packet’s bits into the link. Transmission delays are typically on the order of microseconds to milliseconds in practice.
 
 
+##### Propagation Delay
+Once a bit is pushed into the link, it needs to propagate to router B. The time required to propagate from the beginning of the link to router B is the propagation delay. The bit propagates at the propagation speed of the link. The propagation speed depends on the physical medium of the link (that is, fiber optics, twisted-pair copper wire, and so on) and is in the range of
 
+```2 􏰂108 meters/sec to 3 􏰂108 meters/sec```
+
+which is equal to, or a little less than, the speed of light. The propagation delay is the distance between two routers divided by the propagation speed. That is, the propagation delay is d/s, where d is the distance between router A and router B and s is the propagation speed of the link. Once the last bit of the packet propagates to node B, it and all the preceding bits of the packet are stored in router B. The whole process then continues with router B now performing the forwarding. In wide-area networks, propagation delays are on the order of milliseconds.
+
+###### Comparing Transmission and Propagation Delay
+The transmission delay is the amount of time required for the router to push out the packet; it is a function of the packet’s length and the trans- mission rate of the link, but has nothing to do with the distance between the two routers. The propagation delay, on the other hand, is the time it takes a bit to propagate from one router to the next; it is a function of the distance between the two routers, but has nothing to do with the packet’s length or the transmission rate of the link.
+
+If we let dproc, dqueue, dtrans, and dprop denote the processing, queuing, transmis- sion, and propagation delays, then the total nodal delay is given by
+
+```dnodal = dproc + dqueue + dtrans + dprop```
+The contribution of these delay components can vary significantly. For example, dprop can be negligible (for example, a couple of microseconds) for a link connect- ing two routers on the same university campus; however, dprop is hundreds of mil- liseconds for two routers interconnected by a geostationary satellite link, and can be the dominant term in dnodal. Similarly, dtrans can range from negligible to significant. Its contribution is typically negligible for transmission rates of 10 Mbps and higher (for example, for LANs); however, it can be hundreds of milliseconds for large Internet packets sent over low-speed dial-up modem links. The processing delay, dproc, is often negligible; however, it strongly influences a router’s maximum throughput, which is the maximum rate at which a router can forward packets.
+
+### Queuing Delay and Packet Loss
+The ratio La/R, called the __traffic intensity__, often plays an important role in estimating the extent of the queuing delay. If La/R > 1, then the average rate at which bits arrive at the queue exceeds the rate at which the bits can be transmitted from the queue. In this unfortunate situation, the queue will tend to increase without bound and the queuing delay will approach infinity! Therefore, one of the golden rules in traffic engineering is: Design your system so that the traffic intensity is no greater than 1.
+
+Now consider the case La/R ≤ 1. Here, the nature of the arriving traffic impacts the queuing delay. For example, if packets arrive periodically—that is, one packet arrives every L/R seconds—then every packet will arrive at an empty queue and there will be no queuing delay. On the other hand, if packets arrive in bursts but periodically, there can be a significant average queuing delay. For example, suppose N packets arrive simultaneously every (L/R)N seconds. Then the first packet trans- mitted has no queuing delay; the second packet transmitted has a queuing delay of L/R seconds; and more generally, the nth packet transmitted has a queuing delay of (n 􏰃 1)L/R seconds. 
+
+#### Packet Loss
+In our discussions above, we have assumed that the queue is capable of holding an infinite number of packets. In reality a queue preceding a link has finite capacity, although the queuing capacity greatly depends on the router design and cost. Because the queue capacity is finite, packet delays do not really approach infinity as the traffic intensity approaches 1. Instead, a packet can arrive to find a full queue. __With no place to store such a packet, a router will drop that packet; that is, the packet will be lost.__ This overflow at a queue can again be seen in the Java applet for a queue when the traffic intensity is greater than 1.
+
+From an end-system viewpoint, a packet loss will look like a packet having been transmitted into the network core but never emerging from the network at the destination. The fraction of lost packets increases as the traffic intensity increases. Therefore, performance at a node is often measured not only in terms of delay, but also in terms of the probability of packet loss.  A lost packet may be retransmitted on an end-to-end basis in order to ensure that all data are eventually transferred from source to destination.
+
+### End-to-End Delay
 
 
