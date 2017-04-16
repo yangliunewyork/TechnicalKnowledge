@@ -154,6 +154,46 @@ In our discussions above, we have assumed that the queue is capable of holding a
 
 From an end-system viewpoint, a packet loss will look like a packet having been transmitted into the network core but never emerging from the network at the destination. The fraction of lost packets increases as the traffic intensity increases. Therefore, performance at a node is often measured not only in terms of delay, but also in terms of the probability of packet loss.  A lost packet may be retransmitted on an end-to-end basis in order to ensure that all data are eventually transferred from source to destination.
 
-### End-to-End Delay
+## Protocol Layers and Their Service Models
 
+### Layered Architecture
+A layered architecture allows us to discuss a well-defined, specific part of a large and complex system. This simplification itself is of considerable value by pro- viding modularity, making it much easier to change the implementation of the serv- ice provided by the layer. As long as the layer provides the same service to the layer above it, and uses the same services from the layer below it, the remainder of the system remains unchanged when a layer’s implementation is changed. (Note that changing the implementation of a service is very different from changing the serv- ice itself!) For example, if the gate functions were changed (for instance, to have people board and disembark by height), the remainder of the airline system would remain unchanged since the gate layer still provides the same function (loading and unloading people); it simply implements that function in a different manner after the change. For large and complex systems that are constantly being updated, the ability to change the implementation of a service without affecting other components of the system is another important advantage of layering.
+
+##### Protocol Layering
+ To provide structure to the design of network protocols, network designers organize protocols—and the network hardware and software that implement the protocols— in layers.Each protocol belongs to one of the layers.  We are again interested in the services that a layer offers to the layer above—the so-called service model of a layer. Each layer provides its service by (1) performing certain actions within that layer and by (2) using the services of the layer directly below it.
+ 
+ A protocol layer can be implemented in software, in hardware, or in a combina- tion of the two. Application-layer protocols—such as HTTP and SMTP—are almost always implemented in software in the end systems; so are transport-layer protocols. Because the physical layer and data link layers are responsible for handling commu- nication over a specific link, they are typically implemented in a network interface card (for example, Ethernet or WiFi interface cards) associated with a given link. The network layer is often a mixed implementation of hardware and software.
+ 
+ Protocol layering has conceptual and structural advantages. As we have seen, __layering provides a structured way to discuss system components. Mod- ularity makes it easier to update system components.__ We mention, however, that some researchers and networking engineers are vehemently opposed to layering. One potential drawback of layering is that one layer may dupli- cate lower-layer functionality. For example, many protocol stacks provide error recovery on both a per-link basis and an end-to-end basis. A second potential draw- back is that functionality at one layer may need information (for example, a time- stamp value) that is present only in another layer; this violates the goal of separation of layers.
+
+When taken together, the protocols of the various layers are called the __protocol stack__. The Internet protocol stack consists of five layers: the physical, link, network, transport, and application layers. If you examine the Table of Contents, you will see that we have roughly organized this book using the layers of the Internet protocol stack. We take a top-down approach, first covering the application layer and then proceeding downward.
+
+##### Application Layer
+The application layer is where network applications and their application-layer proto- cols reside. The Internet’s application layer includes many protocols, such as the HTTP protocol (which provides for Web document request and transfer), SMTP (which pro- vides for the transfer of e-mail messages), and FTP (which provides for the transfer of files between two end systems). We’ll see that certain network functions, such as the translation of human-friendly names for Internet end systems like www.ietf.org to a 32-bit network address, are also done with the help of a specific application-layer pro- tocol, namely, the domain name system (DNS).
+
+An application-layer protocol is distributed over multiple end systems, with the application in one end system using the protocol to exchange packets of information with the application in another end system. We’ll refer to this packet of information at the application layer as a message.
+
+##### Transport Layer
+The Internet’s transport layer transports application-layer messages between application endpoints. In the Internet there are two transport protocols, TCP and UDP, either of which can transport application-layer messages. TCP provides a connection-oriented service to its applications. This service includes guaranteed delivery of application-layer messages to the destination and flow control (that is, sender/receiver speed matching). TCP also breaks long messages into shorter seg- ments and provides a congestion-control mechanism, so that a source throttles its transmission rate when the network is congested. The UDP protocol provides a con- nectionless service to its applications. This is a no-frills service that provides no reliability, no flow control, and no congestion control. 
+
+##### Network Layer
+The Internet’s network layer is responsible for moving network-layer packets known as __datagrams__ from one host to another. The Internet’s network layer includes the celebrated IP Protocol, which defines the fields in the datagram as well as how the end systems and routers act on these fields. There is only one IP protocol, and all Internet components that have a net- work layer must run the IP protocol. The Internet’s network layer also contains rout- ing protocols that determine the routes that datagrams take between sources and destinations. Although the network layer contains both the IP protocol and numerous routing protocols, it is often simply referred to as the IP layer, reflecting the fact that IP is the glue that binds the Internet together.
+
+##### Link Layer
+The Internet’s network layer routes a datagram through a series of routers between the source and destination. __To move a packet from one node (host or router) to the next node in the route, the network layer relies on the services of the link layer. In particular, at each node, the network layer passes the datagram down to the link layer, which delivers the datagram to the next node along the route. At this next node, the link layer passes the datagram up to the network layer.__
+
+As datagrams typically need to traverse several links to travel from source to destination, a datagram may be handled by different link-layer protocols at different links along its route.We’ll refer to the link- layer packets as __frames__.
+
+##### Physical Layer
+While the job of the link layer is to move entire frames from one network element to an adjacent network element, the job of the physical layer is to move the individ- ual bits within the frame from one node to the next. The protocols in this layer are again link dependent and further depend on the actual transmission medium of the link (for example, twisted-pair copper wire, single-mode fiber optics). 
+
+##### OSI model
+
+![alt](http://www.opengroup.org/public/arch/p4/views/figa-9.gif)
+
+The seven layers of the OSI reference model, are: application layer, presentation layer, session layer, transport layer, network layer, data link layer, and physical layer. The functionality of five of these layers is roughly the same as their similarly named Internet counterparts. Thus, let’s consider the two additional layers present in the OSI reference model—the presentation layer and the session layer. The role of the presentation layer is to provide services that allow communicating applications to interpret the meaning of data exchanged. These services include data compression and data encryption (which are self- explanatory) as well as data description (which frees the applications from having to worry about the internal format in which data are represented/stored—formats that may differ from one computer to another). The session layer provides for delimiting and synchronization of data exchange, includ- ing the means to build a checkpointing and recovery scheme.
+
+
+### Encapsulation
+### Encapsulation
 
