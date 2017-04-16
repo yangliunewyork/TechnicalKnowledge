@@ -195,5 +195,5 @@ The seven layers of the OSI reference model, are: application layer, presentatio
 
 
 ### Encapsulation
-### Encapsulation
+
 
