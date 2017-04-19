@@ -76,3 +76,18 @@ Neither TCP nor UDP provide any encryption—the data that the sending process p
 
 ## The Web and HTTP
 
+##### Overview of HTTP
+The __HyperText Transfer Protocol (HTTP)__, the Web’s application-layer protocol, is at the heart of the Web.  HTTP is implemented in two programs: a client program and a server program. The client program and server program, executing on different end systems, talk to each other by exchanging HTTP messages. HTTP defines the structure of these messages and how the client and server exchange the messages.
+
+A __Web page__ (also called a document) consists of objects. An __object__ is simply a file—such as an HTML file, a JPEG image, a Java applet, or a video clip—that is addressable by a single URL. Most Web pages consist of a base HTML file and several referenced objects. For example, if a Web page contains HTML text and five JPEG images, then the Web page has six objects: the base HTML file plus the five images. The base HTML file references the other objects in the page with the objects’ URLs. __Each URL has two components: the hostname of the server that houses the object and the object’s path name.__
+
+__Web servers, which implement the server side of HTTP, house Web objects, each addressable by a URL. Popular Web servers include Apache and Microsoft Internet Information Server.__
+
+HTTP defines how Web clients request Web pages from Web servers and how servers transfer Web pages to clients. HTTP uses TCP as its underlying transport protocol (rather than running on top of UDP). The HTTP client first initiates a TCP connection with the server. Once the connection is established, the browser and the server processes access TCP through their socket interfaces. Nn the client side the socket interface is the door between the client process and the TCP connection; on the server side it is the door between the server process and the TCP connection. The client sends HTTP request messages into its socket interface and receives HTTP response messages from its socket interface. Similarly, the HTTP server receives request messages from its socket interface and sends response messages into its socket interface. Once the client sends a message into its socket interface, the message is out of the client’s hands and is “in the hands” of TCP.Recall that TCP provides a reliable data trans- fer service to HTTP. This implies that each HTTP request message sent by a client process eventually arrives intact at the server; similarly, each HTTP response message sent by the server process eventually arrives intact at the client. Here we see one of the great advantages of a layered architecture—HTTP need not worry about lost data or the details of how TCP recovers from loss or reordering of data within the network. That is the job of TCP and the protocols in the lower layers of the protocol stack.
+
+It is important to note that the server sends requested files to clients without stor- ing any state information about the client. If a particular client asks for the same object twice in a period of a few seconds, the server does not respond by saying that it just served the object to the client; instead, the server resends the object, as it has completely forgotten what it did earlier. Because an HTTP server maintains no information about the clients, HTTP is said to be a __stateless protocol__. We also remark that the Web uses the client-server application architecture. __A Web server is always on, with a fixed IP address, and it services requests from potentially millions of different browsers.__
+
+##### Non-Persistent and Persistent Connections
+
+
+
