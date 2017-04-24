@@ -150,3 +150,36 @@ SVG’s default style is a black fill with no stroke. If you want anything else,
 * stroke-width : A numeric measurement (typically in pixels).
 * opacity : A numeric value between 0.0 (completely transparent) and 1.0 (completely opaque).
 * text :  you can also use these properties, which work just like in CSS: font-family and font-size
+
+## Data
+Typically, when using D3 to generate new DOM elements, the new elements will be circles, rectangles, or other visual forms that represent your data.
+
+D3 smartly employs a technique called chain syntax, which you might recognize from jQuery. By “chaining” methods together with periods, you can perform several actions in a single line of code. It can be fast and easy, but it’s important to understand how it works, to save yourself hours of debugging headaches later.
+
+Many, but not all, D3 methods return a selection (actually, a reference to a selection), which enables this handy technique of method chaining. Typically, a method returns a reference to the element that it just acted on, but not always.
+So remember this: when chaining methods, order matters. The output type of one method has to match the input type expected by the next method in the chain. If adjacent inputs and outputs are mismatched, the hand-off will function more like a dropped baton in a middle-school relay race.
+
+Data visualization is a process of mapping data to visuals. Data in, visual properties out. Maybe bigger numbers make taller bars, or special categories trigger brighter colors. The mapping rules are up to you.
+
+With D3, we bind our data input values to elements in the DOM. Binding is like “at‐ taching” or associating data to specific elements, so that later you can reference those values to apply mapping rules. Without the binding step, we have a bunch of data-less, unmappable DOM elements. No one wants that.
+
+```
+ d3.select("body").selectAll("p")
+        .data(dataset)
+        .enter()
+        .append("p")
+        .text("New paragraph!");
+ ```
+ 
+ Here’s what’s happening:
+
+d3.select("body") : Finds the body in the DOM and hands off a reference to the next step in the chain.
+.selectAll("p") : Selects all paragraphs in the DOM. Because none exist yet, this returns an empty selection. Think of this empty selection as representing the paragraphs that will soon exist.
+.data(dataset) : Counts and parses our data values. There are five values in our array called data set, so everything past this point is executed five times, once for each value.
+.enter() : To create new, data-bound elements, you must use enter(). This method looks at the current DOM selection, and then at the data being handed to it. If there are more data values than corresponding DOM elements, then enter() creates a new placeholder element on which you can work your magic. It then hands off a reference to this new placeholder to the next step in the chain.
+.append("p") : Takes the empty placeholder selection created by enter() and appends a p element into the DOM. Hooray! Then it hands off a reference to the element it just created to the next step in the chain.
+.text("New paragraph!") : Takes the reference to the newly created p and inserts a text value.
+
+
+## Drawing with Data
+
