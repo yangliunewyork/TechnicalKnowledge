@@ -1,4 +1,4 @@
-<<High Performance MySQL>>
+* Reference :  High Performance MySQL
 
 MySQL use often grows organically. In the corporate world, a single application developer may build the company's next killer app on top of MySQL. This initial success with MySQL development typically breeds more projects and more success. As the amount of data you manage using MySQL grows, you'll certainly appreciate its ability to handle large amounts of data efficiently. You may even find that MySQL has become the de facto standard backend storage for your applications.
 
@@ -127,3 +127,53 @@ While the steps are presented as a serial list, it's important to realize that S
 This solution isn't foolproof. It's possible for the IO thread to miss one or more queries if the master crashes before the thread has had a chance to read them. The amount of data that could be missed is greatly reduced compared to the 3.23 implementation, however.
 
 ## Replication Architectures
+
+### The Replication Rules
+Before looking at the architectures, it helps to understand the basic rules that must be followed in any MySQL replication setup:
+
+* Every slave must have a unique server ID.
+* A slave may have only one master.
+* A master may have many slaves.
+* Slaves can also be masters for other slaves.
+
+The first rule isn't entirely true, but let's assume that it is for right now, and soon enough you'll see why it isn't always necessary. In any case, the rules aren't terribly complex. Those four rules provide quite a bit of flexibility, as the next sections illustrate.
+
+#### Master with slaves
+The most basic replication model, a single master with one or more slaves. The master is given server ID 1 and each slave has a different ID.
+
+![alt](http://www.clusterdb.com/wp-content/uploads/2010/10/Multiple_slaves.jpg)
+
+This configuration is useful in situations in which you have few write queries and many reads. Using several slaves, you can effectively spread the workload among many servers. In fact, each of the slaves can be running other services, such as Apache. By following this model, you can scale horizontally with many servers. The only limit you are likely to hit is bandwidth from the master to the slaves. If you have 20 slaves, which each need to pull an average of 500 KB per second, that's a total of 10,000 KB/sec (or nearly 10 Mbits/sec) of bandwidth.
+
+A 100-Mbit network should have little trouble with that volume, but if either the rate of updates to the master increases or you significantly increase the number of slaves, you run the risk of saturating even a 100-Mbit network. In this case, you need to consider gigabit network hardware or an alternative replication architecture, such as the pyramid described later.
+
+#### Slave with two masters
+It would be nice to use a single slave to handle two unrelated masters. That allows you to minimize hardware costs and still have a backup server for each master. However, it's a violation of the second rule: a slave can't have two masters.
+
+To get around that limitation, you can run two copies of MySQL on the slave machine. Each MySQL instance is responsible for replicating a different master. In fact, there's no reason you couldn't do this for 5 or 10 distinct MySQL masters. As long as the slave has sufficient disk space, I/O, and CPU power to keep up with all the masters, you shouldn't have any problems.
+
+#### Dual master
+Another possibility is to have a pair of masters. This is particularly useful when two geographically separate parts of an organization need write access to the same shared database. Using a dual-master design means that neither site has to endure the latency associated with a WAN connection.
+
+Furthermore, WAN connections are more likely to have brief interruptions or outages. When they occur, neither site will be without access to their data, and when the connection returns to normal, both masters will catch up from each other.Of course, there are drawbacks to this setup. However, if responsibility for your data is relatively well partitioned (site A writes only to customer records, and site B writes only to contract records) you may not have much to worry about.
+
+A logical extension to the dual-master configuration is to add one or more slaves to each master. This has the same benefits and drawbacks of a dual-master arrangement, but it also inherits the master/slave benefits at each site. With a slave available, there is no single point of failure. The slaves can be used to offload read-intensive queries that don't require the absolutely latest data.
+
+#### Replication ring (multi-master)
+
+![alt](https://severalnines.com/sites/default/files/blog/node_5019/image02.png)
+
+The dual-master configuration is really just a special case of the master ring configuration. In a master ring, there are three or more masters that form a ring. Each server is a slave of one of its neighbors and a master to the other.
+
+The benefits of a replication ring are, like a dual-master setup, geographical. Each site has a master so it can update the database without incurring high network latencies. However, this convenience comes at a high price. Master rings are fragile; if a single master is unavailable for any reason, the ring is broken. Queries will flow around the ring only until they reach the break. Full service can't be restored until all nodes are online.
+
+To mitigate the risk of a single node crashing and interrupting service to the ring, you can add one or more slaves at each site. But this does little to guard against a loss of connectivity.
+
+![alt](http://pic002.cnblogs.com/images/2012/93867/2012090320454927.jpg)
+
+#### Pyramid
+
+In large, geographically diverse organizations, there may be a single master that must be replicated to many smaller offices. Rather than configure each slave to contact the master directly, it may be more manageable to use a pyramid design.
+
+
+## Common Problems
