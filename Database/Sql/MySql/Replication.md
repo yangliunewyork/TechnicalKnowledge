@@ -177,3 +177,103 @@ In large, geographically diverse organizations, there may be a single master tha
 
 
 ## Common Problems
+
+####  Slave Data Changes
+
+It should go without saying that manually changing data on a slave is usually a very bad idea. The same holds true for programmatically changing slave data. By accidentally making changes to data on a slave, you can easily introduce data inconsistencies that may cause replication to fail. It may take hours, days, weeks, or even months for the problem to surface, and when it does, you'll be hard pressed to explain what's going on.
+
+Before MySQL 4.0.14 there was no way to tell MySQL not to allow any changes that don't originate from replication. Instead, the best solution in versions prior to 4.0.14 has an ironic aspect to it: you need to make a change on all the slaves, removing the permissions (or even the accounts) of users who can change data.
+
+But that solution is problematic for other reasons. You'd probably forget about the change after a while. Then, late one night, the master would fail and you would need to promote a slave to master. You'd have to spend a bit of time trying figure out why applications are mysteriously failing.
+
+As of Version 4.0.14, adding read-only to the slave's configuration file allows the slave to process write queries only via replication.
+
+It's worth remembering that MySQL is very trusting when it comes to replication. The slave threads don't switch identities to run each query as the same user that originally executed it on the master. Instead, the slave thread runs with the equivalent of root access on the slave. It can, by design, change any data it needs to change. The trust comes from the fact that the slaves never verify that a particular user has the necessary privileges to run a query that appears in the binary log. It blindly trusts the master and that the master's logs haven't been tampered with.
+
+#### Nonunique Server IDs
+This has to be one of the most elusive problems you can encounter with MySQL replication. If you accidentally configure two slaves with the same server ID they'll appear to work just fine if you're not watching closely. But if you watch their error logs carefully or watch the master with mytop (covered in Appendix B), you'll notice something very odd.
+
+On the master, you'll see only one of the two slaves connected at a given moment. Usually all slaves are connecting and replicating all the time. On the slave you'll see frequent disconnect/reconnect messages appearing in the error log, but none of those messages will lead you to believe that the server ID of one slave might be misconfigured.
+
+The only real harm in this situation is that the slaves can't replicate very quickly. Because the slaves (not the master) keep track of their replication progress, there's no need to worry about giving one query to the first slave, one to the other slave, and so on. Both slaves get all the data; they just get it much more slowly.
+
+The only solution to this problem is to be careful when setting up your slaves. If you see symptoms like this, double check the configuration of each slave to ensure that it has the server ID you expect it to. You may find it helpful to keep a master list of slave-to-server-ID mappings so that you don't lose track of which ID belongs to each slave. Consider using numeric values that have some sort of meaning in your setup, such as the last octet of each machine's IP address.
+
+#### Log Corruption or Partial Log Record
+The second most elusive problem occurs when a binary log somehow becomes corrupted. When that happens, the slave will typically fail with an error message like:
+```
+Error in Log_event::read_log_event( ): '...', data_len=92,event_type=2
+```
+If that ever happens, there's little you can do. The slave is often confused enough that you can't simply try to skip the query and go to the next one. The only solution is to resync with the master and start over.
+
+How does this happen? It's difficult to say. As long as the software is working properly, it could be a hardware or driver problem. Jeremy once saw a system have this problem repeatedly before he found that it had faulty RAM installed. We have heard of it happening on systems with disk controllers that don't have reliable drivers.
+
+#### Bulk-Loading Data
+
+While you can write code to load a lot of data into MySQL quickly, nothing beats the performance of using MySQL's LOAD DATA INFILE and LOAD DATA LOCAL INFILE commands to read data in from a flat file. In fact, the mysqlimport command-line tool uses LOAD DATA INFILE behind the scenes.
+
+In all 3.23.xx versions of MySQL, replicating the LOAD DATA INFILE command is problematic. The contents of the file aren't stored in the binary log; only the query is, so the file must exist on the master until all slaves have copied it (they will do so automatically when they need it). If the file is removed prematurely, slaves can't copy the file, and replication will fail.
+
+The LOAD DATA LOCAL INFILE command isn't affected. When the LOCAL option is specified, the mysql client reads the file from the client and generates the appropriate SQL to insert the data.
+
+To avoid this problem, it's best either to load the data remotely using the latter syntax or to import the data programmatically. Either option ensures that the inserting is done via normal SQL statements that will all be properly logged.
+
+Starting with Version 4.0, MySQL doesn't have this limitation. When a LOAD DATA INFILE command is issued, MySQL actually copies the entire file into the binary log. Slaves don't need to pull a copy of the original file from the master's disk.
+
+#### Nonreplicated Dependencies
+
+If you perform binary log filtering on either the master or the slave, it's quite easy to inadvertently break replication. For example, you may want to have a production database called production and a staging database called staging. The idea is to do all the necessary testing, development, and retesting in the staging database. When all the interim work is complete, you copy the data into the production database.
+
+If the slave ignores queries from the staging database because of a filtering rule like the following, you'll probably end up frustrated:
+
+```
+replicate-do-db = production
+```
+
+You might try to run a query like this one to populate one of the production tables:
+
+```
+INSERT INTO production.sales SELECT * FROM staging.sales
+```
+
+This query works fine on the master, but the slaves will all fail because they don't have copies of the staging database. In fact, there's no easy way to make it work. Any attempt to reference the staging database is doomed to fail.
+
+The only real solution in a case like this is to export all the data from the staging database and import it into the production database. You can do this programmatically if you want fine control over the process, or you can simply use mysqldump to dump the data to a text file and reimport it using mysql.
+
+#### Missing Temporary Tables
+
+This is really a special case of the previous example, but it warrants special attention because the real cause is a bit different. Instead of a filtering problem, this is a problem of restarting the slave at the wrong time.
+
+Temporary tables replicate just fine, but if a series of queries that create and use a temporary table are interrupted on a slave by a restart or by stopping and starting replication, replication will fail.
+
+Temporary tables are, by definition, temporary. When the server is restarted, they vanish. When the thread vanishes (such as with a SLAVE STOP or SLAVE STOP SQL_THREAD command), any temporary tables created by that thread vanish.
+
+There is no good solution for this problem. On the application side, it's best if temporary tables are created as late as possible, which helps minimize the time between the creation of the table and when it is actually needed. But even this solution only decreases the likelihood of the problem occurring.
+
+You can avoid temporary tables completely, but that may involve time-consuming application changes. You'd have to ensure that the nontemporary tables created by your application always have unique names and that they are dropped when appropriate.
+
+Because they are transient, this problem also affects Heap tables. They are always dropped explicitly, however so they vanish only when a slave is restarted. Stopping and restarting replication on the slave doesn't affect Heap tables.
+
+#### Binary Log Out of Sync with Transaction Log
+
+We know that MySQL records queries in the binary log after it executes them. We also know that MySQL writes transactions to the binary log after they have been committed. What happens if MySQL crashes, or someone pulls the plug in the microseconds after a transaction has been committed but before it writes the transaction to the binary log?
+
+The result is that the master will contain the results of having completed the transaction, but the slaves will never see it. Ever. The transaction may have been a simple insert, or it could have been something as dramatic as a DROP TABLE command.
+
+There is currently no workaround for this problem. Luckily MySQL crashes are rare. Make sure the power cables are plugged in tightly!
+
+#### Slave Wants to Connect to the Wrong Master
+
+If you change the hostname of your master, it's important to tell slaves using the CHANGE MASTER command:
+
+mysql> CHANGE MASTER TO MASTER_HOST='newmaster.example.com';
+You can't simply shut down the slave, edit the my.cnf file, and start it back up. MySQL always uses the master.info file if it exists, despite the settings contained in the my.cnf file.[8]
+
+[8] This is, in my opinion, an easy-to-fix bug, but the MySQL maintainers don't agree. The workaround is to always use the CHANGE MASTER TO command for configuring slaves.
+
+Alternatively, you can manually edit the master.info file, replacing the old hostname with the new one. The danger in relying on this method is that the master.info file can be deprecated, replaced, or radically changed in a future version of MySQL. It's best to stick to the documented way of doing things.
+
+## The Future of Replication
+
+
+
