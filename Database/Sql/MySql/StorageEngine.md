@@ -40,7 +40,7 @@ The locking style that offers the greatest concurrency (and carries the greatest
 
 ### Multi-Version Concurrency Control
 
-There is a final technique for increasing concurrency: Multi-Version Concurrency Control (MVCC). Often referred to simply as versioning, MVCC is used by Oracle, by PostgreSQL, and by MySQL's InnoDB storage engine. MVCC can be thought of as a new twist on row-level locking. It has the added benefit of allowing nonlocking reads while still locking the necessary records only during write operations. Some of MVCC's other properties will be of particular interest when we look at transactions in the next section.
+There is a final technique for increasing concurrency: Multi-Version Concurrency Control (MVCC). Often referred to simply as versioning, __MVCC is used by Oracle, by PostgreSQL, and by MySQL's InnoDB storage engine__. MVCC can be thought of as a new twist on row-level locking. It has the added benefit of allowing nonlocking reads while still locking the necessary records only during write operations. Some of MVCC's other properties will be of particular interest when we look at transactions in the next section.
 
 So how does this scheme work? Conceptually, any query against a table will actually see a snapshot of the data as it existed at the time the query began—no matter how long it takes to execute. 
 
