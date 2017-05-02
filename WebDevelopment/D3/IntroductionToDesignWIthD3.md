@@ -15,7 +15,7 @@ HTTP stands for Hypertext Transfer Protocol, and it’s the most common protocol
 Hypertext Markup Language is used to structure content for web browsers. HTML is stored in plain text files with the .html suffix.HTML is a tool for specifying semantic structure, or attaching hierarchy, relationships, and meaning to content. (HTML doesn’t address the visual representation of a document’s structure—that’s CSS’ job.) .
 
 There are hundreds of different HTML elements. Here are some of the most common.
-* <!DOCTYPE html> : The standard document type declaration. Must be the first thing in the document.
+* < !DOCTYPE html > : The standard document type declaration. Must be the first thing in the document.
 * html : Surrounds all HTML content in a document.
 * head : The document head contains all metadata about the document, such as its title and any references to external stylesheets and scripts.
 * title : The title of the document. Browsers typically display this at the top of the browser window and use this title when bookmarking a page.
