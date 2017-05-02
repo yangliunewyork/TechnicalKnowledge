@@ -38,9 +38,12 @@ The last part of the URI is the fragment. It is delimited by a “#” character
 Using a unique URI to identify each of your services makes each of your resources linkable. Service references can be embedded in documents or even email messages. For instance, consider the situation where somebody calls your company’s help desk with a problem related to your SOA application. A link could represent the exact prob‐ lem the user is having. Customer support can email the link to a developer who can fix the problem. The developer can reproduce the problem by clicking on the link. Fur‐ thermore, the data that services publish can also be composed into larger data streams fairly easily:
 
 ```
-<order id="111"> <customer>http://customers.myintranet.com/customers/32133</customer> <order-entries>
-<order-entry>
-<quantity>5</quantity> <product>http://products.myintranet.com/products/111</product>
+<order id="111"> 
+  <customer>http://customers.myintranet.com/customers/32133</customer> 
+    <order-entries>
+      <order-entry>
+        <quantity>5</quantity> 
+        <product>http://products.myintranet.com/products/111</product>
 ...
 ```
 
