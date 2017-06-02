@@ -60,7 +60,12 @@ It's worth remembering that anytime you create a package, you implicitly specify
 Note that compiled code is often placed in a different directory than source code, but the path to the compiled code must still be found by the JVM using the CLASSPATH.
 
 ## Java access specifiers
+The Java access specifiers public, protected, and private are placed in front of each definition for each member in your class, whether it’s a field or a method. Each access specifier only controls the access for that particular definition. If you don抰 provide an access specifier, it means "package access". So one way or another, everything has some kind of access control.
 
+#### Package access
+All the examples before this chapter used no access specifiers. The default access has no keyword, but it is commonly referred to as package access (and sometimes “friendly”). It means that all the other classes in the current package have access to that member, but to all the classes outside of this package, the member appears to be private. Since a compilation unit—a file—can belong only to a single package, all the classes within a single compilation unit are automatically available to each other via package access.
+
+Package access allows you to group related classes together in a package so that they can easily interact with each other. When you put classes together in a package, thus granting mutual access to their package-access members, you "own" the code in that package. It makes sense that only code that you own should have package access to other code that you own. You could say that package access gives a meaning or a reason for grouping classes together in a package. In many languages the way you organize your definitions in files can be arbitrary, but in Java you're compelled to organize them in a sensible fashion. In addition, you'll probably want to exclude classes that shouldn't have access to the classes being defined in the current package.
 
 ## Summary
 In any relationship it’s important to have boundaries that are respected by all parties involved. When you create a library, you establish a relationship with the user of that library—the client programmer—who is another programmer, but one using your library to build an application or a bigger library.
