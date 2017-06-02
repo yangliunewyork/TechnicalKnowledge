@@ -394,6 +394,6 @@ To determine which requests she responds to, BitTorrent uses a clever trading al
 
 The incentive mechanism for trading just described is often referred to as __tit-for-tat__. It has been shown that this incentive scheme can be circumvented. Nevertheless, the BitTorrent ecosystem is wildly successful, with millions of simultaneous peers actively sharing files in hundreds of thousands of torrents. If BitTorrent had been designed without tit-for-tat (or a variant), but otherwise exactly the same, BitTorrent would likely not even exist now, as the majority of the users would have been freeriders.Many of the P2P live streaming applications, such as PPLive and ppstream, have been inspired by BitTorrent.
 
-
+## Distributed Hash Tables (DHTs)
 
 
