@@ -1,0 +1,17 @@
+Firstly, hyperthreading is an Intel (company) marketing term and was not an idea that was spawned at Intel. It's actually quite a few years old and is called simultaneous multithreading (SMT) in Computer Architecture (the field that studies the design of computers) literature. 
+
+A modern CPU is composed of several different hardware components. The ones that we care about for this discussion are called Functional Units. These pieces of hardware are responsible for the performing the actual computations on data. Functional units do different kinds of work, but for simplicity, let's assume that a CPU has 4 and that each functional unit can do the same types of computation that the others can.
+
+Even with this being true, it may be that at some period of time that one program can only make use of 2 or 3 functional units at a given time. This means that there is hardware in the CPU that is currently doing nothing. The original goal of SMT was to make it such that functional units were doing as much work as possible. Intel CPUs execute two programs at the same time and those programs combined will use more functional units than a single program can. This directly equates to programs running faster.
+
+Most modren CPUs are multi-core. This actually means that when you buy a chip for your desktop (or laptop) it actually contains more than one CPU (Apple Macbook air has dual core CPUs, Apple macbook  Pro has quad core CPUs). You can also buy chips which contain 6 or more cores. For purposes of answering this question, we are only going to focus on one of the CPUs inside the package that you bought (since that is the level at which hyperthreading or simultaneous multi threading really applies).
+
+A modern CPU has several different functional units and  no one program can use all of them at once. For example, a CPU may have 4 ALUs which can do addition. It will be very rare (except in graphics) to find programs that need to do 4 additions all the time. So the solution would be to run 2 separate programs at the same time in the hope that all the ALUs are kept busy. Same goes for any other functional unit. Now, to keep track of which functional unit is running which program requires some extra book keeping which needs more chip area and it also slows down both the running programs just a little bit. This means that both the running programs run a little bit slower but in parallel (so if you had to run both the programs, you still save time in the end).
+
+Another way to look at hyperthreading is by thinking of a burger line at In and Out. The burger line has:
+       - One person toasting the buns
+       - One person adding lettuce/tomatoes/onions to the buns
+       - One person grilling the patty
+        - One person packaging up the final product
+   
+In a non __SMT(Simultaneous multithreading)__ model, each person will do their job and burgers are produced at some known rate. Now imagine that the person toasting the buns has some free time because it does not require a lot of manual intervention and they are able to also add lettuce/tomato/onions to the buns if they are not busy and the person grilling the patty is also able package the final product while they are not busy. This is akin to SMT since the same person is actually doing two different tasks during the same period of time. It is easy to see why this second method would produce more burgers in the same amount of time.... or how SMT can run two programs in less time than it would take to run the programs one after the other. 
