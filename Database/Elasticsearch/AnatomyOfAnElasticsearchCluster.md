@@ -146,12 +146,34 @@ To get around this problem, Elasticsearch merges small segments together into a 
 
 This automatically happens in the background without interrupting indexing or searching. Since segment merging can use up resources and affect search performance, Elasticsearch throttles the merging process to have enough resources available for search.
 
+# Near real-time search
+While changes in Elasticsearch are not visible right away, it does offer a near real-time search engine. As mentioned in a previous post, committing Lucene changes to disk is an expensive operation. To avoid committing changes to disk while still make documents available for search, there is a filesystem cache sitting in between the memory buffer and the disk. The memory buffer is refreshed every second (by default) and a new segment, with the inverted index, is created in the filesystem cache. This segment is opened and made available for search.
 
+A filesystem cache can have file handles and files can be opened, read and closed, however, it lives in memory. Since, the refresh interval is 1 sec by default, the changes are not visible right away and hence it is near real-time. Since, the translog is a persistent record of changes not persisted to the disk, it also helps with the near real-time aspect for CRUD operations. For every request, the translog is searched for any recent changes before looking into relevant segments and hence, the client has access to all the changes in near real-time.
 
+You can explicitly refresh the index after every Create/Update/Delete operation to make the changes visible right away but it is not recommended as it affects the search performance due to too many small segments being created. For a search request, all Lucene segments in a given shard of an Elasticsearch index are searched, however, fetching all matching documents or documents deep in the resulting pages is dangerous for your Elasticsearch cluster. Let’s see why that is.
 
+# Why deep pagination in distributed search can be dangerous?
+When you make a search request in Elasticsearch which has a lot of matching documents, by default, the first page returned consists of the top 10 results. The search API has from and size parameters to specify how deep the results should be for all the documents that match the search. For instance, if you want to see the documents with ranks 50 to 60 that match the search, then from=50 and size=10. When each shard receives the search request, it creates a priority queue of size from+size to satisfy the search result itself and then returns the results to the coordinating node.
 
+![alt](https://cdn-images-1.medium.com/max/800/0*4S4VzUOamK5hnMFT.png)
 
+If you want to see results ranked from 50,000 to 50,010, then each shard will create a priority queue with 50,010 results each, and the coordinating node will have to sort number of shards * 50,010 results in memory. This level of pagination may or may not be possible depending upon the hardware resources you have but it suffices to say that you should be very careful with deep pagination as it can easily crash your cluster.
 
+It is possible to get all the documents that match the result using the scroll API which acts more like a cursor in relational databases. Sorting is disabled with the scroll API and each shard keeps sending results as long as it has documents that match the search.
+
+Sorting scored results is expensive if a large number of documents are to be fetched. And since Elasticsearch is a distributed system, calculating the search relevance score for a document is very expensive. Let’s now see one of the many trade-offs made to calculate search relevance.
+
+# Trade-offs in calculating search relevance
+Elasticsearch uses tf-idf for search relevance and because of its distributed nature, calculating a global idf (inverse document frequency) is very expensive. Instead, every shard calculates a local idf to assign a relevance score to the resulting documents and returns the result for only the documents on that shard. Similarly, all the shards return the resulting documents with relevant scores calculated using local idf and the coordinating node sorts all the results to return the top ones. This is fine in most cases, unless your index is skewed in terms of keywords or there is not enough data on a single shard to represent the global distribution.
+
+For instance, if you are searching for the word “insight” and a majority of the documents containing the term “insight” reside on one shard, then the documents that match the query won’t be fairly ranked on each shard as the local idf values will vary greatly and the search results might not be very relevant. Similarly, if there is not enough data, then the local idf values may vary greatly for some searches and the results might not be as relevant as expected. In real-world scenarios with enough data, the local idf values tend to even out and search results are relevant as the documents are fairly scored.
+
+There are a couple of ways to get around the local idf score but they are not really recommended for production systems.
+
+* One way is that you can have just one shard for the index and then the local idf is the global idf, but this doesn’t leave room for parallelism/scaling and isn’t practical for huge indices.
+
+* Another way is to use a parameter dfs_query_then_search (dfs = distributed frequency search) with the search request, which calculates local idf for all shards first, then combines these local idf values to calculate a global idf for the entire index and then returns the results with the relevance score calculated using the global idf. This isn’t recommended in production and having enough data would ensure that the term frequencies are well distributed.
 
 
 
