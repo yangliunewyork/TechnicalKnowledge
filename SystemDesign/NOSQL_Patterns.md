@@ -156,19 +156,79 @@ Notice that the term "situation" is used here in an abstract sense. Depends on w
 Because state is always flow from the replica to the client but not the other way round, the client doesn't have an entry in the Vector clock. The vector clock contains only one entry for each replica. However, the client will also keep a vector clock from the last replica it contacts. This is important for support the client consistency model we describe above. For example, to support monotonic read, the replica will make sure the vector clock attached to the data is > the client's submitted vector clock in the request.
 
 ### Gossip (Operation Transfer Model)
+In a state transfer model, each replica maintain a vector clock as well as a state version tree where each state is neither > or < among each other (based on vector clock comparison). In other words, the state version tree contains all the conflicting updates.
+
+At query time, the client will attach its vector clock and the replica will send back a subset of the state tree which precedes the client's vector clock (this will provide monotonic read consistency). The client will then advance its vector clock by merging all the versions. This means the client is responsible to resolve the conflict of all these versions because when the client sends the update later, its vector clock will precede all these versions.
+
+![alt](http://2.bp.blogspot.com/_j6mB7TMmJJY/SwmXpttEVKI/AAAAAAAAAVc/BuDsgnTJoZM/s1600/p1.png)
+
+At update, the client will send its vector clock and the replica will check whether the client state precedes any of its existing version, if so, it will throw away the client's update.
+
+![alt](http://2.bp.blogspot.com/_j6mB7TMmJJY/SwmX6waHqPI/AAAAAAAAAVk/48TsSr21pUU/s1600/P2.png)
+
+Replicas also gossip among each other in the background and try to merge their version tree together.
+
+![alt](http://2.bp.blogspot.com/_j6mB7TMmJJY/SwmYWE4O5sI/AAAAAAAAAV0/2QDGlh-JAGA/s1600/P3.png)
+
+### Gossip (Operation Transfer Model)
+In an operation transfer approach, the sequence of applying the operations is very important. At the minimum causal order need to be maintained. Because of the ordering issue, each replica has to defer executing the operation until all the preceding operations has been executed. Therefore replicas save the operation request to a log file and exchange the log among each other and consolidate these operation logs to figure out the right sequence to apply the operations to their local store in an appropriate order.
+
+"Causal order" means every replica will apply changes to the "causes" before apply changes to the "effect". "Total order" requires that every replica applies the operation in the same sequence.
+
+In this model, each replica keeps a list of vector clock, Vi is the vector clock the replica itself and Vj is the vector clock when replica i receive replica j's gossip message. There is also a V-state that represent the vector clock of the last updated state.
+
+When a query is submitted by the client, it will also send along its vector clock which reflect the client's view of the world. The replica will check if it has a view of the state that is later than the client's view.
+
+![alt](http://3.bp.blogspot.com/_j6mB7TMmJJY/SwmlOzM4YuI/AAAAAAAAAV8/vXWT2gsQvNc/s1600/p1.png)
+
+When an update operation is received, the replica will buffer the update operation until it can be applied to the local state. Every submitted operation will be tag with 2 timestamp, V-client indicates the client's view when he is making the update request. V-@receive is the replica's view when it receives the submission.
+
+This update operation request will be sitting in the queue until the replica has received all the other updates that this one depends on. This condition is reflected in the vector clock Vi when it is larger than V-client
+
+![alt](http://3.bp.blogspot.com/_j6mB7TMmJJY/Swmll8oYbqI/AAAAAAAAAWE/F_oI7WwWep0/s1600/P2.png)
 
 
+On the background, different replicas exchange their log for the queued updates and update each other's vector clock. After the log exchange, each replica will check whether certain operation can be applied (when all the dependent operation has been received) and apply them accordingly. Notice that it is possible that multiple operations are ready for applying at the same time, the replica will sort these operation in causal order (by using the Vector clock comparison) and apply them in the right order.
+
+![alt](http://4.bp.blogspot.com/_j6mB7TMmJJY/Swml33Xp04I/AAAAAAAAAWM/yCHvTCgTzF8/s1600/P3.png)
 
 
+The concurrent update problem at different replica can also happen. Which means there can be multiple valid sequences of operation. In order for different replica to apply concurrent update in the same order, we need a total ordering mechanism.
 
+One approach is whoever do the update first acquire a monotonic sequence number and late comers follow the sequence. On the other hand, if the operation itself is commutative, then the order to apply the operations doesn't matter
 
+After applying the update, the update operation cannot be immediately removed from the queue because the update may not be fully exchange to every replica yet. We continuously check the Vector clock of each replicas after log exchange and after we confirm than everyone has receive this update, then we'll remove it from the queue.
 
+### Map Reduce Execution
+Notice that the distributed store architecture fits well into distributed processing as well. For example, to process a Map/Reduce operation over an input key list.
 
+The system will push the map and reduce function to all the nodes (ie: moving the processing logic towards the data). The map function of the input keys will be distributed among the replicas of owning those input, and then forward the map output to the reduce function, where the aggregation logic will be executed.
 
+![alt](http://4.bp.blogspot.com/_j6mB7TMmJJY/SwoeUzwoKrI/AAAAAAAAAW0/ch01mbMkRuk/s1600/p1.png)
 
+### Handling Deletes
+In a multi-master replication system, we use Vector clock timestamp to determine causal order, we need to handle "delete" very carefully such that we don't lost the associated timestamp information of the deleted object, otherwise we cannot even reason the order of when to apply the delete.
 
+Therefore, we typically handle delete as a special update by marking the object as "deleted" but still keep its metadata / timestamp information around. Around a long enough time that we are confident that every replica has marked this object deleted, then we garbage collected the deleted object to reclaim its space.
 
+### Storage Implementaton
+One strategy is to use make the storage implementation pluggable. e.g. A local MySQL DB, Berkeley DB, Filesystem or even a in memory Hashtable can be used as a storage mechanism.
 
+Another strategy is to implement the storage in a highly scalable way. Here are some techniques that I learn from CouchDB and Google BigTable.
+
+CouchDB has a MVCC model that uses a copy-on-modified approach. Any update will cause a private copy being made which in turn cause the index also need to be modified and causing the a private copy of the index as well, all the way up to the root pointer.
+
+![alt](http://1.bp.blogspot.com/_j6mB7TMmJJY/SwjQAV_JShI/AAAAAAAAAU8/ndAucGpmwzI/s1600/p1.png)
+
+Notice that the update happens in an append-only mode where the modified data is appended to the file and the old data becomes garbage. Periodic garbage collection is done to compact the data. Here is how the model is implemented in memory and disks
+
+![alt](http://2.bp.blogspot.com/_j6mB7TMmJJY/SwjQd22AlMI/AAAAAAAAAVE/bUDkgpnPu5Q/s1600/P2.png)
+
+In Google BigTable model, the data is broken down into multiple generations and the memory is use to hold the newest generation. Any query will search the mem data as well as all the data sets on disks and merge all the return results. Fast detection of whether a generation contains a key can be done by checking a bloom filter.
+
+![alt](http://3.bp.blogspot.com/_j6mB7TMmJJY/SwnJ4-X4GjI/AAAAAAAAAWk/Wy8cW8f8dwM/s1600/p1.png)
+
+When update happens, both the mem data and the commit log will be written so that if the machine crashes before the mem data flush to disk, it can be recovered from the commit log.
 
 
 
