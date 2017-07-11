@@ -1,3 +1,19 @@
+* http://lambda-architecture.net/
+
+Nathan Marz came up with the term Lambda Architecture (LA) for a generic, scalable and fault-tolerant data processing architecture, based on his experience working on distributed data processing systems at Backtype and Twitter.
+
+The LA aims to satisfy the needs for a robust system that is fault-tolerant, both against hardware failures and human mistakes, being able to serve a wide range of workloads and use cases, and in which low-latency reads and updates are required. The resulting system should be linearly scalable, and it should scale out rather than up.
+
+Here’s how it looks like, from a high-level perspective:
+
+![alt](http://lambda-architecture.net/img/la-overview_small.png)
+
+All data entering the system is dispatched to both the batch layer and the speed layer for processing.
+1. The batch layer has two functions: (i) managing the master dataset (an immutable, append-only set of raw data), and (ii) to pre-compute the batch views.
+2. The serving layer indexes the batch views so that they can be queried in low-latency, ad-hoc way.
+3. The speed layer compensates for the high latency of updates to the serving layer and deals with recent data only.
+4. Any incoming query can be answered by merging results from batch views and real-time views.
+
 ## What is Lambda Architecture
 Lambda architecture is a data-processing architecture designed to handle massive quantities of data by taking advantage of both batch- and stream-processing methods. This approach to architecture attempts to balance latency, throughput, and fault-tolerance by using batch processing to provide comprehensive and accurate views of batch data, while simultaneously using real-time stream processing to provide views of online data. The two view outputs may be joined before presentation. The rise of lambda architecture is correlated with the growth of big data, real-time analytics, and the drive to mitigate the latencies of map-reduce.
 
