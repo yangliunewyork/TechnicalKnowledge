@@ -95,6 +95,35 @@ An important advantage of per-host breadthfirst visits is that DNS requests are 
 
 ### 3.1.3 Assignment of URLs
 
+Assignment of hosts to agents takes into accounts the mass storage resources and bandwidth available at each agent. This is currently done by means of a single indicator, called capacity, which acts as a weight used by the assignment function to distribute hosts. Under certain circumstances, each agent a gets a fraction of hosts proportional to its capacity Ca. Note that even if the number of URLs per host varies wildly, the distribution of URLs among agents tends to even out during large crawls. Besides empirical statistical reasons for this, there are also other motivations, such as the usage of policies for bounding the maximum number of pages crawled from a host and the maximum depth of a visit. Such policies are necessary to avoid (possibly malicious) web traps.
+
+### 3.1.4 Failure Detector
+
+Finally, an essential component in DCrawler is a reliable failure detector that uses timeouts to detect crashed agents; reliability refers to the fact that a crashed agent will eventually be distrusted by every active agent (a property that is usually referred to as strong completeness in the theory of failure detectors). The failure detector is the only synchronous component of DCrawler (i.e., the only component using timings for its functioning); all other components interact in a completely asynchronous way.
+
+## 3.2 Software Architecture
+
+### 3.2.1 The overall structure
+
+DCrawler is composed by several agents that autonomously coordinate their behavior in such a way that each of them scans its share of the web. The objective of the design of this crawling architecture is to divide the crawling task into different tasks that will be carried efficiently by specialized modules.
+
+### 3.2.2 The core Crawling Module
+
+The core crawling module follows the very basic crawling algorithm. The page related to the corresponding URL is fetched first, which is then passed to the HTML parsing module. The HTML parsing module extracts different components of the web page and returns them to crawler in turn. The extracted links are passed to assignment module for further processing.
+
+### 3.2.3 HTML Parsing
+
+HTML parsing module analyses the web pages fetched by the core crawling module. Apart from link extraction, the HTML module can be used by the search engine directly to search for specific keywords. This approach of crawling for a specified set of pages based on constrains is known as focused crawling.
+
+### 3.2.4 Workbench Interface
+
+The workbench is a user interface module that provides graphical representation and statistics on the current crawling process. This also allows to add seeds during crawler execution and to control crawling process in real time.
+
+### 3.2.5 Document Dumping
+
+When a page is fetched, after link extraction it should be stored in the repository. This is done using document dumping module. The location can be in local machine or network server. When the dumping is done in local machine, then available capacity is also considered as a component that forms the weight of the crawler.
+
+# 4. WEB SERVER COOPERATION SCHEMES
 
 
 
