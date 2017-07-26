@@ -140,6 +140,62 @@ How the same schema could be represented in HBase.
 
 # Building Blocks
 
+### Backdrop
+
+In 2003, Google published a paper titled "The Google File System" This scalable distributed file system, abbreviated as GFS, uses a cluster of commodity hardware to store huge amounts of data. The filesystem handled data replication between nodes so that losing a storage server would have no effect on data availability. It was also optimized for streaming reads so that data could be read for processing later on.
+
+Shortly afterward, another paper by Google was published, titled “MapReduce: Simplified Data Processing on Large Clusters”. MapReduce was the missing piece to the GFS architecture, as it made use of the vast number of CPUs each commodity server in the GFS cluster provides. MapReduce plus GFS forms the backbone for processing massive amounts of data, including the entire search index Google owns.
+
+What is missing, though, is the ability to access data randomly and in close to real-time (meaning good enough to drive a web service, for example). Another drawback of the GFS design is that it is good with a few very, very large files, but not as good with millions of tiny files, because the data retained in memory by the master node is ultimately bound to the number of files. The more files, the higher the pressure on the memory of the master.
+
+So, Google was trying to find a solution that could drive interactive applications, such as Mail or Analytics, while making use of the same infrastructure and relying on GFS for replication and data availability. The data stored should be composed of much smaller entities, and the system would transparently take care of aggregating the small records into very large storage files and offer some sort of indexing that allows the user to retrieve data with a minimal number of disk seeks. Finally, it should be able to store the entire web crawl and work with MapReduce to build the entire search index in a timely manner.
+
+Being aware of the shortcomings of RDBMSes at scale, the engineers approached this problem differently: forfeit relational features and use a simple API that has basic create, read, update, and delete (or CRUD) operations, plus a scan function to iterate  over larger key ranges or entire tables. The culmination of these efforts was published in 2006 in a paper titled “Bigtable: A Distributed Storage System for Structured Data”, two excerpts from which follow:"Bigtable is a distributed storage system for managing structured data that is designed to scale to a very large size: petabytes of data across thousands of commodity servers. …a sparse, distributed, persistent multi-dimensional sorted map."
+
+##### Tables, Rows, Columns, and Cells
+
+First, a quick summary: the most basic unit is a column. One or more columns form a row that is addressed uniquely by a row key. A number of rows, in turn, form a table, and there can be many of them. Each column may have multiple versions, with each distinct value contained in a separate cell.
+
+All rows are always sorted lexicographically by their row key.
+
+Having the row keys always sorted can give you something like a primary key index known from RDBMSes. It is also always unique, that is, you can have each row key only once, or you are updating the same row. While the original Bigtable paper only considers a single index, HBase adds support for secondary indexes.The row keys can be any arbitrary array of bytes and are not necessarily human-readable.
+
+Rows are composed of columns, and those, in turn, are grouped into column families. This helps in building semantical or topical boundaries between the data, and also in applying certain features to them—for example, compression—or denoting them to stay in-memory. All columns in a column family are stored together in the same lowlevel storage file, called an __HFile__.
+
+Columns are often referenced as __*family:qualifier*__ with the qualifier being any arbitrary array of bytes.# As opposed to the limit on column families, there is no such thing for the number of columns: you could have millions of columns in a particular column family. There is also no type nor length boundary on the column values.
+
+Every column value, or cell, either is timestamped implicitly by the system or can be set explicitly by the user. This can be used, for example, to save multiple versions of a value as it changes over time. Different versions of a cell are stored in decreasing timestamp order, allowing you to read the newest value first. This is an optimization aimed at read patterns that favor more current values over historical ones.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
