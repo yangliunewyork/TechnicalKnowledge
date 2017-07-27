@@ -41,8 +41,8 @@ How subset of 0 is same as 2?
 
 0->1->2 // 1 is parent of 0 and 2 is parent of 1
 
-···cpp
-/ Naive implementation of find
+```cpp
+// Naive implementation of find
 int find(int parent[], int i)
 {
     if (parent[i] == -1)
@@ -141,7 +141,7 @@ reduced.
 
 The two techniques complement each other. The time complexity of each operations becomes even smaller than O(Logn). In fact, amortized time complexity effectively becomes small constant.
 
-```
+```cpp
 // A utility function to find set of an element i
 // (uses path compression technique)
 int find(struct subset subsets[], int i)
