@@ -1,3 +1,7 @@
+* http://blog.gainlo.co/index.php/2016/03/29/design-news-feed-system-part-1-system-design-interview-questions/
+* http://blog.gainlo.co/index.php/2016/04/05/design-news-feed-system-part-2/
+
+
 ## Requirement
 News Feed is the constantly updating list of stories in the middle of your home page. News Feed includes status updates, photos, videos, links, app activity and likes from people, Pages and groups that you follow on Facebook.
 
