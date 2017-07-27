@@ -142,6 +142,13 @@ reduced.
 The two techniques complement each other. The time complexity of each operations becomes even smaller than O(Logn). In fact, amortized time complexity effectively becomes small constant.
 
 ```cpp
+
+struct subset
+{
+    int parent;
+    int rank;
+};
+
 // A utility function to find set of an element i
 // (uses path compression technique)
 int find(struct subset subsets[], int i)
