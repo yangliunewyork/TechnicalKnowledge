@@ -110,6 +110,62 @@ From the sender’s viewpoint, retransmission is a panacea. The sender does not 
 
 ### Pipelined Reliable Data Transfer Protocols
 
+The solution to this particular performance problem is simple: Rather than oper- ate in a stop-and-wait manner, the sender is allowed to send multiple packets with- out waiting for acknowledgments Figure 3.18(b) shows that if the sender is allowed to transmit three packets before having to wait for acknowledgments, the utilization of the sender is essentially tripled. Since the many in-transit sender-to-receiver packets can be visualized as filling a pipeline, this technique is known as __pipelining__. Pipelining has the following consequences for reliable data transfer protocols:
+
+![alt](http://www.networkinginfoblog.com/contentsimages/Stop-and-wait%20versus%20pipelined%20protocol.JPG)
+
+* The range of sequence numbers must be increased, since each in-transit packet (not counting retransmissions) must have a unique sequence number and there may be multiple, in-transit, unacknowledged packets.  
+* The sender and receiver sides of the protocols may have to buffer more than one packet. Minimally, the sender will have to buffer packets that have been trans- mitted but not yet acknowledged. Buffering of correctly received packets may also be needed at the receiver, as discussed below.  
+* The range of sequence numbers needed and the buffering requirements will depend on the manner in which a data transfer protocol responds to lost, cor- rupted, and overly delayed packets. Two basic approaches toward pipelined error recovery can be identified: __Go-Back-N__ and __selective repeat__.  
+
+##### Go-Back-N (GBN)
+
+In a __Go-Back-N (GBN) protocol__, the sender is allowed to transmit multiple packets (when available) without waiting for an acknowledgment, but is constrained to have no more than some maximum allowable number, N, of unacknowledged packets in the pipeline. 
+
+__*Need come back and read latter*__
+
+# 3.5 Connection-Oriented Transport: TCP
+
+## 3.5.1 The TCP Connection
+
+TCP is said to be __connection-oriented__ because before one application process can begin to send data to another, the two processes must first “handshake” with each other—that is, they must send some preliminary segments to each other to establish the parameters of the ensuing data transfer. As part of TCP connection establishment, both sides of the connection will initialize many TCP state variables associated with the TCP connection.
+
+The TCP “connection” is not an end-to-end TDM or FDM circuit as in a circuit- switched network. Nor is it a virtual circuit (see Chapter 1), as the connection state resides entirely in the two end systems. Because the TCP protocol runs only in the end systems and not in the intermediate network elements (routers and link-layer switches), the intermediate network elements do not maintain TCP connection state.__In fact, the intermediate routers are completely oblivious to TCP connections; they see datagrams, not connections.__
+
+A TCP connection provides a __full-duplex service__: If there is a TCP connection between Process A on one host and Process B on another host, then application- layer data can flow from Process A to Process B at the same time as application- layer data flows from Process B to Process A. A TCP connection is also always point-to-point, that is, between a single sender and a single receiver. So-called “multicasting”—the transfer of data from one sender to many receivers in a single send operation—is not possible with TCP. With TCP, two hosts are company and three are a crowd!
+
+ For now it suffices to know that the client first sends a special TCP segment; the server responds with a second special TCP segment; and finally the client responds again with a third special segment. The first two segments carry no payload, that is, no application-layer data; the third of these segments may carry a payload. Because three segments are sent between the two hosts, this connec- tion-establishment procedure is often referred to as a __three-way handshake__.
+ 
+ ![alt](http://www.networkinginfoblog.com/contentsimages/TCP%20send%20and%20receive%20buffers.JPG)
+
+TCP pairs each chunk of client data with a TCP header, thereby forming TCP segments. The segments are passed down to the network layer, where they are sepa- rately encapsulated within network-layer IP datagrams. The IP datagrams are then sent into the network. When TCP receives a segment at the other end, the segment’s data is placed in the TCP connection’s receive buffer. The application reads the stream of data from this buffer. Each side of the connection has its own send buffer and its own receive buffer. 
+
+## 3.5.2 TCP Segment Structure
+
+![alt](http://www.networkinginfoblog.com/contentsimages/TCP%20Segment%20structure.JPG)
+
+ The TCP segment consists of header fields and a data field. The data field contains a chunk of application data. As mentioned above, the MSS limits the maximum size of a segment’s data field. When TCP sends a large file, such as an image as part of a Web page, it typically breaks the file into chunks of size MSS (except for the last chunk, which will often be less than the MSS). Interactive appli- cations, however, often transmit data chunks that are smaller than the MSS.
+ 
+ As with UDP, the header includes __source and destination port numbers__, which are used for __multiplexing/demultiplexing__ data from/to upper-layer applications. Also, as with UDP, the header includes a __checksum field__. A TCP segment header also contains the following fields:
+
+* The 32-bit __sequence number field__ and the 32-bit __acknowledgment number field__ are used by the TCP sender and receiver in implementing a reliable data transfer service, as discussed below.
+* The 16-bit __receive window field__ is used for flow control. We will see shortly that it is used to indicate the number of bytes that a receiver is willing to accept.
+* The 4-bit __header length field__ specifies the length of the TCP header in 32-bit words. The TCP header can be of variable length due to the TCP options field.
+The optional and variable-length __options field__ is used when a sender and receiver negotiate the maximum segment size (MSS) or as a window scaling fac- tor for use in high-speed networks. A time-stamping option is also defined. See RFC 854 and RFC 1323 for additional details.
+* The __flag field__ contains 6 bits. The __ACK bit__ is used to indicate that the value car- ried in the acknowledgment field is valid; that is, the segment contains an acknowledgment for a segment that has been successfully received. The RST, SYN, and * FIN bits are used for connection setup and teardown, as we will dis- cuss at the end of this section. Setting the PSH bit indicates that the receiver should pass the data to the upper layer immediately. Finally, the URG bit is used to indicate that there is data in this segment that the sending-side upper-layer entity has marked as “urgent.” The location of the last byte of this urgent data is indicated by the 16-bit urgent data pointer field. TCP must inform the receiv- ing-side upper-layer entity when urgent data exists and pass it a pointer to the end of the urgent data. (In practice, the PSH, URG, and the urgent data pointer are not used. However, we mention these fields for completeness.)
+
+## 3.5.3 Round-Trip Time Estimation and Timeout
+
+## 3.5.4 Reliable Data Transfer
+Recall that the Internet’s network-layer service (IP service) is unreliable. IP does not guarantee datagram delivery, does not guarantee in-order delivery of data- grams, and does not guarantee the integrity of the data in the datagrams. With IP service, datagrams can overflow router buffers and never reach their destination, datagrams can arrive out of order, and bits in the datagram can get corrupted (flipped from 0 to 1 and vice versa). Because transport-layer segments are carried across the network by IP datagrams, transport-layer segments can suffer from these problems as well.
+
+TCP creates a __reliable data transfer service__ on top of IP’s unreliable __best- effort service__. __TCP’s reliable data transfer service ensures that the data stream that a process reads out of its TCP receive buffer is uncorrupted, without gaps, without duplication, and in sequence; that is, the byte stream is exactly the same byte stream that was sent by the end system on the other side of the connection. __
+
+In our earlier development of reliable data transfer techniques, it was conceptu- ally easiest to assume that an individual timer is associated with each transmitted but not yet acknowledged segment. While this is great in theory, timer management can require considerable overhead. Thus, __the recommended TCP timer management procedures [RFC 6298] use only a single retransmission timer__, even if there are mul- tiple transmitted but not yet acknowledged segments. 
+
+The second major event is the timeout. TCP responds to the timeout event by retransmitting the segment that caused the timeout. TCP then restarts the timer.
+
+## 3.5.5 Flow Control
 
 
 
