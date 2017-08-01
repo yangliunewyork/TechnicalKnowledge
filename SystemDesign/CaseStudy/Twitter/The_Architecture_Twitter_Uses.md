@@ -36,7 +36,7 @@ People are creating content on Twitter all the time. The job of Twitter is to fi
 The real challenge is the real-time constraint. Goal is to have a message flow to a user in no more than 5 seconds.
 
 * Delivery means gathering content and exerting pressure on the Internet to get it back out again as fast as possible.  
-* Delivery is to in-memory timeline clusters, push notifications, emails that are triggered, all the iOS notifications as well as Blackberry and Android, SMSs.  
+* Delivery is to in-memory timeline clusters, push notifications, emails that are triggered, all the iOS notifications as well as Blackberry and Android, SMSs(Short Message Service ).  
 * Twitter is the largest generator of SMSs on a per active user basis of anyone in the world.  
 * Elections can be one of the biggest drivers of content coming in and fanouts of content going out.  
 
@@ -69,7 +69,7 @@ Two main types of timelines: user timeline and home timeline.
 
 * Tweet comes in over a write API. It goes through load balancers and a TFE (Twitter Front End) and other stuff that won’t be addressed.
 This is a very directed path. Completely precomputed home timeline. All the business rules get executed as tweets come in.
-* Immediately the fanout process occurs. Tweets that come in are placed into a massive Redis cluster. Each tweet is replicated 3 times on 3 different machines. At Twitter scale many machines fail a day.
+* Immediately the fanout process occurs.(In message-oriented middleware solutions, __fan-out__ is a messaging pattern used to model an information exchange that implies the delivery (or spreading) of a message to one or multiple destinations possibly in parallel, and not halting the process that executes the messaging to wait for any response to that message.) Tweets that come in are placed into a massive Redis cluster. Each tweet is replicated 3 times on 3 different machines. At Twitter scale many machines fail a day.
 * Fanout queries the social graph service that is based on Flock. Flock maintains the follower and followings lists.
 
   * Flock returns the social graph for a recipient and starts iterating through all the timelines stored in the Redis cluster.
