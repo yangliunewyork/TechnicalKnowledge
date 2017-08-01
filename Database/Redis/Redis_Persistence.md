@@ -1,3 +1,4 @@
+* https://redis.io/topics/persistence
 Redis provides a different range of persistence options:
 * The RDB persistence performs point-in-time snapshots of your dataset at specified intervals.
 * the AOF persistence logs every write operation received by the server, that will be played again at server startup, reconstructing the original dataset. Commands are logged using the same format as the Redis protocol itself, in an append-only fashion. Redis is able to rewrite the log on background when it gets too big.
