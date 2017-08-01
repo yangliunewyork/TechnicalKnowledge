@@ -1,3 +1,5 @@
+* https://www.adayinthelifeof.nl/2011/02/06/memcache-internals/
+
 Memcache is a pretty well-known system inside the web-community and for a good reason. It’s fast, flexible, lightweight and it looks like installing memcache on your servers automatically increases your website speed tenfold or more. Ok, so that’s a bit over the top, but still: having a good caching-strategy in place can help your website/application. If you want to know how to implement memcache in your website you’re out of luck. This post isn’t about starting with memcache. We are going to pop the trunk and see what’s under the hood.. What exactly makes memcache so magical??
 
 Even though memcache on itself is not a very complex piece of software, it’s got lots of nifty features which would take too long to talk about. I’ll focus on 4 of them:
