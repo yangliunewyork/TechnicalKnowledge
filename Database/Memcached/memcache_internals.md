@@ -31,7 +31,7 @@ Now, this is all fine when you are creating a (simple) application in C, where y
 Now, in order to combat this “malloc()” problem, memcache does its own memory management by default (you can let memcache use the standard malloc() function, but that would not be advisable). Memcache’s memory manager will allocate the maximum amount of memory from the operating system that you have set (for instance, 64Mb, but probably more) through one malloc() call. From that point on, it will use its own memory manager system called the slab allocator.
 
 
-# Slab allocation
+### Slab allocation
 
 When memcache starts, it partitions its allocated memory into smaller parts called pages. Each page is 1Mb large (coincidentally, the maximum size that an object can have you can store in memcache). Each of those pages can be assigned to a slab-class, or can be unassigned (being a free page). A slab-class decides how large the objects can be that are stored inside that particular page. Each page that is designated to a particular slab-class will be divided into smaller parts called chunks. The chunks in each slab have the same size so there cannot be 2 different sized chunks inside the same page. For instance, there could be a page with 64byte chunks (slab class 1), a page with 128byte chunks (slab class 2) and so on, until we get the largest slab with only 1 chunk (the 1MB chunk). There can be multiple pages for each slab-class, but as soon as a page is assigned a slab-class (and thus, split up in chunks), it cannot be changed to another slab-class.
 
