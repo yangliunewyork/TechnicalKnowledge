@@ -3,6 +3,12 @@
 https://msdn.microsoft.com/en-us/library/bb742455.aspx
 http://www.thegeekstuff.com/2016/01/load-balancer-intro/?utm_source=tuicool&utm_medium=referral
 
+# Load Balancing
+
+In computing, load balancing improves the distribution of workloads across multiple computing resources, such as computers, a computer cluster, network links, central processing units, or disk drives. Load balancing aims to optimize resource use, maximize throughput, minimize response time, and avoid overload of any single resource. Using multiple components with load balancing instead of a single component may increase reliability and availability through redundancy. Load balancing usually involves dedicated software or hardware, such as a multilayer switch or a Domain Name System server process.
+
+
+
 ## What is Load Balancer ?
 A load balancer is a device that acts as a reverse proxy and distributes network or application traffic across a number of servers. Load balancers are used to increase capacity (concurrent users) and reliability of applications. They improve the overall performance of applications by decreasing the burden on servers associated with managing and maintaining application and network sessions, as well as by performing application-specific tasks.
 
