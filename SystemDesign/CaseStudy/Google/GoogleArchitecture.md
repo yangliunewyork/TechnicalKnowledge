@@ -1,3 +1,6 @@
+* http://highscalability.com/google-architecture
+
+
 # Platform
 
 * Linux
