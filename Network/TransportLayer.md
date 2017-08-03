@@ -206,7 +206,26 @@ This TCP connection management protocol sets the stage for a classic Denial of S
 
 # 3.6 Principles of Congestion Control
 
+In the previous sections, we examined both the general principles and specific TCP mechanisms used to provide for a reliable data transfer service in the face of packet loss. We mentioned earlier that, in practice, such loss typically results from the overflowing of router buffers as the network becomes congested. Packet retransmission thus treats a symptom of network congestion (the loss of a specific transport-layer segment) but does not treat the cause of network congestion—too many sources attempting to send data at too high a rate. To treat the cause of network congestion, mechanisms are needed to throttle senders in the face of network congestion.
+
+## 3.6.1 The Causes and the Costs of Congestion
 
 
+ Even in this (extremely) idealized scenario, we’ve already found one cost of a congested network—large queuing delays are experienced as the packet- arrival rate nears the link capacity.
+
+We see here another cost of a congested net- work—the sender must perform retransmissions in order to compensate for dropped (lost) packets due to buffer overflow.Finally, let us consider the case that the sender may time out prematurely and retransmit a packet that has been delayed in the queue but not yet lost. In this case, both the original data packet and the retransmission may reach the receiver. Of course, the receiver needs but one copy of this packet and will discard the retrans- mission. In this case, the work done by the router in forwarding the retransmitted copy of the original packet was wasted, as the receiver will have already received the original copy of this packet. The router would have better used the link trans- mission capacity to send a different packet instead. Here then is yet another cost of a congested network—unneeded retransmissions by the sender in the face of large delays may cause a router to use its link bandwidth to forward unneeded copies of a packet. 
+
+So here we see yet another cost of dropping a packet due to conges- tion—when a packet is dropped along a path, the transmission capacity that was used at each of the upstream links to forward that packet to the point at which it is dropped ends up having been wasted.
+
+## 3.6.2 Approaches to Congestion Control
+
+At the broadest level, we can distinguish among congestion-control approaches by whether the network layer provides any explicit assistance to the transport layer for congestion-control purposes:
+
+* __End-to-end congestion control.__ In an end-to-end approach to congestion control, the network layer provides no explicit support to the transport layer for congestion- control purposes. Even the presence of congestion in the network must be inferred by the end systems based only on observed network behavior (for example, packet loss and delay). TCP must necessarily take this end- to-end approach toward congestion control, since the IP layer provides no feedback to the end systems regarding network congestion. TCP segment loss (as indicated by a timeout or a triple duplicate acknowledgment) is taken as an indication of net- work congestion and TCP decreases its window size accordingly. We will also see a more recent proposal for TCP congestion control that uses increasing round-trip delay values as indicators of increased network congestion.
+* __Network-assisted congestion control.__ With network-assisted congestion control, network-layer components (that is, routers) provide explicit feedback to the sender regarding the congestion state in the network. This feedback may be as simple as a single bit indicating congestion at a link. 
+
+For network-assisted congestion control, congestion information is typically fed back from the network to the sender in one of two ways. Direct feedback may be sent from a network router to the sender. This form of notifi- cation typically takes the form of a choke packet (essentially saying, “I’m con- gested!”). The second form of notification occurs when a router marks/updates a field in a packet flowing from sender to receiver to indicate congestion. Upon receipt of a marked packet, the receiver then notifies the sender of the congestion indication. Note that this latter form of notification takes at least a full round-trip time.
+
+## 3.6.3 Network-Assisted Congestion-Control Example: ATM ABR Congestion Control
 
 
