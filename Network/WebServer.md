@@ -9,6 +9,14 @@ So, a Web Server to start with is any source which provides a service on a Clien
 How and from where this response is computed has to be the understanding of the another application, which takes care of opening and reading files, making database connections, running algorithms and to do all that understanding the specifics and implications of the programming platform. This part or module or engine computes the response and does all the hard part and communicates back to the web server for the dispatch. Essentially this needs not to be a server, but a computational engine alone. But more often it ends up being a server to coordinate with the front heading web server.
 ### Web Server vs Application Server
 
+Web Server is designed to serve HTTP Content. App Server can also serve HTTP Content but is not limited to just HTTP. It can be provided other protocol support such as RMI/RPC.
+
+Web Server is mostly designed to serve static content, though most Web Servers have plugins to support scripting languages like Perl, PHP, ASP, JSP etc. through which these servers can generate dynamic HTTP content.
+
+Most of the application servers have Web Server as integral part of them, that means App Server can do whatever Web Server is capable of. Additionally App Server have components and features to support Application level services such as Connection Pooling, Object Pooling, Transaction Support, Messaging services etc.
+
+As web servers are well suited for static content and app servers for dynamic content, most of the production environments have web server acting as reverse proxy to app server. That means while servicing a page request, static contents (such as images/Static HTML) are served by web server that interprets the request. Using some kind of filtering technique (mostly extension of requested resource) web server identifies dynamic content request and transparently forwards to app server.
+
 #### Web Server
 * Processes HTTP requests by responding with HTML pages
 * Servers static content(html,images,etc)
