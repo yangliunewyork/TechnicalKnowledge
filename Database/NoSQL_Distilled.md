@@ -124,6 +124,73 @@ Column-family models divide the aggregate into column families, allowing the dat
 
 # Chapter 3. More Details on Data Models
 
+## 3.1. Relationships
+
+An important aspect of relationships between aggregates is how they handle updates. Aggregate-oriented databases treat the aggregate as the unit of data- retrieval. Consequently, atomicity is only supported within the contents of a single aggregate. If you update multiple aggregates at once, you have to deal yourself with a failure partway through. Relational databases help you with this by allowing you to modify multiple records in a single transaction, providing ACID guarantees while altering many rows.
+
+All of this means that aggregate-oriented databases become more awkward as you need to operate across multiple aggregates. There are various ways to deal with this,  but the fundamental awkwardness remains.This may imply that if you have data based on lots of relationships, you should prefer a relational database over a NoSQL store. While that’s true for aggregate-oriented databases, it’s worth remembering that relational databases aren’t all that stellar with complex relationships either. While you can express queries involving joins in SQL, things quickly get very hairy—both with SQL writing and with the resulting performance—as the number of joins mounts up.This makes it a good moment to introduce another category of databases that’s often lumped into the NoSQL pile.
+
+## 3.2. Graph Databases
+
+Graph databases are an odd fish in the NoSQL pond. Most NoSQL databases were inspired by the need to run on clusters, which led to aggregate-oriented data models of large records with simple connections. Graph databases are motivated by a different frustration with relational databases and thus have an opposite model— small records with complex interconnections.
+
+
+Graph databases specialize in capturing this sort of information—but on a much larger scale than a readable diagram could capture. This is ideal for capturing any data consisting of complex relationships such as social networks, product preferences, or eligibility rules.
+
+The fundamental data model of a graph database is very simple: nodes connected by edges (also called arcs). Beyond this essential characteristic there is a lot of variation in data models—in particular, what mechanisms you have to store data in your nodes and edges.
+
+Once you have built up a graph of nodes and edges, a graph database allows you to query that network with query operations designed with this kind of graph in mind. This is where the important differences between graph and relational databases come in. Although relational databases can implement relationships using foreign keys, the joins required to navigate around can get quite expensive— which means performance is often poor for highly connected data models. Graph databases make traversal along the relationships very cheap. A large part of this is because graph databases shift most of the work of navigating relationships from query time to insert time. This naturally pays off for situations where querying performance is more important than insert speed.
+
+The emphasis on relationships makes graph databases very different from aggregate-oriented databases. This data model difference has consequences in other aspects, too; you’ll find such databases are more likely to run on a single server rather than distributed across clusters. ACID transactions need to cover multiple nodes and edges to maintain consistency. The only thing they have in common with aggregate-oriented databases is their rejection of the relational model and an upsurge in attention they received around the same time as the rest of the NoSQL field.
+
+## 3.3. Schemaless Databases
+
+A common theme across all the forms of NoSQL databases is that they are schemaless. When you want to store data in a relational database, you first have to define a schema—a defined structure for the database which says what tables exist, which columns exist, and what data types each column can hold. Before you store some data, you have to have the schema defined for it.
+
+With NoSQL databases, storing data is much more casual. A key-value store allows you to store any data you like under a key. A document database effectively does the same thing, since it makes no restrictions on the structure of the documents you store. Column-family databases allow you to store any data under any column you like. Graph databases allow you to freely add new edges and freely add properties to nodes and edges as you wish.
+
+dvocates of schemalessness rejoice in this freedom and flexibility. With a schema, you have to figure out in advance what you need to store, but that can be hard to do. Without a schema binding you, you can easily store whatever you need. This allows you to easily change your data storage as you learn more about your project. You can easily add new things as you discover them. Furthermore, if you find you don’t need some things anymore, you can just stop storing them, without worrying about losing old data as you would if you delete columns in a relational schema.
+
+As well as handling changes, a schemaless store also makes it easier to deal with __nonuniform data: data where each record has a different set of fields__. A schema puts all rows of a table into a straightjacket, which becomes awkward if you have different kinds of data in different rows. You either end up with lots of columns that are usually null (a sparse table), or you end up with meaningless columns. Schemalessness avoids this, allowing each record to contain just what it needs—no more, no less.
+
+
+The vital, if sometimes inconvenient, fact is that whenever we write a program that accesses data, that program almost always relies on some form of implicit schema. So, however schemaless our database is, there is usually an implicit schema present. __This implicit schema is a set of assumptions about the data’s structure in the code that manipulates the data.__
+
+Having the implicit schema in the application code results in some problems. It means that in order to understand what data is present you have to dig into the application code. If that code is well structured you should be able to find a clear place from which to deduce the schema. But there are no guarantees; it all depends on how clear the application code is. Furthermore, the database remains ignorant of the schema—it can’t use the schema to help it decide how to store and retrieve data efficiently. It can’t apply its own validations upon that data to ensure that different applications don’t manipulate data in an inconsistent way.
+
+Essentially, a schemaless database shifts the schema into the application code that accesses it. This becomes problematic if multiple applications, developed by different people, access the same database. These problems can be reduced with a couple of approaches. One is to encapsulate all database interaction within a single application and integrate it with other applications using web services. This fits in well with many people’s current preference for using web services for integration. Another approach is to clearly delineate different areas of an aggregate for access by different applications. These could be different sections in a document database or different column families an a column-family database.
+
+## 3.4. Materialized Views
+
+When we talked about aggregate-oriented data models, we stressed their advantages. If you want to access orders, it’s useful to have all the data for an order contained in a single aggregate that can be stored and accessed as a unit. But aggregate-orientation has a corresponding disadvantage: What happens if a product manager wants to know how much a particular item has sold over the last couple of weeks? Now the aggregate-orientation works against you, forcing you to potentially read every order in the database to answer the question. You can reduce this burden by building an index on the product, but you’re still working against the aggregate structure.
+
+Relational databases have an advantage here because their lack of aggregate structure allows them to support accessing data in different ways. Furthermore, they provide a convenient mechanism that allows you to look at data differently from the way it’s stored—views. A view is like a relational table (it is a relation) but it’s defined by computation over the base tables. When you access a view, the database computes the data in the view—a handy form of encapsulation.
+
+Views provide a mechanism to hide from the client whether data is derived data or base data—but can’t avoid the fact that some views are expensive to compute. To cope with this, __materialized views__ were invented, which are views that are computed in advance and cached on disk. Materialized views are effective for data that is read heavily but can stand being somewhat stale.
+
+Although NoSQL databases don’t have views, they may have precomputed and cached queries, and they reuse the term “ materialized view” to describe them. It’s also much more of a central aspect for aggregate-oriented databases than it is for relational systems, since most applications will have to deal with some queries that don’t fit well with the aggregate structure. 
+
+There are two rough strategies to building a materialized view. The first is the eager approach where you update the materialized view at the same time you update the base data for it. In this case, adding an order would also update the purchase history aggregates for each product. This approach is good when you have more frequent reads of the materialized view than you have writes and you want the materialized views to be as fresh as possible. The application database approach is valuable here as it makes it easier to ensure that any updates to base data also update materialized views.
+
+If you don’t want to pay that overhead on each update, you can run batch jobs to update the materialized views at regular intervals. You’ll need to understand your business requirements to assess how stale your materialized views can be.
+
+You can build materialized views outside of the database by reading the data, computing the view, and saving it back to the database. More often databases will support building materialized views themselves. In this case, you provide the computation that needs to be done, and the database executes the computation when needed according to some parameters that you configure.
+
+Materialized views can be used within the same aggregate. An order document might include an order summary element that provides summary information about the order so that a query for an order summary does not have to transfer the entire order document. Using different column families for materialized views is a common feature of column-family databases. An advantage of doing this is that it allows you to update the materialized view within the same atomic operation.
+
+## 3.6. Key Points
+
+*  Aggregate-oriented databases make inter-aggregate relationships more difficult to handle than intra-aggregate relationships.
+* Graph databases organize data into node and edge graphs; they work best for data that has complex relationship structures.
+* Schemaless databases allow you to freely add fields to records, but there is usually an implicit schema expected by users of the data.
+*  Aggregate-oriented databases often compute materialized views to provide data organized differently from their primary aggregates. This is often done with map-reduce computations.
+
+
+
+
+
+
+
 
 
 
