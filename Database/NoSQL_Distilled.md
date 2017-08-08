@@ -225,6 +225,49 @@ In any case the step from a single node to sharding is going to be tricky. We ha
 
 ## 4.3. Master-Slave Replication
 
+With master-slave distribution, you replicate data across multiple nodes. One node is designated as the master, or primary. This master is the authoritative source for the data and is usually responsible for processing any updates to that data. The other nodes are slaves, or secondaries. A replication process synchronizes the slaves with the master.
+
+![alt](http://sungsoo.github.io/images/master-to-slaves.png)
+
+Master-slave replication is most helpful for scaling when you have a read- intensive dataset. You can scale horizontally to handle more read requests by adding more slave nodes and ensuring that all read requests are routed to the slaves. You are still, however, limited by the ability of the master to process updates and its ability to pass those updates on. Consequently it isn’t such a good scheme for datasets with heavy write traffic, although offloading the read traffic will help a bit with handling the write load.
+
+
+A second advantage of master-slave replication is __read resilience__: Should the master fail, the slaves can still handle read requests. Again, this is useful if most of your data access is reads. The failure of the master does eliminate the ability to handle writes until either the master is restored or a new master is appointed. However, having slaves as replicates of the master does speed up recovery after a failure of the master since a slave can be appointed a new master very quickly.
+
+Masters can be appointed manually or automatically. Manual appointing typically means that when you configure your cluster, you configure one node as the master. With automatic appointment, you create a cluster of nodes and they elect one of themselves to be the master. Apart from simpler configuration, automatic appointment means that the cluster can automatically appoint a new master when a master fails, reducing downtime.
+
+
+In order to get read resilience, you need to ensure that the read and write paths into your application are different, so that you can handle a failure in the write path and still read. This includes such things as putting the reads and writes through separate database connections—a facility that is not often supported by database interaction libraries. As with any feature, you cannot be sure you have read resilience without good tests that disable the writes and check that reads still occur.
+
+Replication comes with some alluring benefits, but it also comes with an inevitable dark side—inconsistency. You have the danger that different clients, reading different slaves, will see different values because the changes haven’t all propagated to the slaves. In the worst case, that can mean that a client cannot read a write it just made. Even if you use master-slave replication just for hot backup this can be a concern, because if the master fails, any updates not passed on to the backup are lost. 
+
+## 4.4. Peer-to-Peer Replication
+
+Master-slave replication helps with read scalability but doesn’t help with scalability of writes. It provides resilience against failure of a slave, but not of a master. Essentially, the master is still a bottleneck and a single point of failure. Peer-to-peer replication attacks these problems by not having a master. All the replicas have equal weight, they can all accept writes, and the loss of any of them doesn’t prevent access to the data store.
+
+![alt](http://sungsoo.github.io/images/peer-to-peer-replication.png)
+
+The prospect here looks mighty fine. With a peer-to-peer replication cluster, you can ride over node failures without losing access to data. Furthermore, you can easily add nodes to improve your performance. There’s much to like here—but there are complications.
+
+The biggest complication is, again, consistency. When you can write to two different places, you run the risk that two people will attempt to update the same record at the same time—a write-write conflict. Inconsistencies on read lead to problems but at least they are relatively transient. Inconsistent writes are forever.
+
+## 4.6. Key Points
+
+There are two styles of distributing data:
+* Sharding distributes different data across multiple servers, so each server acts as the single source for a subset of data.
+* Replication copies data across multiple servers, so each bit of data can be found in multiple places.  
+
+A system may use either or both techniques.
+
+
+Replication comes in two forms:
+* Master-slave replication makes one node the authoritative copy that handles writes while slaves synchronize with the master and may handle reads.
+* Peer-to-peer replication allows writes to any node; the nodes coordinate to synchronize their copies of the data.
+
+Master-slave replication reduces the chance of update conflicts but peer- to-peer replication avoids loading all writes onto a single point of failure.
+
+# Chapter 5. Consistency
+
 
 
 
