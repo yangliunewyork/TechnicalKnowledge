@@ -268,6 +268,24 @@ Master-slave replication reduces the chance of update conflicts but peer- to-pee
 
 # Chapter 5. Consistency
 
+One of the biggest changes from a centralized relational database to a cluster- oriented NoSQL database is in how you think about consistency. Relational databases try to exhibit __strong consistency__ by avoiding all the various inconsistencies that we’ll shortly be discussing. Once you start looking at the NoSQL world, phrases such as “ CAP theorem” and “ eventual consistency” appear, and as soon as you start building something you have to think about what sort of consistency you need for your system.
+
+## 5.1. Update Consistency
+
+Approaches for maintaining consistency in the face of concurrency are often described as __pessimistic__ or __optimistic__. A pessimistic approach works by preventing conflicts from occurring; an optimistic approach lets conflicts occur, but detects them and takes action to sort them out. For update conflicts, the most common pessimistic approach is to have write locks, so that in order to change a value you need to acquire a lock, and the system ensures that only one client can get a lock at a time. 
+
+A common optimistic approach is a __conditional update__ where any client that does an update tests the value just before updating it to see if it’s changed since his last read.
+
+Both the pessimistic and optimistic approaches that we’ve just described rely on a consistent serialization of the updates. With a single server, this is obvious— it has to choose one, then the other. But if there’s more than one server, such as with peer-to-peer replication, then two nodes might apply the updates in a different order, resulting in a different value for the telephone number on each peer. Often, when people talk about concurrency in distributed systems, they talk about sequential consistency—ensuring that all nodes apply operations in the same order.
+
+
+There is another optimistic way to handle a write-write conflict—save both updates and record that they are in conflict. This approach is familiar to many programmers from version control systems, particularly distributed version control systems that by their nature will often have conflicting commits. The next step again follows from version control: You have to merge the two updates somehow. Maybe you show both values to the user and ask them to sort it out—this is what happens if you update the same contact on your phone and your computer. Alternatively, the computer may be able to perform the merge itself; if it was a phone formatting issue, it may be able to realize that and apply the new number with the standard format. Any automated merge of write-write conflicts is highly domain-specific and needs to be programmed for each particular case.
+
+Often, when people first encounter these issues, their reaction is to prefer pessimistic concurrency because they are determined to avoid conflicts. While in some cases this is the right answer, there is always a tradeoff. Concurrent programming involves a fundamental tradeoff between safety (avoiding errors such as update conflicts) and liveness (responding quickly to clients). Pessimistic approaches often severely degrade the responsiveness of a system to the degree that it becomes unfit for its purpose. This problem is made worse by the danger of errors—pessimistic concurrency often leads to deadlocks, which are hard to prevent and debug.
+
+Replication makes it much more likely to run into write-write conflicts. If different nodes have different copies of some data which can be independently updated, then you’ll get conflicts unless you take specific measures to avoid them. Using a single node as the target for all writes for some data makes it much easier to maintain update consistency. Of the distribution models we discussed earlier, all but peer-to-peer replication do this.
+
+# 5.2.ReadConsistency
 
 
 
