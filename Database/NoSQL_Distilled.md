@@ -287,6 +287,28 @@ Replication makes it much more likely to run into write-write conflicts. If diff
 
 # 5.2.ReadConsistency
 
+A common claim we hear is that NoSQL databases don’t support transactions and thus can’t be consistent. Such claim is mostly wrong because it glosses over lots of important details. Our first clarification is that any statement about lack of transactions usually only applies to some NoSQL databases, in particular the aggregate-oriented ones. In contrast, graph databases tend to support ACID transactions just the same as relational databases.
+
+In situations like this, you can tolerate reasonably long inconsistency windows, but you need read-your-writes consistency which means that, once you’ve made an update, you’re guaranteed to continue seeing that update. One way to get this in an otherwise eventually consistent system is to provide __session consistency__: Within a user’s session there is read-your-writes consistency. This does mean that the user may lose that consistency should their session end for some reason or should the user access the same system simultaneously from different computers, but these cases are relatively rare.
+
+
+There are a couple of techniques to provide session consistency. A common way, and often the easiest way, is to have a __sticky session__ a session that’s tied to one node (this is also called __session affinity__). A sticky session allows you to ensure that as long as you keep read-your-writes consistency on a node, you’ll get it for sessions too. The downside is that sticky sessions reduce the ability of the load balancer to do its job.
+
+
+Another approach for session consistency is to use version stamps (“ Version Stamps,”) and ensure every interaction with the data store includes the latest version stamp seen by a session. The server node must then ensure that it has the updates that include that version stamp before responding to a request.
+
+Maintaining session consistency with sticky sessions and master-slave replication can be awkward if you want to read from the slaves to improve read performance but still need to write to the master. One way of handling this is for writes to be sent the slave, who then takes responsibility for forwarding them to the master while maintaining session consistency for its client. Another approach is to switch the session to the master temporarily when doing a write, just long enough that reads are done from the master until the slaves have caught up with the update.
+
+## 5.3. Relaxing Consistency
+
+Consistency is a Good Thing—but, sadly, sometimes we have to sacrifice it. It is always possible to design a system to avoid inconsistencies, but often impossible to do so without making unbearable sacrifices in other characteristics of the system. As a result, we often have to tradeoff consistency for something else. While some architects see this as a disaster, we see it as part of the inevitable tradeoffs involved in system design. Furthermore, different domains have different tolerances for inconsistency, and we need to take this tolerance into account as we make our decisions.
+
+Trading off consistency is a familiar concept even in single-server relational database systems. Here, our principal tool to enforce consistency is the transaction, and transactions can provide strong consistency guarantees. However, transaction systems usually come with the ability to relax isolation levels, allowing queries to read data that hasn’t been committed yet, and in practice we see most applications relax consistency down from the highest isolation level (serialized) in order to get effective performance. We most commonly see people using the read-committed transaction level, which eliminates some read-write conflicts but allows others.
+
+Many systems forgo transactions entirely because the performance impact of transactions is too high. We’ve seen this in a couple different ways. On a small scale, we saw the popularity of MySQL during the days when it didn’t support transactions. Many websites liked the high speed of MySQL and were prepared to live without transactions. At the other end of the scale, some very large websites, such as eBay, have had to forgo transactions in order to perform acceptably—this is particularly true when you need to introduce sharding. Even without these constraints, many application builders need to interact with remote systems that can’t be properly included within a transaction boundary, so updating outside of transactions is a quite common occurrence for enterprise applications.
+
+### 5.3.1. The CAP Theorem
+
 
 
 
