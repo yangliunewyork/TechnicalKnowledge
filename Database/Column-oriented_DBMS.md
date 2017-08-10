@@ -55,7 +55,7 @@ Joe:001,Mary:002,Cathy:003,Bob:004;
 40000:001,50000:002,44000:003,55000:004;
 ```
 
-In this layout, any one of the columns more closely matches the structure of an index in a row-based system. This may cause confusion that can lead to the mistaken belief a column-oriented store "is really just" a row-store with an index on every column. However, it is the mapping of the data that differs dramatically. In a row-oriented indexed system, the primary key is the rowid that is mapped from indexed data. In the column-oriented system, the primary key is the data, which is mapped from rowids. This may seem subtle, but the difference can be seen in this common modification to the same store:
+__In this layout, any one of the columns more closely matches the structure of an index in a row-based system.__ This may cause confusion that can lead to the mistaken belief a column-oriented store "is really just" a row-store with an index on every column. __However, it is the mapping of the data that differs dramatically. In a row-oriented indexed system, the primary key is the rowid that is mapped from indexed data. In the column-oriented system, the primary key is the data, which is mapped from rowids.__ This may seem subtle, but the difference can be seen in this common modification to the same store:
 
 ```
 …;Smith:001;Jones:002,004;Johnson:003;…
