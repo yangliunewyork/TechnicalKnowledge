@@ -309,10 +309,67 @@ Many systems forgo transactions entirely because the performance impact of trans
 
 ### 5.3.1. The CAP Theorem
 
+In the NoSQL world it’s common to refer to the CAP theorem as the reason why you may need to relax consistency. It was originally proposed by Eric Brewer in 2000  and given a formal proof by Seth Gilbert and Nancy Lynch a couple of years later.
 
+The basic statement of the CAP theorem is that, given the three properties of Consistency, Availability, and Partition tolerance, you can only get two. Obviously this depends very much on how you define these three properties, and differing opinions have led to several debates on what the real consequences of the CAP theorem are.
 
+Consistency is pretty much as we’ve defined it so far. Availability has a particular meaning in the context of CAP—it means that if you can talk to a node in the cluster, it can read and write data. That’s subtly different from the usual meaning. Partition tolerance means that the cluster can survive communication breakages in the cluster that separate the cluster into multiple partitions unable to communicate with each other (situation known as a __split brain__).
 
+![alt](https://docs.voltdb.com/graphics/NetworkPartition.png)
 
+A single-server system is the obvious example of a CA system—a system that has Consistency and Availability but not Partition tolerance. A single machine can’t partition, so it does not have to worry about partition tolerance. There’s only one node—so if it’s up, it’s available. Being up and keeping consistency is reasonable. This is the world that most relational database systems live in.
+
+So clusters have to be tolerant of network partitions. And here is the real point of the CAP theorem. Although the CAP theorem is often stated as “ you can only get two out of three,” in practice what it’s saying is that in a system that may suffer partitions, as distributed system do, you have to trade off consistency versus availability. This isn’t a binary decision; often, you can trade off a little consistency to get some availability. The resulting system would be neither perfectly consistent nor perfectly available—but would have a combination that is reasonable for your particular needs.
+
+Advocates of NoSQL often say that instead of following the ACID properties of relational transactions, NoSQL systems follow the BASE properties (Basically Available, Soft state, Eventual consistency). Although we feel we ought to mention the BASE acronym here, we don’t think it’s very useful. The acronym is even more contrived than ACID, and neither “ basically available” nor “ soft state” have been well defined. We should also stress that when Brewer introduced the notion of BASE, he saw the tradeoff between ACID and BASE as a spectrum, not a binary choice.
+
+## 5.4. Relaxing Durability
+As it turns out, there are cases where you may want to trade off some durability for higher performance. If a database can run mostly in memory, apply updates to its in-memory representation, and periodically flush changes to disk, then it may be able to provide substantially higher responsiveness to requests. The cost is that, should the server crash, any updates since the last flush will be lost.
+
+One example of where this tradeoff may be worthwhile is storing user-session state. A big website may have many users and keep temporary information about what each user is doing in some kind of session state. There’s a lot of activity on this state, creating lots of demand, which affects the responsiveness of the website. The vital point is that losing the session data isn’t too much of a tragedy—it will create some annoyance, but maybe less than a slower website would cause. This makes it a good candidate for nondurable writes. Often, you can specify the durability needs on a call-by-call basis, so that more important updates can force a flush to disk.
+
+Another class of durability tradeoffs comes up with replicated data. A failure of __replication durability__ occurs when a node processes an update but fails before that update is replicated to the other nodes. A simple case of this may happen if you have a master-slave distribution model where the slaves appoint a new master automatically should the existing master fail. If a master does fail, any writes not passed onto the replicas will effectively become lost. Should the master come back online, those updates will conflict with updates that have happened since. We think of this as a durability problem because you think your update has succeeded since the master acknowledged it, but a master node failure caused it to be lost.
+
+## 5.5. Quorums
+When you’re trading off consistency or durability, it’s not an all or nothing proposition. The more nodes you involve in a request, the higher is the chance of avoiding an inconsistency. This naturally leads to the question: How many nodes need to be involved to get strong consistency?
+
+Imagine some data replicated over three nodes. You don’t need all nodes to acknowledge a write to ensure strong consistency; all you need is two of them—a majority. If you have conflicting writes, only one can get a majority. This is referred to as a __write quorum__ and expressed in a slightly pretentious inequality of ```W > N / 2``` , meaning the number of nodes participating in the write (W ) must be more than the half the number of nodes involved in replication (N ). The number of replicas is often called the __replication factor__.
+
+Similarly to the write quorum, there is the notion of read quorum: How many nodes you need to contact to be sure you have the most up-to-date change. The read quorum is a bit more complicated because it depends on how many nodes need to confirm a write.
+
+Let’s consider a replication factor of 3. If all writes need two nodes to confirm (W = 2 ) then we need to contact at least two nodes to be sure we’ll get the latest data. If, however, writes are only confirmed by a single node (W = 1 ) we need to talk to all three nodes to be sure we have the latest updates. In this case, since we don’t have a write quorum, we may have an update conflict, but by contacting enough readers we can be sure to detect it. Thus we can get strongly consistent reads even if we don’t have strong consistency on our writes.
+
+This relationship between the number of nodes you need to contact for a read (R ), those confirming a write (W ), and the replication factor (N ) can be captured in an inequality: You can have a strongly consistent read if __R + W > N__ .
+
+These inequalities are written with a peer-to-peer distribution model in mind. If you have a master-slave distribution, you only have to write to the master to avoid write-write conflicts, and similarly only read from the master to avoid read- write conflicts. With this notation, it is common to confuse the number of nodes in the cluster with the replication factor, but these are often different. I may have 100 nodes in my cluster, but only have a replication factor of 3, with most of the distribution occurring due to sharding.
+
+Indeed most authorities suggest that a replication factor of 3 is enough to have good resilience. This allows a single node to fail while still maintaining quora for reads and writes. If you have automatic rebalancing, it won’t take too long for the cluster to create a third replica, so the chances of losing a second replica before a replacement comes up are slight.
+
+The number of nodes participating in an operation can vary with the operation. When writing, we might require quorum for some types of updates but not others, depending on how much we value consistency and availability. Similarly, a read that needs speed but can tolerate staleness should contact less nodes.
+
+Often you may need to take both into account. If you need fast, strongly consistent reads, you could require writes to be acknowledged by all the nodes, thus allowing reads to contact only one (N = 3, W = 3, R = 1). That would mean that your writes are slow, since they have to contact all three nodes, and you would not be able to tolerate losing a node. But in some circumstances that may be the tradeoff to make.
+
+The point to all of this is that you have a range of options to work with and can choose which combination of problems and advantages to prefer. Some writers on NoSQL talk about a simple tradeoff between consistency and availability; we hope you now realize that it’s more flexible—and more complicated—than that.
+
+## 5.7. Key Points
+
+* Write-write conflicts occur when two clients try to write the same data at the same time. Read-write conflicts occur when one client reads inconsistent data in the middle of another client’s write.
+
+* Pessimistic approaches lock data records to prevent conflicts. Optimistic approaches detect conflicts and fix them.
+
+* Distributed systems see read-write conflicts due to some nodes having received updates while other nodes have not. Eventual consistency means that at some point the system will become consistent once all the writes have propagated to all the nodes.
+
+* Clients usually want read-your-writes consistency, which means a client can write and then immediately read the new value. This can be difficult if the read and the write happen on different nodes.
+
+* To get good consistency, you need to involve many nodes in data operations, but this increases latency. So you often have to trade off consistency versus latency.
+
+* The CAP theorem states that if you get a network partition, you have to trade off availability of data versus consistency.
+
+*  Durability can also be traded off against latency, particularly if you want to survive failures with replicated data.
+
+* You do not need to contact all replicants to preserve strong consistency with replication; you just need a large enough quorum.
+
+# Chapter 6. Version Stamps
 
 
 
