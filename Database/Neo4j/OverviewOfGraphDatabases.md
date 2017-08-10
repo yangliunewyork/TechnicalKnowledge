@@ -41,7 +41,44 @@ Relationship types achieve something similar to what you do with node labels, bu
 
 # Why use a graph database?
   
-  
+When you are trying to solve a problem that meets any of the following descriptions, you should probably consider using a graph database such as Neo4j.
+
+##### Complex queries
+
+Complex queries are the types of questions that you want to ask of your data that are inherently composed of a number of complex join-style operations. These operations, as every database administrator knows, are very expensive operations in relational database systems, because we need to be computing the Cartesian product of the indices of the tables that we are trying to join. That may be okay for one or two joins between two or three tables in a relational database management system, but as you can easily understand, this problem becomes exponentially bigger with every table join that you add. On smaller datasets, it can become an unsolvable problem in a relational system, and this is why complex queries become problematic.
+
+In a graph database, a join operation will never need to be performed: all we need to do is to find a starting node in the database (for example, London), usually with an index lookup, and then just use the index free adjacency characteristic and hop from one node (London) to the next (Restaurant) over its connecting relationships (Restaurant-[LOCATED_IN]->London). Every hop along this path is, in effect, the equivalent of a join operation. Relationships between nodes can therefore also be thought of as an explicitly stored representation of such a join operation.
+
+This, actually, is one of the key performance characteristics of a graph database: as soon as you "grab" a starting node, the database will only explore the vicinity of that starting node and will be completely oblivious to anything that is not connected to the starting node. The key performance characteristic that follows from this is that query performance is very independent of the data set size, because in most graphs everything is not connected to everything. By the same token, as we will see later, performance will be much more dependent on the size of the result set, and this will also be one of the key things to keep in mind when putting together your persistence architecture.
+
+##### In-the-clickstream queries on live data
+We all know that you can implement different database queries—such as the preceding example—in different kinds of database management systems. However, in most alternative systems, these types of queries would yield terrible performance on the live database management systems, and potentially endanger the responsiveness of an entire application. The reaction of the relational database management industry, therefore, has been to make sure that these kinds of queries would be done on precalculated, preformatted data that would be specifically structured for this purpose. This means duplicating data, denormalizing data, and using techniques such as Extract, Transform, and Load (ETL) that are often used in Business Intelligence systems to create query-specific representations (sometimes also referred to as cubes) for the data at hand. Obviously, these are valuable techniques—the business intelligence industry would not be the billion-dollar industry that it is otherwise—but they are best suited for working with data that can be allowed to be more stale, less than up-to-date. Graph databases will allow you to answer a wider variety of these complex queries, between a web request and a web response, on data that will not have to be replicated as much, and that therefore will be updated in near real time.
+
+##### Path finding queries
+
+Another type of query that is extremely well suited for graph databases are queries where you would be looking to find out how different data elements are related to each other. In other words, finding the paths between different nodes on your graph. The problem with such queries in other database management systems is that you would actually have to understand the structure of the potential paths extremely well. You would have to be able to tell the database how to "jump" from table to table, so to speak. In a graph database, you can still do that, but typically you won't. You just tell the database to apply a graph algorithm to a starting point and an endpoint and be done with it. It's up to the database to figure out if and how these data elements would be connected to each other and return the result as a path expression for you to use in your system. The fact that you are able to delegate this to the database is extremely useful, and often leads to unexpected and valuable insights.
+
+# Why not use a graph database, and what to use instead
+
+##### Large, set-oriented queries 
+
+If you think back to what we discussed earlier, and think about how graph databases achieve the performance that they do in complex queries, it will also immediately follow that there are a number of cases where graph databases will still work, but will just not be as efficient. If you are trying to put together large lists of things, effectively sets, that do not require a lot of joining or require a lot of aggregation (summing, counting, averaging, and so on) on these sets, then the performance of the graph database compared to other database management systems will be not as favorable. It is clear that a graph database will be able to perform these operations, but the performance advantage will be smaller, or perhaps even negative. Set-oriented databases such as relational database management systems will most likely give just as or even more performance.
+
+##### Graph global operations
+
+Finding clusters of nodes, discovering unknown patterns of relationships between nodes, and defining centrality and/or in-betweenness of specific graph components are extremely interesting and wonderful concepts, but they are very different concepts from the ones that graph databases excel at. These concepts are looking at the graph in its entirety, and we refer to them as graph global operations. While graph databases are extremely powerful at answering "graph local" questions, there is an entire category of graph tools (often referred to as graph processing engines or graph compute engines) that look at the graph global problems.
+
+##### Simple, aggregate-oriented queries
+
+We mentioned that graphs and graph database management systems are great for complex queries—things that would make your relational system choke. As a consequence, simple queries, where write patterns and read patterns align to the aggregates that we are trying to store, are typically served quite inefficiently in a graph, and would be more efficiently handled by an aggregate-oriented Key-Value or Document store. If complexity is low, the advantage of using a graph database system will be lower too
+
+
+
+
+
+
+
+
   
   
   
