@@ -371,6 +371,23 @@ The point to all of this is that you have a range of options to work with and ca
 
 # Chapter 6. Version Stamps
 
+Many critics of NoSQL databases focus on the lack of support for transactions. Transactions are a useful tool that helps programmers support consistency. One reason why many NoSQL proponents worry less about a lack of transactions is that aggregate-oriented NoSQL databases do support atomic updates within an aggregate —and aggregates are designed so that their data forms a natural unit of update. That said, it’s true that transactional needs are something to take into account when you decide what database to use.
+
+As part of this, it’s important to remember that transactions have limitations. Even within a transactional system we still have to deal with updates that require human intervention and usually cannot be run within transactions because they would involve holding a transaction open for too long. We can cope with these using __version stamps__—which turn out to be handy in other situations as well, particularly as we move away from the single-server distribution model.
+
+## 6.1.Business andSystemTransactions
+
+Usually applications only begin a system transaction at the end of the interaction with the user, so that the locks are only held for a short period of time. The problem, however, is that calculations and decisions may have been made based on data that’s changed. The price list may have updated the price of the Talisker, or someone may have updated the customer’s address, changing the shipping charges.
+
+The broad techniques for handling this are offline concurrency, useful in NoSQL situations too. A particularly useful approach is the Optimistic Offline Lock, a form of conditional update where a client operation rereads any information that the business transaction relies on and checks that it hasn’t changed since it was originally read and displayed to the user. A good way of doing this is to ensure that records in the database contain some form of __version stamp__: a field that changes every time the underlying data in the record changes. When you read the data you keep a note of the version stamp, so that when you write data you can check to see if the version has changed.
+
+You may have come across this technique with updating resources with HTTP. One way of doing this is to use etags. Whenever you get a resource, the server responds with an etag in the header. This etag is an opaque string that indicates the version of the resource. If you then update that resource, you can use a conditional update by supplying the etag that you got from your last GET. If the resource has changed on the server, the etags won’t match and the server will refuse the update, returning a 412 (Precondition Failed) response.
+
+Some databases provide a similar mechanism of conditional update that allows you to ensure updates won’t be based on stale data. You can do this check yourself, although you then have to ensure no other thread can run against the resource between your read and your update. (Sometimes this is called a compare-and-set (CAS) operation, whose name comes from the CAS operations done in processors. The difference is that a processor CAS compares a value before setting it, while a database conditional update compares a version stamp of the value.)
+
+## 6.2. Version Stamps on Multiple Nodes
+
+
 
 
 
