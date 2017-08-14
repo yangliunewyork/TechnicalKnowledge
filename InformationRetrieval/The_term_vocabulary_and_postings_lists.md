@@ -123,3 +123,21 @@ operative and dentistry
 For a case like this, moving to using a lemmatizer would not completely fix the problem because particular inflectional forms are used in particular collocations: a sentence with the words operate and system is not a good match for the query operating and system. Getting better value from term normalization depends more on pragmatic issues of word use than on formal issues of linguistic morphology.
 
 # Faster postings list intersection via skip pointers
+Recall the basic postings list intersection operation from Section 1.3 (page [*]): we walk through the two postings lists simultaneously, in time linear in the total number of postings entries. If the list lengths are ```m``` and ```n```, the intersection takes ```O(m+n)``` operations. Can we do better than this? That is, empirically, can we usually process postings list intersection in sublinear time? We can, if the index isn't changing too fast.
+
+One way to do this is to use a skip list by augmenting postings lists with skip pointers (at indexing time), as shown in Figure 2.9 . Skip pointers are effectively shortcuts that allow us to avoid processing parts of the postings list that will not figure in the search results. The two questions are then where to place skip pointers and how to do efficient merging using skip pointers.
+
+![alt](https://nlp.stanford.edu/IR-book/html/htmledition/img106.png)
+
+Postings lists with skip pointers.The postings intersection can use a skip pointer when the end point is still less than the item on the other list.
+
+![alt](https://nlp.stanford.edu/IR-book/html/htmledition/img107.png)
+
+Where do we place skips? There is a tradeoff. More skips means shorter skip spans, and that we are more likely to skip. But it also means lots of comparisons to skip pointers, and lots of space storing skip pointers. Fewer skips means few pointer comparisons, but then long skip spans which means that there will be fewer opportunities to skip. A simple heuristic for placing skips, which has been found to work well in practice, is that for a postings list of length $P$, use  $\sqrt{P}$ evenly-spaced skip pointers. This heuristic can be improved upon; it ignores any details of the distribution of query terms.
+
+Building effective skip pointers is easy if an index is relatively static; it is harder if a postings list keeps changing because of updates. A malicious deletion strategy can render skip lists ineffective.
+
+Choosing the optimal encoding for an inverted index is an ever-changing game for the system builder, because it is strongly dependent on underlying computer technologies and their relative speeds and sizes. Traditionally, CPUs were slow, and so highly compressed techniques were not optimal. Now CPUs are fast and disk is slow, so reducing disk postings list size dominates. However, if you're running a search engine with everything in memory then the equation changes again. 
+
+# Positional postings and phrase queries
+
