@@ -140,4 +140,51 @@ Building effective skip pointers is easy if an index is relatively static; it is
 Choosing the optimal encoding for an inverted index is an ever-changing game for the system builder, because it is strongly dependent on underlying computer technologies and their relative speeds and sizes. Traditionally, CPUs were slow, and so highly compressed techniques were not optimal. Now CPUs are fast and disk is slow, so reducing disk postings list size dominates. However, if you're running a search engine with everything in memory then the equation changes again. 
 
 # Positional postings and phrase queries
+Many complex or technical concepts and many organization and product names are multiword compounds or phrases. We would like to be able to pose a query such as Stanford University by treating it as a phrase so that a sentence in a document like The inventor Stanford Ovshinsky never went to university. is not a match. Most recent search engines support a double quotes syntax (``stanford university'') for phrase queries , which has proven to be very easily understood and successfully used by users. As many as 10% of web queries are phrase queries, and many more are implicit phrase queries (such as person names), entered without use of double quotes. To be able to support such queries, it is no longer sufficient for postings lists to be simply lists of documents that contain individual terms. In this section we consider two approaches to supporting phrase queries and their combination. A search engine should not only support phrase queries, but implement them efficiently. A related but distinct concept is term proximity weighting, where a document is preferred to the extent that the query terms appear close to each other in the text. 
+
+
+### Biword indexes
+
+One approach to handling phrases is to consider every pair of consecutive terms in a document as a phrase. For example, the text Friends, Romans, Countrymen would generate the __biwords__ :
+
+```
+friends romans 
+romans countrymen
+```
+
+In this model, we treat each of these biwords as a vocabulary term. Being able to process two-word phrase queries is immediate. Longer phrases can be processed by breaking them down. The query stanford university palo alto can be broken into the Boolean query on biwords:
+
+```''stanford university'' AND ``university palo'' AND ``palo alto''```
+
+This query could be expected to work fairly well in practice, but there can and will be occasional false positives. Without examining the documents, we cannot verify that the documents matching the above Boolean query do actually contain the original 4 word phrase.
+
+Among possible queries, nouns and noun phrases have a special status in describing the concepts people are interested in searching for. But related nouns can often be divided from each other by various function words, in phrases such as ```the abolition of slavery or renegotiation of the constitution```. These needs can be incorporated into the biword indexing model in the following way. First, we tokenize the text and perform part-of-speech-tagging.We can then group terms into nouns, including proper nouns, (N) and function words, including articles and prepositions, (X), among other classes. Now deem any string of terms of the form NX*N to be an extended biword. Each such extended biword is made a term in the vocabulary. For example:
+
+```
+renegotiation	of	the	constitution
+N	X	X	N
+```
+
+To process a query using such an extended biword index, we need to also parse it into N's and X's, and then segment the query into extended biwords, which can be looked up in the index.
+
+This algorithm does not always work in an intuitively optimal manner when parsing longer queries into Boolean queries. Using the above algorithm, the query ```cost overruns on a power plant``` is parsed into ```''cost overruns'' AND ``overruns power'' AND ``power plant''```,whereas it might seem a better query to omit the middle biword. Better results can be obtained by using more precise part-of-speech patterns that define which extended biwords should be indexed.
+
+The concept of a biword index can be extended to longer sequences of words, and if the index includes variable length word sequences, it is generally referred to as a phrase index . Indeed, searches for a single term are not naturally handled in a biword index (you would need to scan the dictionary for all biwords containing the term), and so we also need to have an index of single-word terms. While there is always a chance of false positive matches, the chance of a false positive match on indexed phrases of length 3 or more becomes very small indeed. But on the other hand, storing longer phrases has the potential to greatly expand the vocabulary size. Maintaining exhaustive phrase indexes for phrases of length greater than two is a daunting prospect, and even use of an exhaustive biword dictionary greatly expands the size of the vocabulary. However, towards the end of this section we discuss the utility of the strategy of using a partial phrase index in a compound indexing scheme.
+
+### Positional indexes
+
+For the reasons given, a biword index is not the standard solution. Rather, a __positional index__ is most commonly employed. Here, for each term in the vocabulary, we store postings of the form docID(pos1,pos2,pos3,....). , where each position is a token index in the document. Each posting will also usually record the term frequency.
+
+![alt](https://nlp.stanford.edu/IR-book/html/htmledition/img121.png)
+
+To process a phrase query, you still need to access the inverted index entries for each distinct term. As before, you would start with the least frequent term and then work to further restrict the list of possible candidates. In the merge operation, the same general technique is used as before, but rather than simply checking that both terms are in a document, you also need to check that their positions of appearance in the document are compatible with the phrase query being evaluated. This requires working out offsets between the words.
+
+![alt](https://nlp.stanford.edu/IR-book/html/htmledition/img122.png)
+
+##### Positional index size.
+
+
+
+
+
 
