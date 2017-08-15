@@ -183,6 +183,14 @@ To process a phrase query, you still need to access the inverted index entries f
 
 ##### Positional index size.
 
+Adopting a positional index expands required postings storage significantly, even if we compress position values/offsets as we will discuss in Section 5.3. Indeed, moving to a positional index also changes the asymptotic complexity of a postings intersection operation, because the number of items to check is now bounded not by the number of documents but by the total number of tokens in the document collection ```T```. That is, the complexity of a Boolean query is ```\Theta(T)``` rather than  ```\Theta(N)```. However, most applications have little choice but to accept this, since most users now expect to have the functionality of phrase and proximity searches.
+
+### Combination schemes
+
+The strategies of biword indexes and positional indexes can be fruitfully combined. If users commonly query on particular phrases, such as Michael Jackson, it is quite inefficient to keep merging positional postings lists. A combination strategy uses a phrase index, or just a biword index , for certain queries and uses a positional index for other phrase queries. Good queries to include in the phrase index are ones known to be common based on recent querying behavior. But this is not the only criterion: the most expensive phrase queries to evaluate are ones where the individual words are common but the desired phrase is comparatively rare. Adding Britney Spears as a phrase index entry may only give a speedup factor to that query of about 3, since most documents that mention either word are valid results, whereas adding The Who as a phrase index entry may speed up that query by a factor of 1000. Hence, having the latter is more desirable, even if it is a relatively less common query.
+
+
+
 
 
 
