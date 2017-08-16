@@ -24,6 +24,8 @@ Broadcasting may be abused to perform a type of DoS-attack known as a Smurf atta
 
 ## Unicast vs Broadcast vs Multicase
 
+![alt](https://techiemaster.files.wordpress.com/2016/08/slide_6.jpg)
+
 #### Unicast
 
 Unicast is the term used to describe communication where a piece of information is sent from one point to another point. In this case there is just one sender, and one receiver.
@@ -52,17 +54,15 @@ The majority of installed LANs (e.g. Ethernet) are able to support the multicast
 
 
 Simply put:
-------------------------------------------------------------
+
 | TYPE      | ASSOCIATIONS     | SCOPE           | EXAMPLE |
-------------------------------------------------------------
+| ------------- |:-------------:| :-------------:|:-------------:|
 | Unicast   | 1 to 1           | Whole network   | HTTP    | 
-------------------------------------------------------------
 | Broadcast | 1 to Many        | Subnet          | ARP     |
-------------------------------------------------------------
 | Multicast | One/Many to Many | Defined horizon | SLP     |
-------------------------------------------------------------
 | Anycast   | Many to Few      | Whole network   | 6to4    |
-------------------------------------------------------------
+
+
 Unicast is used when two network nodes need to talk to each other. This is pretty straight forward, so I'm not going to spend much time on it. TCP by definition is a Unicast protocol, except when there is Anycast involved (more on that below).
 
 When you need to have more than two nodes see the traffic, you have options.
