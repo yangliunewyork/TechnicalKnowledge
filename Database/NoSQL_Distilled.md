@@ -387,11 +387,57 @@ Some databases provide a similar mechanism of conditional update that allows you
 
 ## 6.2. Version Stamps on Multiple Nodes
 
+The basic version stamp works well when you have a single authoritative source for data, such as a single server or master-slave replication. In that case the version stamp is controlled by the master. Any slaves follow the master’s stamps. But this system has to be enhanced in a peer-to-peer distribution model because there’s no longer a single place to set the version stamps.
+
+If you’re asking two nodes for some data, you run into the chance that they may give you different answers. If this happens, your reaction may vary depending on the cause of that difference. It may be that an update has only reached one node but not the other, in which case you can accept the latest (assuming you can tell which one that is). Alternatively, you may have run into an inconsistent update, in which case you need to decide how to deal with that. In this situation, a simple GUID or etag won’t suffice, since these don’t tell you enough about the relationships.
+
+The simplest form of version stamp is a counter. Each time a node updates the data, it increments the counter and puts the value of the counter into the version stamp. If you have blue and green slave replicas of a single master, and the blue node answers with a version stamp of 4 and the green node with 6, you know that the green’s answer is more recent.
+
+In multiple-master cases, we need something fancier. One approach, used by distributed version control systems, is to ensure that all nodes contain a history of version stamps. That way you can see if the blue node’s answer is an ancestor of the green’s answer. This would either require the clients to hold onto version stamp histories, or the server nodes to keep version stamp histories and include them when asked for data. This also detects an inconsistency, which we would see if we get two version stamps and neither of them has the other in their histories. Although version control systems keep these kinds of histories, they aren’t found in NoSQL databases.
+
+A simple but problematic approach is to use timestamps. The main problem here is that it’s usually difficult to ensure that all the nodes have a consistent notion of time, particularly if updates can happen rapidly. Should a node’s clock get out of sync, it can cause all sorts of trouble. In addition, you can’t detect write- write conflicts with timestamps, so it would only work well for the single-master case—and then a counter is usually better.
+
+The most common approach used by peer-to-peer NoSQL systems is a special form of version stamp which we call a __vector stamp__. In essence, a vector stamp is a set of counters, one for each node. A vector stamp for three nodes (blue, green, black) would look something like [blue: 43, green: 54, black: 12]. Each time a node has an internal update, it updates its own counter, so an update in the green node would change the vector to [blue: 43, green: 55, black: 12]. Whenever two nodes communicate, they synchronize their vector stamps. There are several variations of exactly how this synchronization is done. We’re coining the term “ vector stamp” as a general term in this book; you’ll also come across __vector clocks__ and __version vectors__—these are specific forms of vector stamps that differ in how they synchronize.
+
+By using this scheme you can tell if one version stamp is newer than another because the newer stamp will have all its counters greater than or equal to those in the older stamp. So [blue: 1, green: 2, black: 5] is newer than [blue:1, green: 1, black 5] since one ofits counters is greater. Ifboth stamps have a counter greater than the other, e.g. [blue: 1, green: 2, black: 5] and [blue: 2, green: 1, black: 5], then you have a write-write conflict.
+
+There may be missing values in the vector, in which case we use treat the missing value as 0. So [blue: 6, black: 2] would be treated as [blue: 6, green: 0, black: 2]. This allows you to easily add new nodes without invalidating the existing vector stamps.
+
+Vector stamps are a valuable tool that spots inconsistencies, but doesn’t resolve them. Any conflict resolution will depend on the domain you are working in. This is part of the consistency/latency tradeoff. You either have to live with the fact that network partitions may make your system unavailable, or you have to detect and deal with inconsistencies.
+
+## 6.3. Key Points
+
+* Version stamps help you detect concurrency conflicts. When you read data, then update it, you can check the version stamp to ensure nobody updated the data between your read and write.
+* Version stamps can be implemented using counters, GUIDs, content hashes, timestamps, or a combination of these.
+* With distributed systems, a vector of version stamps allows you to detect when different nodes have conflicting updates.
+
+# Chapter 7. Map-Reduce
+
+The rise of aggregate-oriented databases is in large part due to the growth of clusters. Running on a cluster means you have to make your tradeoffs in data storage differently than when running on a single machine. Clusters don’t just change the rules for data storage—they also change the rules for computation. If you store lots of data on a cluster, processing that data efficiently means you have to think differently about how you organize your processing.
 
 
+With a centralized database, there are generally two ways you can run the processing logic against it: either on the database server itself or on a client machine. Running it on a client machine gives you more flexibility in choosing a programming environment, which usually makes for programs that are easier to create or extend. This comes at the cost of having to shlep lots of data from the database server. If you need to hit a lot of data, then it makes sense to do the processing on the server, paying the price in programming convenience and increasing the load on the database server.
+
+When you have a cluster, there is good news immediately—you have lots of machines to spread the computation over. However, you also still need to try to reduce the amount of data that needs to be transferred across the network by doing as much processing as you can on the same node as the data it needs.
+
+__The map-reduce pattern (a form of Scatter-Gather) is a way to organize processing in such a way as to take advantage of multiple machines on a cluster while keeping as much processing and the data it needs together on the same machine.__ It first gained prominence with Google’s MapReduce framework. A widely used open-source implementation is part of the Hadoop project, although several databases include their own implementations. As with most patterns, there are differences in detail between these implementations, so we’ll concentrate on the general concept. The name “ map-reduce” reveals its inspiration from the map and reduce operations on collections in functional programming languages.
+
+## 7.1. Basic Map-Reduce
+
+To explain the basic idea, we’ll start from an example we’ve already flogged to death—that of customers and orders. Let’s assume we have chosen orders as our aggregate, with each order having line items. Each line item has a product ID, quantity, and the price charged. This aggregate makes a lot of sense as usually people want to see the whole order in one access. We have lots of orders, so we’ve sharded the dataset over many machines.
+
+However, sales analysis people want to see a product and its total revenue for the last seven days. This report doesn’t fit the aggregate structure that we have— which is the downside of using aggregates. In order to get the product revenue report, you’ll have to visit every machine in the cluster and examine many records on each machine.
+
+This is exactly the kind of situation that calls for __map-reduce__. The first stage in a map-reduce job is the map. __A map is a function whose input is a single aggregate and whose output is a bunch of key-value pairs.__ In this case, the input would be an order. The output would be key-value pairs corresponding to the line items. Each one would have the product ID as the key and an embedded map with the quantity and price as the values.
+
+Each application of the map function is independent of all the others. This allows them to be safely parallelizable, so that a map-reduce framework can create efficient map tasks on each node and freely allocate each order to a map task. This yields a great deal of parallelism and locality of data access. 
+
+A map operation only operates on a single record; the reduce function takes multiple map outputs with the same key and combines their values. So, a map function might yield 1000 line items from orders for “ Database Refactoring”; the reduce function would reduce down to one, with the totals for the quantity and revenue. While the map function is limited to working only on data from a single aggregate, the reduce function can use all values emitted for a single key.
 
 
+The map-reduce framework arranges for map tasks to be run on the correct nodes to process all the documents and for data to be moved to the reduce function. To make it easier to write the reduce function, the framework collects all the values for a single pair and calls the reduce function once with the key and the collection of all the values for that key. So to run a map-reduce job, you just need to write these two functions.
 
+## 7.2. Partitioning and Combining
 
 
 
