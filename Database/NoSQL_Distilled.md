@@ -439,7 +439,138 @@ The map-reduce framework arranges for map tasks to be run on the correct nodes t
 
 ## 7.2. Partitioning and Combining
 
+In the simplest form, we think of a map-reduce job as having a single reduce function. The outputs from all the map tasks running on the various nodes are concatenated together and sent into the reduce. While this will work, there are things we can do to increase the parallelism and to reduce the data transfer.
+
+The first thing we can do is increase parallelism by partitioning the output of the mappers. Each reduce function operates on the results of a single key. This is a limitation—it means you can’t do anything in the reduce that operates across keys —but it’s also a benefit in that it allows you to run multiple reducers in parallel. To take advantage of this, the results of the mapper are divided up based the key on each processing node. Typically, multiple keys are grouped together into partitions. The framework then takes the data from all the nodes for one partition, combines it into a single group for that partition, and sends it off to a reducer. Multiple reducers can then operate on the partitions in parallel, with the final results merged together. (This step is also called “ shuffling,” and the partitions are sometimes referred to as “buckets” or “regions.”)
+
+The next problem we can deal with is the amount of data being moved from node to node between the map and reduce stages. Much of this data is repetitive, consisting of multiple key-value pairs for the same key. A combiner function cuts this data down by combining all the data for the same key into a single value. A combiner function is, in essence, a reducer function—indeed, in many cases the same function can be used for combining as the final reduction. The reduce function needs a special shape for this to work: Its output must match its input. We call such a function a __combinable reducer__.
+
+When you have combining reducers, the map-reduce framework can safely run not only in parallel (to reduce different partitions), but also in series to reduce the same partition at different times and places. In addition to allowing combining to occur on a node before data transmission, you can also start combining before mappers have finished. This provides a good bit of extra flexibility to the map- reduce processing. Some map-reduce frameworks require all reducers to be combining reducers, which maximizes this flexibility. If you need to do a noncombining reducer with one of these frameworks, you’ll need to separate the processing into pipelined map-reduce steps.
+
+## 7.3. Composing Map-Reduce Calculations
+
+The map-reduce approach is a way of thinking about concurrent processing that trades off flexibility in how you structure your computation for a relatively straightforward model for parallelizing the computation over a cluster. Since it’s a tradeoff, there are constraints on what you can do in your calculations. Within a map task, you can only operate on a single aggregate. Within a reduce task, you can only operate on a single key. This means you have to think differently about structuring your programs so they work well within these constraints.
 
 
+Map-reduce is a pattern that can be implemented in any programming language. However, the constraints of the style make it a good fit for languages specifically designed for map-reduce computations. Apache Pig [Pig], an offshoot of the Hadoop [Hadoop] project, is a language specifically built to make it easy to write map-reduce programs. It certainly makes it much easier to work with Hadoop than the underlying Java libraries. In a similar vein, if you want to specify map- reduce programs using an SQL-like syntax, there is hive [Hive], another Hadoop offshoot.
 
+The map-reduce pattern is important to know about even outside of the context of NoSQL databases. Google’s original map-reduce system operated on files stored on a distributed file system—an approach that’s used by the open- source Hadoop project. While it takes some thought to get used to the constraints of structuring computations in map-reduce steps, the result is a calculation that is inherently well-suited to running on a cluster. When dealing with high volumes of data, you need to take a cluster-oriented approach. Aggregate-oriented databases fit well with this style of calculation. We think that in the next few years many more organizations will be processing the volumes of data that demand a cluster-oriented solution—and the map-reduce pattern will see more and more use.
+
+
+7.5. Key Points
+
+* Map-reduce is a pattern to allow computations to be parallelized over a cluster.
+* The map task reads data from an aggregate and boils it down to relevant key-value pairs. Maps only read a single record at a time and can thus be parallelized and run on the node that stores the record.
+* Reduce tasks take many values for a single key output from map tasks and summarize them into a single output. Each reducer operates on the result of a single key, so it can be parallelized by key.
+* Reducers that have the same form for input and output can be combined into pipelines. This improves parallelism and reduces the amount of data to be transferred.
+* Map-reduce operations can be composed into pipelines where the output of one reduce is the input to another operation’s map.
+* If the result of a map-reduce computation is widely used, it can be stored as a materialized view.
+* Materialized views can be updated through incremental map-reduce operations that only compute changes to the view instead of recomputing everything from scratch.
+
+# Chapter 8. Key-Value Databases
+
+A key-value store is a simple hash table, primarily used when all access to the database is via primary key. 
+
+## 8.1. What Is a Key-Value Store
+
+Key-value stores are the simplest NoSQL data stores to use from an API perspective. The client can either get the value for the key, put a value for a key, or delete a key from the data store. The value is a blob that the data store just stores, without caring or knowing what’s inside; it’s the responsibility of the application to understand what was stored. Since key-value stores always use primary-key access, they generally have great performance and can be easily scaled.
+
+## 8.2. Key-Value Store Features
+
+While using any NoSQL data stores, there is an inevitable need to understand how the features compare to the standard RDBMS data stores that we are so used to. The primary reason is to understand what features are missing and how does the application architecture need to change to better use the features of a key-value data store. Some of the features we will discuss for all the NoSQL data stores are consistency, transactions, query features, structure of the data, and scaling.
+
+### 8.2.1. Consistency
+
+Consistency is applicable only for operations on a single key, since these operations are either a get, put, or delete on a single key. Optimistic writes can be performed, but are very expensive to implement, because a change in value cannot be determined by the data store.
+
+In distributed key-value store implementations like Riak, the eventually consistent model of consistency is implemented. Since the value may have already been replicated to other nodes, Riak has two ways of resolving update conflicts: either the newest write wins and older writes loose, or both (all) values are returned allowing the client to resolve the conflict.
+
+### 8.2.2. Transactions
+
+Different products of the key-value store kind have different specifications of transactions. Generally speaking, there are no guarantees on the writes. Many data stores do implement transactions in different ways. Riak uses the concept of __quorum__ implemented by using the W value—replicationfactor —during the write API call.
+
+Assume we have a Riak cluster with a replication factor of 5 and we supply the W value of 3.Whenwriting,the write is reported ass uccessful only when it is written and reported as a success on at least three of the nodes. This allows Riak to have write tolerance;in our example,with N equalto5 and with a W value of 3,the cluster can tolerate N - W = 2 nodes being down for write operations, though we would still have lost some data on those nodes for read.
+
+### 8.2.3. Query Features
+
+All key-value stores can query by the key—and that’s about it. If you have requirements to query by using some attribute of the value column, it’s not possible to use the database: Your application needs to read the value to figure out if the attribute meets the conditions.
+
+Query by key also has an interesting side effect. What if we don’t know the key, especially during ad-hoc querying during debugging? Most of the data stores will not give you a list of all the primary keys; even if they did, retrieving lists of keys and then querying for the value would be very cumbersome. Some key-value databases get around this by providing the ability to search inside the value, such as Riak Search that allows you to query the data just like you would query it using Lucene indexes.
+
+While using key-value stores, lots of thought has to be given to the design of the key. Can the key be generated using some algorithm? Can the key be provided by the user (user ID, email, etc.)? Or derived from timestamps or other data that can be derived outside of the database?
+
+These query characteristics make key-value stores likely candidates for storing session data (with the session ID as the key), shopping cart data, user profiles, and soon. The ```expiry_secs``` property can be used to expire keys after a certain time interval, especially for session/shopping cart objects.
+
+### 8.2.4. Structure of Data
+
+Key-value databases don’t care what is stored in the value part of the key-value pair. The value can be a blob, text, JSON, XML, and so on. In Riak, we can use the Content-Type in the POST request to specify the datatype.
+
+### 8.2.5. Scaling
+
+Many key-value stores scale by using sharding (“ Sharding,” p. 38). With sharding, the value of the key determines on which node the key is stored. Let’s assume we are sharding by the first character of the key; if the key is f 4 b 1 9 d 7 9 5 8 7 d , which starts with an f, it will be sent to different node than the key ad9c7a396542. This kind of sharding setup can increase performance as more nodes are added to the cluster.
+
+Sharding also introduces some problems.If the node used to store f goes down, the data stored on that node becomes unavailable, nor can new data be written with keys that start with f .
+
+Data stores such as Riak allow you to control the aspects of the CAP Theorem (“The CAP Theorem,”p.53):N (number of nodes to store the key-value replicas), R (number of nodes that have to have the data being fetched before the read is considered successful),and W (the number of nodes the write has to be written to before it is considered successful).
+
+Let’s assume we have a 5-node Riak cluster. Setting N to 3 means that all data is replicated to at least three nodes, setting R to 2 means any two nodes must reply to aG ET request for it to be considered successful,and setting W to2 ensures that the PUT requestis written to two nodes before the write is considered successful.
+
+These settings allow us to fine-tune node failures for read or write operations. Based on our need, we can change these values for better read availability or write availability.Generally speaking choose a W value to match your consistency needs; these values can be set as defaults during bucket creation.
+
+## 8.3. Suitable Use Cases
+
+### 8.3.1. Storing Session Information
+
+Generally,every web session is unique and is assigned a unique sessionid value. Applications that store the sessionid on disk or in an RDBMS will greatly benefit from moving to a key-value store, since everything about the session can be stored by a single PUT request or retrieved using GET.This single-request operation makes it very fast, as everything about the session is stored in a single object. Solutions such as Memcached are used by many web applications, and Riak can be used when availability is important.
+
+### 8.3.2. User Profiles, Preferences
+
+Almost every user has a unique userId, username, or some other attribute, as well as preferences such as language, color, timezone, which products the user has access to, and so on. This can all be put into an object, so getting preferences of a user takes a single GET operation.Similarly,product profiles can be stored.
+
+### 8.3.3. Shopping Cart Data
+
+E-commerce websites have shopping carts tied to the user. As we want the shopping carts to be available all the time, across browsers, machines, and sessions,all the shopping information can be put into the value where the key is the u s e r i d . A Riak cluster would be best suited for these kinds of applications.
+
+## 8.4.When Not to Use
+
+### 8.4.1. Relationships among Data
+
+If you need to have relationships between different sets of data, or correlate the data between different sets of keys, key-value stores are not the best solution to use, even though some key-value stores provide link-walking features.
+
+###  8.4.2. Multioperation Transactions
+
+If you’re saving multiple keys and there is a failure to save any one of them, and you want to revert or roll back the rest of the operations, key-value stores are not the best solution to be used.
+
+### 8.4.3. Query by Data
+
+If you need to search the keys based on something found in the value part of the key-value pairs, then key-value stores are not going to perform well for you. There is no way to inspect the value on the database side, with the exception of some products like Riak Search or indexing engines like Lucene [Lucene] or Solr [Solr].
+
+### 8.4.4. Operations by Sets
+
+Since operations are limited to one key at a time, there is no way to operate upon multiple keys at the same time. If you need to operate upon multiple keys, you have to handle this from the client side.
+
+# Chapter 9. Document Databases
+
+Documents are the main concept in document databases. The database stores and retrieves documents, which can be XML, JSON, BSON, and so on. These documents are self-describing, hierarchical tree data structures which can consist of maps, collections, and scalar values. The documents stored are similar to each other but do not have to be exactly the same. Document databases store documents in the value part of the key-value store; think about document databases as key- value stores where the value is examinable. 
+
+## 9.1. What Is a Document Database?
+
+This different representation of data is not the same as in RDBMS where every column has to be defined, and if it does not have data it is marked as empty or set to n u l l . In documents, there are no empty attributes; if a given attribute is not found, we assume that it was not set or not relevant to the document. Documents allow for new attributes to be created without the need to define them or to change the existing documents.
+
+## 9.2. Features
+
+
+While there are many specialized document databases, we will use MongoDB as a representative of the feature set. Keep in mind that each product has some features that may not be found in other document databases.
+
+Let’s take some time to understand how MongoDB works. Each MongoDB instance has multiple databases, and each database can have multiple collections. When we compare this with RDBMS, an RDBMS instance is the same as MongoDB instance, the schemas in RDBMS are similar to MongoDB databases, and the RDBMS tables are collections in MongoDB. When we store a document, we have to choose which database and collection this document belongs in—for example, database.collection.insert(document), which is usually represented as db.coll.insert(document).
+
+### 9.2.1. Consistency
+
+Consistency in MongoDB database is configured by using the __replica sets__ and choosing to wait for the writes to be replicated to all the slaves or a given number of slaves. Every write can specify the number of servers the write has to be propagated to before it returns as successful.
+
+A command like db.runCommand({ getlasterror : 1 , w : "majority" }) tells the database how strong is the consistency you want.Forexample,if you have one server and specify thew as majority,the write will return immediately since there is only one node. If you have three nodes in the replica set and specify w as majority, the write will have to complete at a minimum oftwo nodes before it is reported as a success.You can increase the w value for stronger consistency but you will suffer on write performance, since now the writes have to complete at more nodes. Replica sets also allow you to increase the read performance by allowing reading from slaves by setting ```s l a v e O k``` ; this parameter can be set on the connection, or database, or collection, or individually for each operation.
+
+Similar to various options available for read, you can change the settings to achieve strong write consistency, if desired. By default, a write is reported successful once the database receives it; you can change this so as to wait for the writes to be synced to disk or to propagate to two or more slaves. This is known as WriteConcern: You make sure that certain writes are written to the master and some slaves by setting WriteConcern to ```REPLICAS_SAFE```.
+
+### 9.2.2. Transactions
 
