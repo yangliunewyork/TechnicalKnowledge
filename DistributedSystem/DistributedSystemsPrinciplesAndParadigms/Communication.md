@@ -143,6 +143,29 @@ __MPI assumes communication takes place within a known group of processes. Each 
 
 ### 4.3.2 Message-Oriented Persistent Communication
 
+We now come to an important class of message-oriented middle ware services, generally known as __message-queuing systems__, or just __Message-Oriented Middleware (MOM)__. Message-queuing systems provide extensive support for persistent asynchronous communication. The essence of these systems is that they offer intermediate-term storage capacity for messages, without requiring either the sender or receiver to be active during message transmission. __An important difference with Berkeley sockets and MPI is that message-queuing systems are typically targeted to support message transfers that are allowed to take minutes instead of seconds or milliseconds.__ We first explain a general approach to messagequeuing systems, and conclude this section by comparing them to more traditional systems, notably the Internet e-mail systems.
+
+##### Message-Queuing Model
+
+The basic idea behind a message-queuing system is that applications communicate by inserting messages in specific queues. These messages are forwarded over a series of communication servers and are eventually delivered to the destination, even if it was down when the message was sent. In practice, most communication servers are directly connected to each other. In other words, a message is generally transferred directly to a destination server. In principle, each application has its own private queue to which other applications can send messages. A queue can be read only by its associated application, but it is also possible for multiple applications to share a single queue.
+
+An important aspect of message-queuing systems is that a sender is generally given only the guarantees that its message will eventually be inserted in the recipient's queue. No guarantees are given about when, or even if the message will actually be read, which is completely determined by the behavior of the recipient.
+
+These semantics permit communication loosely-coupled in time. There is thus no need for the receiver to be executing when a message is being sent to its queue. Likewise, there is no need for the sender to be executing at the moment its message is picked up by the receiver. The sender and receiver can execute completely independently of each other. In fact, once a message has been deposited in a queue, it will remain there until it is removed, irrespective of whether its sender or receiver is executing. This gives us four combinations with respect to the execution mode of the sender and receiver, as shown in Fig. 4-17.
+
+![alt](http://slideplayer.com/slide/5821235/19/images/18/Four+combinations+for+loosely-coupled+communications+using+queues..jpg)
+
+Messages can, in principle, contain any data. The only important aspect from the perspective of middleware is that messages are properly addressed. In practice, addressing is done by providing a systemwide unique name of the destination queue. In some cases, message size may be limited, although it is also possible that the underlying system takes care of fragmenting and assembling large messages in a way that is completely transparent to applications. An effect of this approach is that the basic interface offered to applications can be extremely simple.
+
+![alt](http://images.slideplayer.com/25/7899270/slides/slide_32.jpg)
+
+The put primitive is called by a sender to pass a message to the underlying system that is to be appended to the specified queue. As we explained. this is a nonblocking call. The get primitive is a blocking call by which an authorized process can remove the longest pending message in the specified queue. The process is blocked only if the queue is empty. Variations on this call allow searching for a specific message in the queue, for example, using a priority, or a matching pattern. The nonblocking variant is given by the poll primitive. If the queue is empty, or if a specific message could not be found, the calling process simply continues.
+
+Finally, most queuing systems also allow a process to install a handler as a __callback function__, which is automatically invoked whenever a message is put into the queue. Callbacks can also be used to automatically start a process that will fetch messages from the queue if no process is currently executing. This approach is often implemented by means of a daemon on the receiver's side that continuously monitors the queue for incoming messages and handles accordingly.
+
+##### General Architecture of a Message-Queuing System
+
+
 
 
 
