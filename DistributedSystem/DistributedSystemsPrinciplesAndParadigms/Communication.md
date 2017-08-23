@@ -184,6 +184,32 @@ Another reason why relays are used is that they allow for secondary processing o
 
 ##### Message Brokers
 
+An important application area of message-queuing systems is integrating existing and new applications into a single, coherent distributed information system. Integration requires that applications can understand the messages they receive. In practice, this requires the sender to have its outgoing messages in the same format as that of the receiver. The problem with this approach is that each time an application is added to the system that requires a separate message format, each potential receiver will have to be adjusted in order to produce that format.
+
+An alternative is to agree on a common message format, as is done with traditional network protocols. Unfortunately, this approach will generally not work for message-queuing systems. The problem is the level of abstraction at which these systems operate. A common message format makes sense only if the collection of processes that make use of that format indeed have enough in common. If the collection of applications that make up a distributed information system is highly diverse (which it often is), then the best common format may well be no more than a sequence of bytes.
+
+__Although a few common message formats for specific application domains have been defined, the general approach is to learn to live with different formats, and try to provide the means to make conversions as simple as possible.__ In message- queuing systems, conversions are handled by special nodes in a queuing network, known as __message brokers__. __A message broker acts as an application-level gateway in a message-queuing system. Its main purpose is to convert incoming messages so that they can be understood by the destination application.__ Note that to a message-queuing system, a message broker is just another application. as shown in Fig. 4-21. In other words, a message broker is generally not considered to be an integral part of the queuing system.
+
+![alt](http://slideplayer.com/slide/9282898/28/images/36/The+general+organization+of+a+message+broker+in+a+message-queuing.jpg)
+
+A message broker can be as simple as a reformatter for messages. For example, assume an incoming message contains a table from a database, in which records are separated by a special end-oj-record delimiter and fields within a record have a known, fixed length. If the destination application expects a different delimiter between records, and also expects that fields have variable lengths, a message broker can be used to convert messages to the format expected by the destination.
+
+In a more advanced setting, a message broker may act as an application-level gateway, such as one that handles the conversion between two different database applications. In such cases, frequently it cannot be guaranteed that all information contained in the incoming message can actually be transformed into something appropriate for the outgoing message.
+
+However, more common is the use of a message broker for advanced __enterprise application integration (EAI)__. In this case, rather than (only) converting messages, a broker is responsible for matching applications based on the messages that are being exchanged. In such a model, called __publish/subscribe__, applications send messages in the form of publishing. In particular, they may publish a message on topic X, which is then sent to the broker. Applications that have stated their interest in messages on topic X, that is, who have subscribed to those messages, will then receive these messages from the broker.
+
+At the heart of a message broker lies a repository of rules and programs that can transform a message of type TI to one of type T2. The problem is defining the rules and developing the programs. Most message broker products come with sophisticated development tools, but the bottom line is still that the repository needs to be filled by experts. Here we see a perfect example where commercial - products are often misleadingly said to provide "intelligence," where, in fact, the only intelligence is to be found in the heads of those experts.
+
+## 4.4 STREAM-ORIENTED COMMUNICATION
+
+Communication as discussed so far has concentrated on exchanging more-orless independent and complete units of information. Examples include a request for invoking a procedure, the reply to such a request, and messages exchanged between applications as in message-queuing systems. The characteristic feature of this type of communication is that it does not matter at what particular point in time communication takes place. Although a system may perform too slow or too fast, timing has no effect on correctness.There are also forms of communication in which timing plays a crucial role.The question that we address in this section is which facilities a distributed system should offer to exchange time-dependent information such as audio and video streams.
+
+
+### 4.4.1 Support for Continuous Media
+
+
+
+
 
 
 
