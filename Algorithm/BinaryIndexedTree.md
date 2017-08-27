@@ -2,150 +2,229 @@
 * https://www.topcoder.com/community/data-science/data-science-tutorials/binary-indexed-trees/
 * http://www.geeksforgeeks.org/binary-indexed-tree-or-fenwick-tree-2/
 * https://www.hackerearth.com/practice/notes/binary-indexed-tree-or-fenwick-tree/
+* https://cs.stackexchange.com/questions/10538/bit-what-is-the-intuition-behind-a-binary-indexed-tree-and-how-was-it-thought-a
 
-Let us consider the following problem to understand Binary Indexed Tree.
 
-We have an array arr[0 . . . n-1]. We should be able to
+__Intuitively, you can think of a binary indexed tree as a compressed representation of a binary tree that is itself an optimization of a standard array representation.__ This answer goes into one possible derivation.
 
-1. Find the sum of first i elements.
-2. Change value of a specified element of the array arr[i] = x where 0 <= i <= n-1.
+Let's suppose, for example, that you want to store cumulative frequencies for a total of 7 different elements. You could start off by writing out seven buckets into which the numbers will be distributed:
 
-A simple solution is to run a loop from 0 to i-1 and calculate sum of elements. To update a value, simply do arr[i] = x. The first operation takes O(n) time and second operation takes O(1) time. Another simple solution is to create another array and store sum from start to i at the i’th index in this array. Sum of a given range can now be calculated in O(1) time, but update operation takes O(n) time now. This works well if the number of query operations are large and very few updates.
-
-##### Can we perform both the operations in O(log n) time once given the array? 
-
-One Efficient Solution is to use Segment Tree that does both operations in O(Logn) time.
-
-__Using Binary Indexed Tree, we can do both tasks in O(Logn) time. The advantages of Binary Indexed Tree over Segment are, requires less space and very easy to implement.__
-
-##### Representation
-
-Binary Indexed Tree is represented as an array. Let the array be BITree[]. Each node of Binary Indexed Tree stores sum of some elements of given array. Size of Binary Indexed Tree is equal to n where n is size of input array. In the below code, we have used size as n+1 for ease of implementation.
-
-##### Construction
-We construct the Binary Indexed Tree by first initializing all values in BITree[] as 0. Then we call update() operation for all indexes to store actual sums, update is discussed below.
+Now, let's suppose that the cumulative frequencies look something like this:
 
 ```
-getSum(index): Returns sum of arr[0..index]
-// Returns sum of arr[0..index] using BITree[0..n].  It assumes that
-// BITree[] is constructed for given array arr[0..n-1]
-1) Initialize sum as 0 and index as index+1.
-2) Do following while index is greater than 0.
-...a) Add BITree[index] to sum
-...b) Go to parent of BITree[index].  Parent can be obtained by removing
-     the last set bit from index, i.e., index = index - (index & (-index))
-3) Return sum.
+[ 5 ] [ 6 ] [14 ] [25 ] [77 ] [105] [105]
+  1     2     3     4     5     6     7
 ```
 
-![alt](http://www.geeksforgeeks.org/wp-content/uploads/BITSum.png)
-
-The above diagram demonstrates working of getSum(). Following are some important observations.
-
-* Node at index 0 is a dummy node.
-* A node at index y is parent of a node at index x, iff y can be obtained by removing last set bit from binary representation of x.
-* A child x of a node y stores sum of elements from of y(exclusive y) and of x(inclusive x).
+Using this version of the array, you can increment the cumulative frequency of any element by increasing the value of the number stored at that spot, then incrementing the frequencies of everything that come afterwards. For example, to increase the cumulative frequency of 3 by 7, we could add 7 to each element in the array at or after position 3, as shown here:
 
 ```
-update(index, val): Updates BIT for operation arr[index] += val
-// Note that arr[] is not changed here.  It changes
-// only BI Tree for the already made change in arr[].
-1) Initialize index as index+1.
-2) Do following while index is smaller than or equal to n.
-...a) Add value to BITree[index]
-...b) Go to parent of BITree[index].  Parent can be obtained by removing
-     the last set bit from index, i.e., index = index + (index & (-index))
+[ 5 ] [ 6 ] [21 ] [32 ] [84 ] [112] [112]
+  1     2     3     4     5     6     7
 ```
 
-![alt](http://www.geeksforgeeks.org/wp-content/uploads/BITUpdate12.png)
+The problem with this is that it takes O(n) time to do this, which is pretty slow if n is large.
 
-The update process needs to make sure that all BITree nodes that have arr[i] as part of the section they cover must be updated. We get all such nodes of BITree by repeatedly adding the decimal number corresponding to the last set bit.
-
-##### How does Binary Indexed Tree work?
-
-__The idea is based on the fact that all positive integers can be represented as sum of powers of 2.__ For example 19 can be represented as 16 + 2 + 1. Every node of BI Tree stores sum of n elements where n is a power of 2. For example, in the above first diagram for getSum(), sum of first 12 elements can be obtained by sum of last 4 elements (from 9 to 12) plus sum of 8 elements (from 1 to 8). The number of set bits in binary representation of a number n is O(Logn). Therefore, we traverse at-most O(Logn) nodes in both getSum() and update() operations. Time complexity of construction is O(nLogn) as it calls update() for all n elements.
-
-![alt](https://he-s3.s3.amazonaws.com/media/uploads/68f2369.jpg)
-
-Notice  
-```
-               {           a[x],                  if x is odd
-BIT[x] =                    a[1] + ... + a[x],     if x is power of 2
-               }
-```
-
-Suppose we are looking for cumulative frequency of index 13 (for the first 13 elements). In binary notation, 13 is equal to 1101. Accordingly, we will calculate c[1101] = tree[1101] + tree[1100] + tree[1000] (more about this later).
-
-Let’s see how to construct this tree and then we will come back to querying the tree for prefix sums. BIT[] is an array of size = 1 + the size of the given array a[] on which we need to perform operations. Initially all values in BIT[] are equal to 0. Then we call update() operation for each element of given array to construct the Binary Indexed Tree. The update() operation is discussed below.
+One way that we can think about improving this operation would be to change what we store in the buckets. Rather than storing the cumulative frequency up to the given point, you can instead think of just storing the amount that the current frequency has increased relative to the previous bucket. For example, in our case, we would rewrite the above buckets as follows:
 
 ```
-void update(int x, int delta)       //add "delta" at index "x"
-{
-    for(; x <= n; x += x&-x)
-          BIT[x] += delta;
-}
+Before:
+[ 5 ] [ 6 ] [21 ] [32 ] [84 ] [112] [112]
+  1     2     3     4     5     6     7
+
+After:
+[ +5] [ +1] [+15] [+11] [+52] [+28] [ +0]
+  1     2     3     4     5     6     7
 ```
 
-Its okay if you are unable to understand how the above update() function works. Let’s take an example and try to understand it.
+Now, we can increment the frequency within a bucket in time O(1) by just adding the appropriate amount to that bucket. However, the total cost of doing a lookup now becomes O(n), since we have to recompute the total in the bucket by summing up the values in all smaller buckets.
 
-Suppose we call update(13, 2).
+The first major insight we need to get from here to a binary indexed tree is the following: rather than continuously recomputing the sum of the array elements that precede a particular element, what if we were to precompute the total sum of all the elements before specific points in the sequence? If we could do that, then we could figure out the cumulative sum at a point by just summing up the right combination of these precomputed sums.
 
-Here we see from the above figure that indices 13, 14, 16 cover index 13 and thus we need to add 2 to them also.
-
-Initially x is 13, we update BIT[13], ```  BIT[13] += 2;```.
-
-Now isolate the last set bit of x = 13(1101) and add that to x , i.e. x += x&(-x)
-
-Last bit is of x = 13(1101) is 1 which we add to x, then x = 13+1 = 14, we update BIT[14]
-
-``` BIT[14] += 2;```
-
-Now 14 is 1110, isolate last bit and add to 14, x becomes 14+2 = 16(10000), we update BIT[16]
-
-```    BIT[16] += 2;```
-
-In this way, when an update() operation is performed on index x we update all the indices of BIT[] which cover index x and maintain the BIT[].
-
-If we look at the for loop in update() operation, we can see that the loop runs at most the number of bits in index x which is restricted to be less or equal to n (the size of the given array), so we can say that the update operation takes at most __O(log2(n))__ time.
-
-How to query such structure for prefix sums? Let’s look at the query operation.
+One way to do this is to change the representation from being an array of buckets to being a binary tree of nodes. Each node will be annotated with a value that represents the cumulative sum of all the nodes to the left of that given node. For example, suppose we construct the following binary tree from these nodes:
 
 ```
-int query(int x)      //returns the sum of first x elements in given array a[]
-{
-     int sum = 0;
-     for(; x > 0; x -= x&-x)
-         sum += BIT[x];
-     return sum;
-}
+             4
+          /     \
+         2       6
+        / \     / \
+       1   3   5   7
+```       
+
+Now, we can augment each node by storing the cumulative sum of all the values including that node and its left subtree. For example, given our values, we would store the following:
+
+```
+Before:
+[ +5] [ +1] [+15] [+11] [+52] [+28] [ +0]
+  1     2     3     4     5     6     7
+
+After:
+                 4
+               [+32]
+              /     \
+           2           6
+         [ +6]       [+80]
+         /   \       /   \
+        1     3     5     7
+      [ +5] [+15] [+52] [ +0]
+ ```
+ 
+ Given this tree structure, it's easy to determine the cumulative sum up to a point. The idea is the following: we maintain a counter, initially 0, then do a normal binary search up until we find the node in question. As we do so, we also the following: any time that we move right, we also add in the current value to the counter.
+
+For example, suppose we want to look up the sum for 3. To do so, we do the following:
+
+* Start at the root (4). Counter is 0.
+* Go left to node (2). Counter is 0.
+* Go right to node (3). Counter is 0 + 6 = 6.
+* Find node (3). Counter is 6 + 15 = 21.
+
+You could imagine also running this process in reverse: starting at a given node, initialize the counter to that node's value, then walk up the tree to the root. Any time you follow a right child link upward, add in the value at the node you arrive at. For example, to find the frequency for 3, we could do the following:
+
+* Start at node (3). Counter is 15.
+* Go upward to node (2). Counter is 15 + 6 = 21.
+* Go upward to node (4). Counter is 21.
+
+To increment the frequency of a node (and, implicitly, the frequencies of all nodes that come after it), we need to update the set of nodes in the tree that include that node in its left subtree. To do this, we do the following: increment the frequency for that node, then start walking up to the root of the tree. Any time you follow a link that takes you up as a left child, increment the frequency of the node you encounter by adding in the current value.
+
+For example, to increment the frequency of node 1 by five, we would do the following:
+
+```
+                 4
+               [+32]
+              /     \
+           2           6
+         [ +6]       [+80]
+         /   \       /   \
+      > 1     3     5     7
+      [ +5] [+15] [+52] [ +0]
+ ```
+ 
+ Starting at node 1, increment its frequency by 5 to get
+ 
+ ```
+                 4
+               [+32]
+              /     \
+           2           6
+         [ +6]       [+80]
+         /   \       /   \
+      > 1     3     5     7
+      [+10] [+15] [+52] [ +0]
+ ```    
+ 
+Now, go to its parent:
+
+```
+                 4
+               [+32]
+              /     \
+         > 2           6
+         [ +6]       [+80]
+         /   \       /   \
+        1     3     5     7
+      [+10] [+15] [+52] [ +0]
+```      
+
+We followed a left child link upward, so we increment this node's frequency as well:
+
+```
+                 4
+               [+32]
+              /     \
+         > 2           6
+         [+11]       [+80]
+         /   \       /   \
+        1     3     5     7
+      [+10] [+15] [+52] [ +0]
+```      
+
+We now go to its parent:
+
+```               
+               > 4
+               [+32]
+              /     \
+           2           6
+         [+11]       [+80]
+         /   \       /   \
+        1     3     5     7
+      [+10] [+15] [+52] [ +0]
 ```
 
-The above function query() returns the sum of first x elements in given array. Let’s see how it works.
+That was a left child link, so we increment this node as well:
 
-Suppose we call query(14), initially sum = 0
+```
 
-x is 14(1110) we add BIT[14] to our sum variable, thus sum = BIT[14] = (a[14] + a[13])
+                 4
+               [+37]
+              /     \
+           2           6
+         [+11]       [+80]
+         /   \       /   \
+        1     3     5     7
+      [+10] [+15] [+52] [ +0]
+```
 
-now we isolate the last set bit from x = 14(1110) and subtract it from x
+And now we're done!
 
-last set bit in 14(1110) is 2(10), thus x = 14 – 2 = 12
+The final step is to convert from this to a binary indexed tree, and this is where we get to do some fun things with binary numbers. Let's rewrite each bucket index in this tree in binary(The reason it is called binary is that the index is represented in binary format):
 
-we add BIT[12] to our sum variable, thus sum = BIT[14] + BIT[12] = (a[14] + a[13]) + (a[12] + … + a[9])
+```
 
-again we isolate last set bit from x = 12(1100) and subtract it from x
+                100
+               [+37]
+              /     \
+          010         110
+         [+11]       [+80]
+         /   \       /   \
+       001   011   101   111
+      [+10] [+15] [+52] [ +0]
+```
 
-last set bit in 12(1100) is 4(100), thus x = 12 – 4 = 8
+Here, we can make a very, very cool observation. Take any of these binary numbers and find the very last 1 that was set in the number, then drop that bit off, along with all the bits that come after it. You are now left with the following:
 
-we add BIT[8] to our sum variable, thus
+```
+              (empty)
+               [+37]
+              /     \
+           0           1
+         [+11]       [+80]
+         /   \       /   \
+        00   01     10   11
+      [+10] [+15] [+52] [ +0]
+```
 
-sum = BIT[14] + BIT[2] + BIT[8] = (a[14] + a[13]) + (a[12] + … + a[9]) + (a[8] + … + a[1])
+Here is a really, really cool observation: if you treat 0 to mean "left" and 1 to mean "right," the remaining bits on each number spell out exactly how to start at the root and then walk down to that number. For example, node 5 has binary pattern 101. The last 1 is the final bit, so we drop that to get 10. Indeed, if you start at the root, go right (1), then go left (0), you end up at node 5!
 
-once again we isolate last set bit from x = 8(1000) and subtract it from x
+The reason that this is significant is that our lookup and update operations depend on the access path from the node back up to the root and whether we're following left or right child links. __For example, during a lookup, we just care about the right links we follow. During an update, we just care about the left links we follow. This binary indexed tree does all of this super efficiently by just using the bits in the index.__
 
-last set bit in 8(1000) is 8(1000), thus x = 8 – 8 = 0
+The key trick is the following property of this perfect binary tree:
 
-since x = 0, the for loop breaks and we return the prefix sum.
+> Given node n, the next node on the access path back up to the root in which we go right is given by taking the binary representation of n and removing the last 1.
 
-Talking about complexity, again we can see that the loop iterates at most the number of bits in x which will be at most n(the size of the given array). Thus the *query operation takes O(log2(n)) time *.
+For example, take a look at the access path for node 7, which is 111. The nodes on the access path to the root that we take that involve following a right pointer upward is
+
+* Node 7: 111
+* Node 6: 110
+* Node 4: 100
+
+All of these are right links. If we take the access path for node 3, which is 011, and look at the nodes where we go right, we get
+
+* Node 3: 011
+* Node 2: 010
+* (Node 4: 100, which follows a left link)
+
+This means that we can very, very efficiently compute the cumulative sum up to a node as follows:
+
+* Write out node n in binary.
+* Set the counter to 0.
+* Repeat the following while n ≠ 0:
+     * Add in the value at node n.
+     * Clear the rightmost 1 bit from n.
+     
+Similarly, let's think about how we would do an update step. To do this, we would want to follow the access path back up to the root, updating all nodes where we followed a left link upward. We can do this by essentially doing the above algorithm, but switching all 1's to 0's and 0's to 1's.
+
+__The final step in the binary indexed tree is to note that because of this bitwise trickery, we don't even need to have the tree stored explicitly anymore. We can just store all the nodes in an array of length n, then use the bitwise twiddling techniques to navigate the tree implicitly. In fact, that's exactly what the bitwise indexed tree does - it stores the nodes in an array, then uses these bitwise tricks to efficiently simulate walking upward in this tree.__
 
 ## Code
 
