@@ -637,3 +637,104 @@ If you need to have atomic cross-document operations, then document databases ma
 Flexible schema means that the database does not enforce any restrictions on the schema. Data is saved in the form of application entities. If you need to query these entities ad hoc, your queries will be changing (in RDBMS terms, this would mean that as you join criteria between tables, the tables to join keep changing). Since the data is saved as an aggregate, if the design of the aggregate is constantly changing, you need to save the aggregates at the lowest level of granularity—basically, you need to normalize the data. In this scenario, document databases may not work.
 
 # Chapter 10. Column-Family Stores
+
+Column-family stores, such as Cassandra [Cassandra], HBase [Hbase], Hypertable [Hypertable], and Amazon SimpleDB [Amazon SimpleDB], allow you to store data with keys mapped to values and the values grouped into multiple column families, each column family being a map of data.
+
+## 10.1. What Is a Column-Family Data Store?
+
+Column-family databases store data in column families as rows that have many columns associated with a row key. Column families are groups of related data that is often accessed together. For a Customer, we would often access their Profile information at the same time, but not their Orders.
+
+![alt](http://ptgmedia.pearsoncmg.com/images/art_sadalage_nosql/elementLinks/fig5.png)
+
+## 10.2. Features
+
+Let’s start by looking at how data is structured in Cassandra. The basic unit of storage in Cassandra is a column. A Cassandra column consists of a name-value pair where the name also behaves as the key. Each of these key-value pairs is a single column and is always stored with a timestamp value. The timestamp is used to expire data, resolve write conflicts, deal with stale data, and do other things. Once the column data is no longer used, the space can be reclaimed later during a compaction phase.
+
+```
+{
+name: "fullName", value: "Martin Fowler", timestamp: 12345667890
+}
+```
+
+The column has a key of firstName and the value of Martin and has a timestamp attached to it. A row is a collection of columns attached or linked to a key; a collection of similar rows makes a column family. When the columns in a column family are simple columns, the column family is known as __standard column family__.
+
+```
+//column family 
+{
+//row
+"pramod-sadalage" : { firstName: "Pramod", lastName: "Sadalage", lastVisit: "2012/12/12"} 
+//row
+"martin-fowler" : { firstName: "Martin", lastName: "Fowler", location: "Boston"} 
+}
+```
+Each column family can be compared to a container of rows in an RDBMS table where the key identifies the row and the row consists on multiple columns. __The difference is that various rows do not have to have the same columns, and columns can be added to any row at any time without having to add it to other rows.__ We have the pramod-sadalage row and the martin-fowler row with different columns; both rows are part of the column family.
+
+When a column consists of a map of columns, then we have a __super column__. A super column consists of a name and a value which is a map of columns. Think of a super column as a container of columns.
+
+When we use super columns to create a column family, we get a __super column family__.
+
+Super column families are good to keep related data together, but when some of the columns are not needed most of the time, the columns are still fetched and deserialized by Cassandra, which may not be optimal.
+
+Cassandra puts the standard and super column families into __keyspaces__. A keyspace is similar to a database in RDBMS where all column families related to the application are stored. Keyspaces have to be created so that column families can be assigned to them.
+
+##### Why many refer to Cassandra as a Column oriented database?
+
+Reading several papers and documents on internet, I found many contradictory information about the Cassandra data model. There are many which identify it as a column oriented database, other as a row-oriented and then who define it as a hybrid way of both.
+
+According to what I know about how Cassandra stores file, it uses the *-Index.db file to access at the right position of the *-Data.db file where it is stored the bloom filter, column index and then the columns of the required row.
+
+In my opinion, this is strictly row-oriented. Is there something I'm missing?
+
+Yes, the "column-oriented" terminology is a bit confusing.
+
+The model in Cassandra is that rows contain columns. To access the smallest unit of data (a column) you have to specify first the row name (key), then the column name.
+
+So in a columnfamily called Fruit you could have a structure like the following example (with 2 rows), where the fruit types are the row keys, and the columns each have a name and value.
+
+```
+apple -> colour  weight  price variety
+         "red"   100     40    "Cox"
+
+orange -> colour    weight  price  origin
+          "orange"  120     50     "Spain"
+```
+
+One difference from a table-based relational database is that one can omit columns (orange has no variety), or add arbitrary columns (orange has origin) at any time. You can still imagine the data above as a table, albeit a sparse one where many values might be empty.
+
+However, a "column-oriented" model can also be used for lists and time series, where every column name is unique (and here we have just one row, but we could have thousands or millions of columns):
+
+```
+temperature ->  2012-09-01  2012-09-02  2012-09-03 ...
+                40          41          39         ...
+```
+
+which is quite different from a relational model, where one would have to model the entries of a time series as rows not columns.
+
+### 10.2.1. Consistency
+
+When a write is received by Cassandra, the data is first recorded in a __commit log__, then written to an in-memory structure known as __memtable__. A write operation is considered successful once it’s written to the commit log and the memtable. Writes are batched in memory and periodically written out to structures known as __SSTable__. SSTables are not written to again after they are flushed; if there are changes to the data, a new SSTable is written. Unused SSTables are reclaimed by __compactation__.
+
+Let’s look at the read operation to see how consistency settings affect it. If we have a consistency setting of ```ONE ``` as the default for all read operations,then when a read request is made, Cassandra returns the data from the first replica, even if the data is stale. If the data is stale, subsequent reads will get the latest (newest) data; this process is known as __read repair__. The low consistency level is good to use when you do not care if you get stale data and/or if you have high read performance requirements.
+
+Similarly, if you are doing writes, Cassandra would write to one node’s commit log and return a response to the client.The consistency of ```ONE``` is good if you have very high write performance requirements and also do not mind if some writes are lost, which may happen if the node goes down before the write is replicated to other nodes.
+
+```
+quorum = new ConfigurableConsistencyLevel(); 
+quorum.setDefaultReadConsistencyLevel(HConsistencyLevel.QUORUM); quorum.setDefaultWriteConsistencyLevel(HConsistencyLevel.QUORUM);
+```
+
+UsingtheQUORUM consistencysettingforbothreadandwriteoperations ensures that majority of the nodes respond to the read and the column with the newest timestamp is returned back to the client, while the replicas that do not have the newest data are repaired via the read repair operations. During write operations, the ```QUORUM``` consistency setting means that the write has to propagate to the majority of the nodes before it is considered successful and the client is notified.
+
+Using ```ALL``` as consistency level means that all nodes will have to respond to reads or writes, which will make the cluster not tolerant to faults—even when one node is down, the write or read is blocked and reported as a failure. It’s therefore upon the system designers to tune the consistency levels as the application requirements change. Within the same application, there may be different requirements of consistency; they can also change based on each operation, for example showing review comments for a product has different consistency requirements compared to reading the status of the last order placed by the customer.
+
+During __keyspace__ creation, we can configure how many replicas of the data we need to store. This number determines the replication factor of the data. If you have a replication factor of 3, the data copied on to three nodes. When writing and reading data with Cassandra, if you specify the consistency values of 2, you get that R + W is greater than the replication factor ( 2 + 2 > 3 ) which gives you better consistency during writes and reads.
+
+We can run the node repair command for the keyspace and force Cassandra to compare every key it’s responsible for with the rest of the replicas. As this operation is expensive, we can also just repair a specific column family or a list of column families:
+```
+repair ecommerce
+repair ecommerce customerInfo
+```
+
+While a node is down, the data that was supposed to be stored by that node is handed off to other nodes. As the node comes back online, the changes made to the data are handed back to the node. This technique is known as __hinted handoff__. Hinted handoff allows for faster restore of failed nodes.
+
+### 10.2.2. Transactions
