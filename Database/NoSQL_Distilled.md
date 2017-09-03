@@ -919,3 +919,56 @@ In some situations, graph databases may not appropriate. When you want to update
 
 # Chapter 12. Schema Migrations
 
+## 12.1. Schema Changes
+
+The recent trend in discussing NoSQL databases is to highlight their schemaless nature—it is a popular feature that allows developers to concentrate on the domain design without worrying about schema changes. It’s especially true with the rise of __agile methods__ where responding to changing requirements is important.
+
+Discussions, iterations, and feedback loops involving domain experts and product owners are important to derive the right understanding of the data; these discussions must not be hampered by a database’s schema complexity. With NoSQL data stores, changes to the schema can be made with the least amount of friction, improving developer productivity. We have seen that developing and maintaining an application in the brave new world of schemaless databases requires careful attention to be given to schema migration.
+
+## 12.2. Schema Changes in RDBMS
+
+While developing with standard RDBMS technologies, we develop objects, their corresponding tables, and their relationships.While this data model supports the current object model, life is good. The first time there is a change in the object model, wehavetochangetheobject and change the database table, because without changing the table the application will be out ofsync with the database. Typically, a database schema migration has been a project in itself. For deployment of the schema changes, database change scripts are developed, using diff techniques, for all the changes in the development database. This approach of creating migration scripts during the deployment/release time is error-prone and does not support agile development methods.
+
+It’s very hard to do schema migrations on large datasets in RDBMS, especially if we have to keep the database available to the applications, as large data movements and structural changes usually create locks on the database tables.
+
+## 12.3. Schema Changes in a NoSQL Data Store
+
+An RDBMS database has to be changed before the application is changed. This is what the schema-free, or schemaless, approach tries to avoid, aiming at flexibility of schema changes per entity. Frequent changes to the schema are needed to react to frequent market changes and product innovations.
+
+When developing with NoSQL databases, in some cases the schema does not have to be thought about beforehand. We still have to design and think about other aspects, such as the types of relationships (with graph databases), or the names of the column families, rows, columns, order of columns (with column databases), or how are the keys assigned and what is the structure of the data inside the value object (with key-value stores). Even if we didn’t think about these up front, or if we want to change our decisions, it is easy to do so.
+
+The claim that NoSQL databases are entirely schemaless is misleading; while they store the data without regard to the schema the data adheres to, that schema has to be defined by the application, because the data stream has to be parsed by the application when reading the data from the database. Also, the application has to create the data that would be saved in the database. If the application cannot parse the data from the database, we have a schema mismatch even if, instead of the RDBMS database throwing a error, this error is now encountered by the application. Thus, even in schemaless databases, the schema of the data has to be taken into consideration when refactoring the application. Schema changes especially matter when there is a deployed application and existing production data. 
+
+
+### 12.3.1. Incremental Migration
+
+![alt](https://martinfowler.com/articles/evodb/stages_refactoring.jpg)
+
+Schema mismatch trips many new converts to the NoSQL world. When schema is changed on the application, we have to make sure to convert all the existing data to the new schema (depending on data size, this might be an expensive operation). Another option would be to make sure that data, before the schema changed, can still be parsed by the new code, and when it’s saved, it is saved back in the new schema. This technique, known as __incremental migration__, will migrate data over time; some data may never get migrated, because it was never accessed. 
+
+When using incremental migration, there could be many versions of the object on the application side that can translate the old schema to the new schema; while saving the object back, it is saved using the new object. This gradual migration of the data helps the application evolve faster.
+
+The incremental migration technique will complicate the object design, especially as new changes are being introduced yet old changes are not being taken out. This period between the change deployment and the last object in the database migrating to the new schema is known as the transition period. Keep it as short as possible and focus it to the minimum possible scope—this will help you keep your objects clean.
+
+### 12.3.2. Migrations in Graph Databases
+
+Graph databases have edges that have types and properties. If you change the type of these edges in the codebase, you no longer can traverse the database, rendering it unusable. To get around this, you can traverse all the edges and change the type of each edge. This operation can be expensive and requires you to write code to migrate all the edges in the database.
+
+If we need to maintain backward compatibility or do not want to change the whole graph in one go, we can just create new edges between the nodes; later when we are comfortable about the change, the old edges can be dropped. We can use traversals with multiple edge types to traverse the graph using the new and old edge types. This technique may help a great deal with large databases, especially if we want to maintain high availability.
+
+### 12.3.3. Changing Aggregate Structure
+
+Sometimes you need to change the schema design, for example by splitting large objects into smaller ones that are stored independently. Suppose you have a customer aggregate that contains all the customers orders, and you want to separate the customer and each of their orders into different aggregate units.
+
+You then have to ensure that the code can work with both versions of the aggregates. If it does not find the old objects, it will look for the new aggregates.
+
+Code that runs in the background can read one aggregate at a time, make the necessary change, and save the data back into different aggregates. The advantage of operating on one aggregate at a time is that this way, you’re not affecting data availability for the application.
+
+## 12.5. Key Points
+
+* Databases with strong schemas, such as relational databases, can be migrated by saving each schema change, plus its data migration, in a version-controlled sequence.
+* Schemaless databases still need careful migration due to the implicit schema in any code that accesses the data.
+* Schemaless databases can use the same migration techniques as databases with strong schemas.
+* Schemaless databases can also read data in a way that’s tolerant to changes in the data’s implicit schema and use incremental migration to update data.
+
+# Chapter 13. Polyglot Persistence
