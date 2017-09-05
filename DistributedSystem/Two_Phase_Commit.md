@@ -24,9 +24,13 @@ The protocol is initiated by the coordinator after the last step of the transact
 ##### voting phase
 
 ```
-1. The coordinator sends a query to commit message to all cohorts and waits until it has received a reply from all cohorts.
-2. The cohorts execute the transaction up to the point where they will be asked to commit. They each write an entry to their undo log and an entry to their redo log.
-3. Each cohort replies with an agreement message (cohort votes Yes to commit), if the cohort's actions succeeded, or an abort message (cohort votes No, not to commit), if the cohort experiences a failure that will make it impossible to commit.
+1. The coordinator sends a query to commit message to all cohorts and waits until it has received a reply 
+    from all cohorts.
+2. The cohorts execute the transaction up to the point where they will be asked to commit. 
+    They each write an entry to their undo log and an entry to their redo log.
+3. Each cohort replies with an agreement message (cohort votes Yes to commit), if the cohort's actions succeeded, 
+    or an abort message (cohort votes No, not to commit), if the cohort experiences a failure that will make 
+    it impossible to commit.
 ```
 
 ##### Commit phase
@@ -44,7 +48,8 @@ Failure
 
 If any cohort votes No during the commit-request phase (or the coordinator's timeout expires):
 1. The coordinator sends a rollback message to all the cohorts.
-2. Each cohort undoes the transaction using the undo log, and releases the resources and locks held during the transaction.
+2. Each cohort undoes the transaction using the undo log, and releases the resources and locks 
+   held during the transaction.
 3. Each cohort sends an acknowledgement to the coordinator.
 4. The coordinator undoes the transaction when all acknowledgements have been received.
 
