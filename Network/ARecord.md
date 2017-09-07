@@ -10,6 +10,21 @@ A Records are the simplest type of DNS records, yet one of the primary records u
 
 You can actually do quite a bit more with A records, including using multiple A records for the same domain in order to provide redundancy. Additionally, multiple names could point to the same address, in which case each would have its own A record pointing to the that same IP address.
 
+##### How many A (host) records can a domain have?
+
+Functionally a zone can have an infinite number of A records but if you have a large number of A's in a DNS round robin then there can be performance implications from the switch to TCP instead of UDP due to response packet sizes.
+
+For example, let's say you have the domain example.com and you want to serve www.example.com using DNS round robin for cheap load balancing. You'd configure it like this (from a BIND zone file):
+
+```
+www             IN      A       127.0.0.1
+www             IN      A       127.0.0.2
+www             IN      A       127.0.0.3
+```
+
+This is perfectly normal and is in use all over the Internet. However, if you expanded this round robin to many, many more A records (more than a couple dozen) then the response that the DNS server sends to clients will grow in size. DNS is primarily transmitted over UDP but in some situations will use TCP instead. 
+
+
 ### Querying A records
 
 You can use dig to determine the A record associated to a domain name. The result is contained in the ANSWER section and it contains the fully-qualified domain name (FQDN), the remaining time-to-live (TTL) and the IP address.
