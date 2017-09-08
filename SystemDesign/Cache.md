@@ -4,6 +4,15 @@ In computing, a __cache__, is a hardware or software component that stores data 
 
 To be cost-effective and to enable efficient use of data, caches must be relatively small. Nevertheless, caches have proven themselves in many areas of computing because access patterns in typical computer applications exhibit the __locality of reference__. Moreover, access patterns exhibit __temporal locality__ if data is requested again that has been recently requested already, while __spatial locality__ refers to requests for data physically stored close to data that has been already requested.
 
+
+__There are majorly three kinds of caching systems :__
+
+__Write through cache__ : __This is a caching system where writes go through the cache and write is confirmed as success only if writes to DB and the cache BOTH succeed.__ This is really useful for applications which write and re-read the information quickly. However, write latency will be higher in this case as there are writes to 2 separate systems.
+
+__Write around cache__ : This is a caching system where write directly goes to the DB. The cache system reads the information from DB incase of a miss. While this ensures lower write load to the cache and faster writes, this can lead to higher read latency incase of applications which write and re-read the information quickly.
+
+__Write back cache__ : __This is a caching system where the write is directly done to the caching layer and the write is confirmed as soon as the write to the cache completes. The cache then asynchronously syncs this write to the DB.__ This would lead to a really quick write latency and high write throughput. But, as is the case with any non-persistent / in-memory write, we stand the risk of losing the data incase the caching layer dies. We can improve our odds by introducing having more than one replica acknowledging the write ( so that we don’t lose data if just one of the replica dies ).
+
 # Locality of reference 
 
 In computer science, __locality of reference__, also known as the __principle of locality__, is a term for the phenomenon in which the same values, or related storage locations, are frequently accessed, depending on the memory access pattern. There are two basic types of reference locality – temporal and spatial locality. __Temporal locality__ refers to the reuse of specific data, and/or resources, within a relatively small time duration. __Spatial locality__ refers to the use of data elements within relatively close storage locations. Sequential locality, a special case of spatial locality, occurs when data elements are arranged and accessed linearly, such as, traversing the elements in a one-dimensional array.
