@@ -1,34 +1,52 @@
-## What is Ethernet
-A single Ethernet is a simple or branching bus-like connection line using a transmission medium consisting of one or more continuous segments of cable linked by hubs or repeaters. Hubs and repeaters are simple devices that link pieces of wire, enabling the same signals to pass through all of them. Several Ethernets can be linked at the Ethernet network protocol level by Ethernet switches or bridges. Switches and bridges operate at the level of Ethernet frames, forwarding them to adjacent Ethernets when their destination is there. Linked Ethernets appear as a single network to higher protocol layers, such as IP . In particular, the __ARP protocol__ is able to resolve IP addresses to Ethernet addresses across linked sets of Ethernets; each ARP request is broadcast on all of the linked networks in a subnet.
-
-### Packet broadcasting 
-The method of communication in CSMA/CD networks is by broadcasting packets of data on the transmission medium. All stations are continuously ‘listening' to the medium for packets that are addressed to them. Any station wishing to transmit a message broadcasts one or more packets (called frames in the Ethernet specification) on the medium. Each packet contains the address of the destination station, the address of the sending station and a variable-length sequence of bits representing the message to be transmitted. 
 
 
+# Wi-Fi vs. Ethernet
 
-### What's the difference between Ethernet and TCP/IP?
 
-Back to basics, there are 7 layers of the OSI model. 
-OSI and TCP/IP Model(Bottom => Top)
+Wireless connectivity, often known as Wi-Fi, is the technology that allows a PC, laptop, mobile phone, or tablet device to connect at high speed to the internet without the need of physical wired connection. Wi-Fi (pronounced “Why-Fy”) is a term that was coined by a branding company in 1999 as a name which would be easily recalled, due to its similarity to the then well-known term “hi-fi”.The technology uses radio signals to transmit information between your Wi-Fi enabled devices and the internet, allowing the device to receive information from the web in the same way that a radio or mobile phone receives sound.
 
-1. Physical—this is where Ethernet lives.  
-2. Data Link—this is where MAC addresses live
-3. Network—this is where IP lives
-4. Transport—this is where TCP/UDP lives
-5. Session
-6. Presentation
-7. Application
- 
-You’ve heard of an Ethernet cable?  That’s because it’s PHYSICAL.
+![alt](https://qph.ec.quoracdn.net/main-qimg-2f885515844e02b58991e6d03e01e15b.webp)
 
-Ethernet is a Physical layer & MAC standard (The definition actually covers Layers 1 & 2 of the OSI model).  It defines how data “packets” are transmitted on the physical cables.  Ethernet is used for wired interfaces (the most common being the RJ45 cat5 cable, but it covers many copper & fiber-optic cable types).
+Ethernet is a way of connecting computers together in a local area network or LAN. It has been the most widely used method of linking computers together in LANs since the 1990s. The basic idea of its design is that multiple computers have access to it and can send data at any time. This is comparatively easy to engineer.
 
-TCP/IP are higher layer protocols that are mostly in layers 3 & 4 of the transport protocol (IP is layer 3 and TCP is layer 4, see above and the hyperlink).  TCP/IP can be used over many types of network interconnects.  TCP/IP is used on Ethernet links, on WiFi links (WiFi is NOT Ethernet), and even by your cell phone (in fact, if you have a 3G LTE phone, everything is done over IP).
+![alt](https://qph.ec.quoracdn.net/main-qimg-9b2945e943eaf69922760f7d235a406e.webp)
 
-Here’s a bit of how it works:
 
-ARP is a layer 2 protocol that resolves Network addresses (IP) to Data Link addresses (MAC) so the layers can communicate.  Address Resolution Protocol
+You probably won’t be connecting an Ethernet cable to your smartphone any time soon. But it’s usually worth running Ethernet cables to the devices that matter, if you can—gaming and media PCs (or consoles), backup devices, and set-top boxes being just a few examples. To help you make the decision, we’re going to take a look at the three main advantages of using Ethernet over Wi-Fi—faster speeds, lower latency, and reliable connections.
 
-MAC addresses include Ethernet header information.  Each layer depends on the other layers.  At a high level, from the IP address of your machine over a TCP connection to the Data Link Mac Layer (resolved via ARP) to the wire (Ethernet/Physical), and now you’re communicating via “1s and 0s” (bits/bytes) on the wire.
-TCP is the connection oriented protocol.  Wikipedia has it right:  Ethernet
-Back to the OSI hyperlink example, note how the TCP/IP protocol stack has its own 4 layers. TCP/IP is are both protocols.  Ethernet exists in both the OSI model and the TCP/IP protocol stack.  
+##### How Much Faster Is Ethernet?
+
+Ethernet is just plain faster than Wi-Fi—there’s no getting around that fact. But the real-world differences are smaller than you might think. Wi-Fi has gotten significantly faster over the last few years, thanks to new standards like 802.11ac and 802.11n, which offer maximum speeds of 866.7 Mb/s and 150 Mb/s, respectively. Even though this is a maximum speed for all your wireless devices to share (and you likely won’t get those speeds in the real world), Wi-Fi has become good enough to handle most of our daily tasks.
+
+On the other hand, a wired Ethernet connection can theoretically offer up to 10 Gb/s, if you have a Cat6 cable. The exact maximum speed of your Ethernet cable depends on the type of Ethernet cable you’re using. However, even the Cat5e cable in common use supports up to 1 Gb/s. And, unlike with Wi-Fi, that speed is consistent.
+
+Ethernet will, however, affect the speed between devices on your network. For example, if you want to transfer files as fast as possible between two computers in the house, Ethernet will be faster than Wi-Fi. Your Internet connection isn’t involved in this, so it’s all up to the maximum speeds your local network hardware can provide.
+
+##### How Much Less Latency Does Ethernet Offer?
+
+Connection speed and quality isn’t just about raw bandwidth. Latency is also a big factor. In this case, latency is the delay in how long it takes for traffic to get from from a device to its destination. We often refer to latency as “ping” in the networking and online gaming worlds.
+
+If reducing latency as much as possible is your concern—for example, if you’re playing online games and need reaction time to be as quick as possible—you’re probably better off with a wired Ethernet connection. Yes, there will be other latency that factors in along the Internet path between your device and the gaming server, but every little bit helps.
+
+##### Wireless Interference and Connection Reliability
+
+Ethernet offers a more reliable connection than Wi-Fi. It’s just that simple.
+
+Wi-Fi is subject to a lot more interference than a wired connection. The layout of your home, objects blocking the signal, interference from electrical devices or your neighbors Wi-Fi networks—all these things contribute to Wi-Fi being generally less reliable.
+
+This interference can cause a number of problems:
+
+* Dropped signals: Occasionally, Wi-Fi will lose the signal and have to reacquire it. This may not be a big deal for daily browsing or even streaming video (which gets buffered on the local device), because the re-acquisition happens quickly. But if you play online games, it can get pretty irritating.  
+* Higher latency: Increased interference can mean higher latency, which can be a problem for all the reasons we outlined in the previous section.  
+* Lowered speeds: More interference also means lower signal quality, which results in lower connection speeds.  
+
+
+#### When Does It Make Sense to Use Ethernet?
+
+We don’t mean to come down too hard on Wi-Fi. It’s pretty speedy, super convenient, and perfectly serviceable for most of what we do on our networks. For one thing, Wi-Fi is essential if you’ve got mobile devices. Also, there are times you just can’t use Ethernet. Maybe it’s too difficult to run a permanent, out-of-the-way cable to the location you want. Or maybe your landlord won’t allow you to run cables the way you want to.
+
+And that’s the real reason to use Wi-Fi: convenience. If a device needs to move around or you just don’t want to run a cable to it, Wi-Fi is the right choice.
+
+On the other hand, if you have a desktop PC or server that sits in a single place, Ethernet may be a good option. If you want better quality streaming (especially if you’re doing it from a media server on your network) or if you’re a gamer, Ethernet will be the way to go. Assuming it’s easy enough to plug the devices in with an Ethernet cable, you’ll get a more consistently solid connection.
+
+In the end, Ethernet offers the advantages of better speed, lower latency, and more reliable connections. Wi-Fi offers the advantage of convenience and being good enough for most uses. So, you’ll just have to see if any of your devices fit into the categories where Ethernet will make a difference, and then decide whether it will make a big enough difference to run some cable.
