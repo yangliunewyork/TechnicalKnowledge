@@ -2,6 +2,21 @@
 
 aster/slave is a model of communication where one device or process has unidirectional control over one or more other devices. In some systems a master is selected from a group of eligible devices, with the other devices acting in the role of slaves.
 
+
+# Master-master vs master-slave database architecture?
+
+We're trading off availability, consistency and complexity. To address the last question first: Does this matter? Yes very much! The choices concerning how your data is to be managed is absolutely fundamental, and there's no "Best Practice" dodging the decisions. You need to understand your particular requirements.
+
+There's a fundamental tension:
+
+One copy: consistency is easy, but if it happens to be down everybody is out of the water, and if people are remote then may pay horrid communication costs. Bring portable devices, which may need to operate disconnected, into the picture and one copy won't cut it.
+
+Master Slave: consistency is not too difficult because each piece of data has exactly one owning master. But then what do you do if you can't see that master, some kind of postponed work is needed.
+
+Master-Master: well if you can make it work then it seems to offer everything, no single point of failure, everyone can work all the time. Trouble is it very hard to preserve absolute consistency. 
+
+
+
 # Case Study
 
 ## Topology for MySQL Replication
