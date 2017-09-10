@@ -1043,3 +1043,103 @@ One other area that enterprises are concerned about is security of the data—th
 * Adding more data storage technologies increases complexity in programming and operations, so the advantages of a good data storage fit need to be weighed against this complexity.
 
 # Chapter 14. Beyond NoSQL
+
+The appearance of NoSQL databases has done a great deal to shake up and open up the world of databases, but we think the kind of NoSQL databases we have discussed here is only part of the picture of polyglot persistence. So it makes sense to spend some time discussing solutions that don’t easily fit into the NoSQL bucket.
+
+## 14.1. File Systems
+
+Databases are very common, but file systems are almost ubiquitous. In the last couple of decades they’ve been widely used for personal productivity documents, but not for enterprise applications. They don’t advertise any internal structure, so they are more like key-value stores with a hierarchic key. They also provide little control over concurrency other than simple file locking—which itself is similar to the way NoSQL only provides locking within a single aggregate.
+
+File systems have the advantage of being simple and widely implemented. They cope well with very large entities, such as video and audio. Often, databases are used to index media assets stored in files. Files also work very well for sequential access, such as streaming, which can be handy for data which is append- only.
+
+Recent attention to clustered environments has seen a rise of distributed file systems. Technologies like the Google File System and Hadoop provide support for replication of files. Much of the discussion of map-reduce is about manipulating large files on cluster systems, with tools for automatic splitting of large files into segments to be processed on multiple nodes. Indeed a common entry path into NoSQL is from organizations that have been using Hadoop.
+
+File systems work best for a relatively small number of large files that can be processed in big chunks, preferably in a streaming style. Large numbers of small files generally perform badly—this is where a data store becomes more efficient. Files also provide no support for queries without additional indexing tools such as Solr.
+
+## 14.2. Event Sourcing
+
+Event sourcing is an approach to persistence that concentrates on persisting all the changes to a persistent state, rather than persisting the current application state itself. It’s an architectural pattern that works quite well with most persistence technologies, including relational databases. We mention it here because it also underpins some of the more unusual ways of thinking about persistence.
+
+As a consequence, in an event-sourced system we store every event that’s caused a state change of the system in the event log, and the application’s state is entirely derivable from this event log. At any time, we can safely throw away the application state and rebuild it from the event log.
+
+In theory, event logs are all you need because you can always recreate the application state whenever you need it by replaying the event log. In practice, this may be too slow. As a result, it’s usually best to provide the ability to store and recreate the application state in a snapshot. A snapshot is designed to persist the memory image optimized for rapid recovery of the state. It is an optimization aid, so it should never take precedence over the event log for authority on the data.
+
+How frequently you take a snapshot depends on your uptime needs. The snapshot doesn’t need to be completely up to date, as you can rebuild memory by loading the latest snapshot and then replaying all events processed since that snapshot was taken. An example approach would be to take a snapshot every night;should the system go down during the day, you’d reload last night’s snapshot followed by today’s events. If you can do that quickly enough, all will be fine.
+
+To get a full record of every change in your application state, you need to keep the event log going back to the beginning of time for your application. But in many cases such a long-lived record isn’t necessary, as you can fold older events into a snapshot and only use the event log after the date of the snapshot.
+
+Using event sourcing has a number of advantages. You can broadcast events to multiple systems, each of which can build a different application state for different purposes. For read-intensive systems, you can provide multiple read nodes, with potentially different schemas, while concentrating the writes on a different processing system (an approach broadly known as CQRS， namely Command Query Responsibility Segregation).
+
+![alt](https://image.slidesharecdn.com/eventsourcing-140402183644-phpapp02/95/event-sourcing-10-638.jpg)
+
+Event sourcing is also an effective platform for analyzing historic information, since you can replicate any past state in the event log. You can also easily investigate alternative scenarios by introducing hypothetical events into an analysis processor.
+
+Event sourcing does add some complexity—most notably, you have to ensure that all state changes are captured and stored as events. Some architectures and tools can make that inconvenient. Any collaboration with external systems needs to take the event sourcing into account; you’ll need to be careful of external side effects when replaying events to rebuild an application state.
+
+## 14.3. Memory Image
+
+__One the consequences of event sourcing is that the event log becomes the definitive persistent record—but it is not necessary for the application state to be persistent.__ This opens up the option of keeping the application state in memory using only in- memory data structures. Keeping all your working data in memory provides a performance advantage, since there’s no disk I/O to deal with when an event is processed. It also simplifies programming since there is no need to perform mapping between disk and in-memory data structures.
+
+The obvious limitation here is that you must be able to store all the data you’ll need to access in memory. This is an increasingly viable option—we can remember disk sizes that were considerably less than the current memory sizes. You also need to ensure that you can recover quickly enough from a system crash — either by reloading events from the event log or by running a duplicate system and cutting over.
+
+You’ll need some explicit mechanism to deal with concurrency. One route is a transactional memory system, such as the one that comes with the Clojure language. Another route is to do all input processing on a single thread. Designed carefully, a single-threaded event processor can achieve impressive throughput at low latency.
+
+Breaking the separation between in-memory and persistent data also affects how you handle errors. A common approach is to update a model and roll back any changes should an error occur. With a memory image, you’ll usually not have an automated rollback facility; you either have to write your own (complicated) or ensure that you do thorough validation before you begin to apply any changes.
+
+## 14.4. Version Control
+
+For most software developers, their most common experience of an event-sourced system is a version control system. Version control allows many people on a team to coordinate their modifications of a complex interconnected system, with the ability to explore past states of that system and alternative realities through branching.
+
+When we think of data storage, we tend to think of a single-point-of-time worldview, which is very limiting compared to the complexity supported by a version control system. It’s therefore surprising that data storage tools haven’t borrowed some of the ideas from version control systems. After all, many situations require historic queries and support for multiple views of the world.
+
+Version control systems are built on top of file systems, and thus have many of the same limitations for data storage as a file system. They are not designed for application data storage, so are awkward to use in that context. However, they are worth considering for scenarios where their timeline capabilities are useful.
+
+## 14.5. XML Databases
+
+Of course there’s no reason why you can’t use XML as a structuring mechanism within a key-value store. XML is less fashionable these days than JSON, but is equally capable of storing complex aggregates, and XML’s schema and query capabilities are greater than what you can typically get for JSON. Using an XML database means that the database itself is able to take advantage of the XML structure and not just treat the value as a blob, but that advantage needs to be weighed with the other database characteristics.
+
+## 14.6. Object Databases
+
+When object-oriented programming started its rise in popularity, there was a flurry of interest in object-oriented databases. The focus here was the complexity of mapping from in-memory data structures to relational tables. The idea of an object- oriented database is that you avoid this complexity—the database would automatically manage the storage of in-memory structures onto disk. You could think of it as a persistent virtual memory system, allowing you to program with persistence yet without taking any notice of a database at all.
+
+Object databases didn’t take off. One reason was that the benefit of the close integration with the application meant you couldn’t easily access data other than with that application. A shift from integration databases to application databases could well make object databases more viable in the future.
+
+An important issue with object databases is how to deal with migration as the data structures change. Here, the close linkage between the persistent storage and in-memory structures can become a problem. Some object databases include the ability to add migration functions to object definitions.
+
+## 14.7. Key Points
+
+* NoSQL is just one set of data storage technologies. As they increase comfort with polyglot persistence, we should consider other data storage technologies whether or not they bear the NoSQL label.
+
+# Chapter 15. Choosing Your Database
+
+We see two broad reasons to consider a NoSQL database: programmer productivity and data access performance. In different cases these forces may complement or contradict each other. Both of them are difficult to assess early on in a project, which is awkward since your choice of a data storage model is difficult to abstract so as to allow you to change your mind later on.
+
+### Programmer Productivity
+
+Talk to any developer of an enterprise application, and you’ll sense frustration from working with relational databases. Information is usually collected and displayed in terms of aggregates, but it has to be transformed into relations in order to persist it. This chore is easier than it used to be; during the 1990s many projects groaned under the effort of building object-relational mapping layers. By the 2000s, we’ve seen popular ORM frameworks such as Hibernate, iBATIS, and Rails Active Record that reduce much of that burden. But this has not made the problem go away. ORMs are a leaky abstraction, there are always some cases that need more attention—particularly in order to get decent performance.
+
+In this situation aggregate-oriented databases can offer a tempting deal. We can remove the ORM and persist aggregates naturally as we use them. We’ve come across several projects that claim palpable benefits from moving to an aggregate- oriented solution.
+
+Graph databases offer a different simplification. Relational databases do not do a good job with data that has a lot of relationships. A graph database offers both a more natural storage API for this kind of data and query capabilities designed around these kinds of structures.
+
+All kinds of NoSQL systems are better suited to nonuniform data. If you find yourself struggling with a strong schema in order to support ad-hoc fields, then the schemaless NoSQL databases can offer considerable relief.
+
+Going through your features and assessing your data needs should lead you to one or more alternatives for how to handle your database needs. This will give you a starting point, but the next step is to try things out by actually building software. Take some initial features and build them, while paying close attention to how straightforward it is to use the technology you’re considering. __In this situation, it may be worthwhile to build the same features with a couple of different databases in order to see which works best. People are often reluctant to do this—no one likes to build software that will be discarded. Yet this is an essential way to judge how effective a particular framework is.__
+
+## 15.2. Data-Access Performance
+
+The concern that led to the growth of NoSQL databases was rapid access to lots of data. As large websites emerged, they wanted to grow horizontally and run on large clusters. They developed the early NoSQL databases to help them run efficiently on such architectures. As other data users follow their lead, again the focus is on accessing data rapidly, often with large volumes involved.
+
+There are many factors that can determine a database’s better performance than the relational default in various circumstances. A aggregate-oriented database may be very fast for reading or retrieving aggregates compared to a relational database where data is spread over many tables. Easier sharding and replication over clusters allows horizontal scaling. A graph database can retrieve highly connected data more quickly than using relational joins.
+
+If you’re investigating NoSQL databases based on performance, the most important thing you must do is to test their performance in the scenarios that matter to you. Reasoning about how a database may perform can help you build a short list, but the only way you can assess performance properly is to build something, run it, and measure it.
+
+## 15.5. Key Points
+
+* The two main reasons to use NoSQL technology are:  
+  * To improve programmer productivity by using a database that better matches an application’s needs.  
+  * To improve data access performance via some combination of handling larger data volumes, reducing latency, and improving throughput.  
+* It’s essential to test your expectations about programmer productivity and/or performance before committing to using a NoSQL technology.
+* Service encapsulation supports changing data storage technologies as needs and technology evolve. Separating parts of applications into services also allows you to introduce NoSQL into an existing application.
+* Most applications, particularly nonstrategic ones, should stick with relational technology—at least until the NoSQL ecosystem becomes more mature.
+
