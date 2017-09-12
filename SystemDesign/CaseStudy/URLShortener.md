@@ -25,7 +25,17 @@ Gotcha: What if two people try to shorten the same URL?
 ## Estimation
 * Q: How many queries per second should the system handle?(Assuming 100 Million new URLs added each month)
   * Hint: Assuming average lifetime of a shortened URL is 2 weeks and 20% of websites creates 80% of the traffic, we see that we'll receive around 1 Billion queries in a month.
-* Given : 100 million new url's are created every month, therefore total no of writes = 100,000,000/30(days)24(hours)60(minutes)*60(seconds) ~= 40 writes per second.
+  
+```
+Given : 100 million new url's are created every month, therefore total number of writes =
+
+100,000,000/30(days)24(hours)60(minutes)*60(seconds) ~= 40 writes per second.
+
+Given : 1 Billion queries in a month. There are 
+1 billion total queries - 100 million write queries = 900 million read queries.
+It means that read queries are 9 times than write queries, 
+therefore we have 40 * 9 = 350 read per second.
+```
 
 * Q: How much data will we need to store so that we don't have to restructure our architecture for the next 5 years considering constant growth rate?
   * Q: How many URLs will we need to handle in the next 5 years? 4
@@ -35,6 +45,7 @@ Gotcha: What if two people try to shorten the same URL?
   * Q: What is the minimum length of shortened url to represent 6 Billion URLs?
 Hint: We will use (a-z, A-Z, 0-9) to encode our URLs. If we call x as minimum number of characters to represent 6 Billion total URLs, then will be the smallest integer such that 62^x > 6*10^9. 
   * A: Log (6*109) to the base 62 = 6
+
 
 *A: 3 TeraBytes for URLs and 36 GigaBytes for shortened URLs
 Note that for the shortened URL, we will only store the slug(6 chars) and compute the actual URL on the fly.
