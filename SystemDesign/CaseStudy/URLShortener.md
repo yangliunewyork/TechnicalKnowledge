@@ -99,6 +99,10 @@ Important : Try to gather feedback from the interviewer here to indicate if you 
   * A: We can use a list of salts in case of collision. 
 For each read request, we can compute all possible shortened URLs using our list of salts and query for them in parallel to save time.
 
+> In cryptography, a salt is random data that is used as an additional input to a one-way function that "hashes" a password or passphrase. Salts are closely related to the concept of nonce. The primary function of salts is to defend against dictionary attacks or against its hashed equivalent, a pre-computed rainbow table attack.
+
+
+
 * A: convert_to_base_62(md5(original_url + salt))[:6](first six characters) 
 Links: MD5-Wiki Base 62 Conversion-Stackoverflow 
 Gotchas:
