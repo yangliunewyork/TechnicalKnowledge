@@ -1,4 +1,5 @@
 * https://en.wikipedia.org/wiki/Salt_(cryptography)
+* https://www.addedbytes.com/blog/why-you-should-always-salt-your-hashes
 
 __In cryptography, a salt is random data that is used as an additional input to a one-way function that "hashes" a password or passphrase. Salts are closely related to the concept of nonce. The primary function of salts is to defend against dictionary attacks or against its hashed equivalent, a pre-computed rainbow table attack.__
 
