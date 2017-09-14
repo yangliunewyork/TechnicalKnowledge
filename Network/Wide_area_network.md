@@ -1,5 +1,14 @@
 A wide area network (WAN) is a telecommunications network or computer network that extends over a large geographical distance. Wide area networks are often established with leased telecommunication circuits.
 
+
+# WAN vs Internet
+
+You can see WAN as  a set of different networks. There is a LAN network in your office, there is a LAN network in your house, there is another LAN network in a data-center in Japan, those three can be connected with various technologies and hardware to create a WAN. That connection could be private and because of that just you, your office and the data center in Japan can access this WAN.
+
+Internet on the other hand is a set of decentralized networks, in other works, they can be private internally, but externally they have a common point of access to the world so everyone can access public services located in the private networks. Internet has for example the popular WWW (World Wide Web) service that is one of the most used. The HTTP protocol used so you can see this page served by a server in some data-center in any location in the world is also an important protocol that practically is what most people understand for internet: browsing pages in the web.
+
+The important thing is the scope, it's true that you can host all the services of the Internet in your private WAN network, but it will be for a limited public. Internet in the other hand has a global public scope and contains a larger number of machines interconnected.
+
 # WAN vs LAN
 
 We divided the networks into two types: Local Area Network (LAN) and Wide Area Network (WAN). The two networks are generally classified on the basis of their coverage area.
