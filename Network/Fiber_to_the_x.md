@@ -1,0 +1,7 @@
+Fiber to the x (FTTX) is a generic term for any broadband network architecture using optical fiber to provide all or part of the local loop used for last mile telecommunications. As fiber optic cables are able to carry much more data than copper cables, especially over long distances, copper telephone networks built in the 20th century are being replaced by fiber.
+
+# fiber to the home (FTTH)
+
+Fiber to the home (FTTH), also called "fiber to the premises" (FTTP), is the installation and use of optical fiber from a central point directly to individual buildings such as residences, apartment buildings and businesses to provide unprecedented high-speed Internet access. FTTH dramatically increases the connection speeds available to computer users compared with technologies now used in most places.
+
+While FTTH promises connection speeds of up to 100 megabits per second (Mbps) -- 20 to 100 times as fast as a typical cable modem or DSL (Digital Subscriber Line) connection -- implementing FTTH on a large scale will be costly because it will require installation of new cable sets over the "last links" from existing optical fiber cables to individual users. Some communities currently enjoy "fiber to the curb" (FTTC) service, which refers to the installation and use of optical fiber cable to the curbs near homes or businesses, with a "copper" medium carrying the signals between the curb and the end users.
