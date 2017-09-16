@@ -4,4 +4,13 @@ Dynamic programming algorithms are often used for optimization. A dynamic progra
 
 # Example
 
+#### Example 1
+
 * https://leetcode.com/problems/coin-change/description/
+
+#### Example 2
+
+* http://www.geeksforgeeks.org/knapsack-problem/
+
+
+
