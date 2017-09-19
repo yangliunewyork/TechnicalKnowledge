@@ -89,8 +89,64 @@ To get around the problem of breaking up nearly exact matches into a process and
 
 ## 3.3 VIRTUAL MEMORY
 
+While base and limit registers can be used to create the abstraction of address spaces, there is another problem that has to be solved: managing bloatware. While memory sizes are increasing rapidly, software sizes are increasing much faster.
+
+As a consequence of these developments, there is a need to run programs that are too large to fit in memory, and there is certainly a need to have systems that can support multiple programs running simultaneously, each of which fits in memory but all of which collectively exceed memory. Swapping is not an attractive option, since a typical SATA disk has a peak transfer rate of several hundreds of MB/sec, which means it takes seconds to swap out a 1-GB program and the same to swap in a 1-GB program.
+
+The method that was devised (Fotheringham, 1961) has come to be known as virtual memory. The basic idea behind virtual memory is that each program has its own address space, which is broken up into chunks called __pages__. __Each page is a contiguous range of addresses.__ These pages are mapped onto physical memory, but not all pages have to be in physical memory at the same time to run the program. When the program references a part of its address space that is in physical memory, the hardware performs the necessary mapping on the fly. When the program references a part of its address space that is not in physical memory, the operating system is alerted to go get the missing piece and re-execute the instruction that failed.
+
+### 3.3.1 Paging
+
+Most virtual memory systems use a technique called __paging__. 
+
+![alt](http://slideplayer.com/slide/5117938/16/images/9/Virtual+Memory+%E2%80%93+Paging+(1).jpg)
+
+These program-generated addresses are called __virtual addresses__ and form the __virtual address space__. __On computers without virtual memory, the virtual address is put directly onto the memory bus and causes the physical memory word with the same address to be read or written. When virtual memory is used, the virtual addresses do not go directly to the memory bus. Instead, they go to an _MMU (Memory Management Unit)_ that maps the virtual addresses onto the physical memory addresses.__
+
+![alt](http://slideplayer.com/slide/5117938/16/images/10/Paging+(2)+Figure+3-9.+Relation+between+virtual+addresses+and+physical+memory+addresses+given+by+page+table..jpg)
+
+In this example, we have a computer that generates 16-bit addresses, from 0 up to 64K − 1. These are the virtual addresses. This computer, howev er, has only 32 KB of physical memory. So although 64-KB programs can be written, they cannot be loaded into memory in their entirety and run. A complete copy of a program’s core image, up to 64 KB, must be present on the disk, however, so that pieces can be brought in as needed.
+
+The virtual address space consists of fixed-size units called pages. The corresponding units in the physical memory are called __page frames__. __The pages and page frames are generally the same size.__ In this example they are 4 KB, but page sizes from 512 bytes to a gigabyte have been used in real systems. With 64 KB of virtual address space and 32 KB of physical memory, we get 16 virtual pages and 8 page frames. Transfers between RAM and disk are always in whole pages. Many processors support multiple page sizes that can be mixed and matched as the operating system sees fit. For instance, the x86-64 architecture supports 4-KB, 2-MB, and 1-GB pages, so we could use 4-KB pages for user applications and a single 1-GB page for the kernel. We will see later why it is sometimes better to use a single large page, rather than a large number of small ones
+
+By itself, this ability to map the 16 virtual pages onto any of the eight page frames by setting the MMU's map appropriately does not solve the problem that the virtual address space is larger than the physical memory. Since we have only eight physical page frames, only eight of the virtual pages in Fig. 3-9 are mapped onto physical memory. The others, shown as a cross in the figure, are not mapped. In the actual hardware, a __Present/absent bit__ keeps track of which pages are physically present in memory.
+
+What happens if the program references an unmapped address? The MMU notices that the page is unmapped and causes the CPU to trap to the operating system. This trap is called a __page fault__. The operating system picks a little-used page frame and writes its contents back to the disk (if it is not already there). It then fetches (also from the disk) the page that was just referenced into the page frame just freed, changes the map, and restarts the trapped instruction.
+
+![alt](http://slideplayer.com/slide/3611123/13/images/26/Paging+(3)+Figure+3-10.+The+internal+operation+of+the+MMU+with+16+4-KB+pages..jpg)
+
+Now let us look inside the MMU to see how it works and why we hav e chosen to use a page size that is a power of 2. In Fig. 3-10 we see an example of a virtual address, 8196 (0010000000000100 in binary), being mapped using the MMU map of Fig. 3-9. The incoming 16-bit virtual address is split into a 4-bit page number and a 12-bit offset. With 4 bits for the page number, we can have 16 pages, and with 12 bits for the offset, we can address all 4096 bytes within a page. 
+
+The __page number__ is used as an index into the page table, yielding the number of the page frame corresponding to that virtual page. If the Present/absent bit is 0, a trap to the operating system is caused. If the bit is 1, the page frame number found in the page table is copied to the high-order 3 bits of the output register, along with the 12-bit offset, which is copied unmodified from the incoming virtual address. Together they form a 15-bit physical address. The output register is then put onto the memory bus as the physical memory address.
+
+### 3.3.2 Page Tables
+
+In a simple implementation, the mapping of virtual addresses onto physical addresses can be summarized as follows: the virtual address is split into a virtual page number (high-order bits) and an offset (low-order bits). For example, with a 16-bit address and a 4-KB page size, the upper 4 bits could specify one of the 16 virtual pages and the lower 12 bits would then specify the byte offset (0 to 4095) within the selected page. However a split with 3 or 5 or some other number of bits for the page is also possible. Different splits imply different page sizes.
+
+The virtual page number is used as an index into the page table to find the entry for that virtual page. From the page table entry, the page frame number (if any) is found. The page frame number is attached to the high-order end of the offset, replacing the virtual page number, to form a physical address that can be sent to the memory.
+
+Thus, the purpose of the page table is to map virtual pages onto page frames. Mathematically speaking, the page table is a function, with the virtual page number as argument and the physical frame number as result. Using the result of this function, the virtual page field in a virtual address can be replaced by a page frame field, thus forming a physical memory address.
+
+##### Structure of a Page Table Entry
+
+The exact layout of an entry in the page table is highly machine dependent, but the kind of information present is roughly the same from machine to machine.
+
+The size varies from computer to computer, but 32 bits is a common size. The most important field is the _Page frame number_. After all, the goal of the page mapping is to output this value. Next to it we have the _Present/absent bit_. If this bit is 1, the entry is valid and can be used. If it is 0, the virtual page to which the entry belongs is not currently in memory. Accessing a page table entry with this bit set to 0 causes a page fault.
+
+![alt](http://img.blog.csdn.net/20140503200839046)
+
+The _Protection bits_ tell what kinds of access are permitted. In the simplest form, this field contains 1 bit, with 0 for read/write and 1 for read only. A more sophisticated arrangement is having 3 bits, one bit each for enabling reading, writing, and executing the page.
+
+The __Referenced bit__ is set whenever a page is referenced, either for reading or for writing. Its value is used to help the operating system choose a page to evict when a page fault occurs. Pages that are not being used are far better candidates than pages that are, and this bit plays an important role in several of the page replacement algorithms.
+
+Finally, the last bit allows caching to be disabled for the page. This feature is important for pages that map onto device registers rather than memory. If the operating system is sitting in a tight loop waiting for some I/O device to respond to a command it was just given, it is essential that the hardware keep fetching the word from the device, and not use an old cached copy. With this bit, caching can be turned off. Machines that have a separate I/O space and do not use memory-mapped I/O do not need this bit.
+
+Note that the disk address used to hold the page when it is not in memory is not part of the page table. The reason is simple. The page table holds only that information the hardware needs to translate a virtual address to a physical address. Information the operating system needs to handle page faults is kept in software tables inside the operating system. The hardware does not need it.
+
+Before getting into more implementation issues, it is worth pointing out again that what virtual memory fundamentally does is create a new abstraction, the address space, which is an abstraction of physical memory, just as a process is an abstraction of the physical processor (CPU). Virtual memory can be implemented by breaking the virtual address space up into pages, and mapping each one onto some page frame of physical memory or having it (temporarily) unmapped.
 
 
+### 3.3.3 Speeding Up Paging
 
 
 
