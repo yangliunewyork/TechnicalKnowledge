@@ -29,7 +29,23 @@ In the case of HTTP PUT or POSTs, the user-submitted data are provided to the pr
 CGI is often used to process inputs information from the user and produce the appropriate output. An example of a CGI program is one implementing a Wiki. The user agent requests the name of an entry; the Web server executes the CGI; the CGI program retrieves the source of that entry's page (if one exists), transforms it into HTML, and prints the result. The web server receives the input from the CGI and transmits it to the user agent. If the "Edit this page" link is clicked, the CGI populates an HTML textarea or other editing control with the page's contents, and saves it back to the server when the user submits the form in it.
 
 
+# Difference Between CGI and Servlet
 
+GI (Common Gateway Interface) is the very first attempt at providing users with dynamic content. It allows users to execute a program that resides in the server to process data and even access databases in order to produce the relevant content. Since these are programs, they are written in the native operating system and then stored in a specific directory. A servlet is an implementation of Java that aims to provide the same service as CGI does, but instead of programs compiled in the native operating system, it compiles into the Java bytecode which is then run in the Java virtual machine. Though Java programs can be compiled into the native code, they still prefer to compile in the Java bytecode.
+
+The first advantage of servlets over CGI is in its platform independence. Servlets can run on any operating system just as long as a JVM is installed, which means that you would not be having any problem even if you choose to switch operating systems. With CGI, switching operating system is a difficult and laborious process as you would need to recompile the programs in the new operating system.
+
+Since you are running independent programs in CGI, they create their own process when they are executed, something that does not happen with servlets as they just share in the memory space of the JVM. This can lead to problems relating to overhead, especially when you increase the number of users exponentially. It also creates vulnerability issues as the program is not controlled in any way once it is run on the server.
+
+
+Later on, the more common method when using CGI is via scripts. This reduces the time needed in creating programs and are generally more secure. With CGI, you can run scripts right away, while servlets, you would need to translate the script into Java and compile it into a servlet which adds a little bit to the loading time.
+
+##### Summary:
+1.CGI are usually executables that are native to the server’s operating system, though servlets can also be compiled to the native OS it can be compiled to Java bytecode which is then run on a JVM  
+2.CGI programs are platform dependent while servlets are platform independent  
+3.CGI programs run as separate processes on the computer while servlets run on the JVM  
+4.CGI can be more vulnerable to attacks than servlets  
+5.CGI can directly process scripts while it needs to be translated and compiled to before it can be run as a servlet  
 
 
 
