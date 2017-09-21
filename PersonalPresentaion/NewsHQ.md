@@ -29,4 +29,69 @@ The left panel is "System Overview". It has the process heatmap which lists all 
 Each small square represents a process, "green" means it is running, "red" means it is down.
 When your mouse hover the small square, it will show the process name. And once you click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics, and by default, the uptime/downtime is shown up there.
 
+On the right panel, we have "Recent Activity" and "Upcoming Events", 
+
+
+### Host Page
+
+We have a slogan for host page, which is "every box in one page". It is very clear and straightforward.
+
+You can see the CPU/Memory/Disk/Inodes of all the boxes we are concerning about within one page.
+
+And when any value is changing, the tiny animation will make sure you won't miss that.
+
+We have 3 health status for all the metrics here. Other than the normal status, if metrics goes up to 50%, it will be shown as in orange text, if goes up to 70%, the text will be highlighted as red.
+
+Now you will understand how this page can help us to be more proactive, because it bring to us a very clear system realtime summary on all our boxes.
+
+What if you want to get more system information about a specific box?
+
+Just lick any box here, it will begin us to a specifix box page which give you a more detailed system information about that box.
+
+All the information and charts on this page are  updated every 20 seconds.
+
+On the top,  there are Fill Gauge CPU chart and other memory pie charts. 
+
+And then we have CPU line chart and memory bar char which give you realtime view as well as historical information.
+
+By simply clicking the zoom in links, you can get different datetime range, up to 24 hours.
+
+By hovering above any data point, you can see a tiny tooltip.
+
+On the bottom, we have the status information of all the processes running on that host.
+
+Click any process will direct you to the process page, which by default give you uptime/downtime information as well as the general process information. For example, the process's owner group and their email address. 
+
+### Services page
+
+News HQ services page lists all the services we are concerning about.  Click any service tile will direct you to that service page, which listed all the operations you can do about that service there.
+
+As you can see, NewsHQ has a very clear visual hierarchy layout. We don't need to give you a manual about it and you won't get lost here. And NewsHQ's URL reveals the hierarhy as well,  you can consider the URL as the Polaris which can guide you here and make the navigation easier.
+
+
+#### NSS redirection page
+
+News searching have two database clusters, A and B. If one of the data centers fails then we need a way to redirect traffic to the other data center. Previously, we need to ssh to the NSS boxes and modify the configuration files there and restart NSS instances.
+
+Right now we have this redirection page which can perform traffic switch over within as minimal as 2 clicks, and can be grandular down to feed basis. It's just that simple. It is as simple as Amazon one-click payment. Maybe we should file a patent for this too?
+
+We can also use the filter box to narrow down the news feeds we looking for, it's quite convinient.
+
+Usually, we can't disable two clusters at the same time for any news feed, that means the requests to that feed will be send to nowhere. And we don't want to do that accidentally. What if we did?
+
+Then the feed row will be as "bloody red" as bloody margarita cocktail. And you probably won't miss that.
+
+#### Shared Search Server / Alerts look up page
+
+
+
+
+
+
+
+
+
+
+
+
 
