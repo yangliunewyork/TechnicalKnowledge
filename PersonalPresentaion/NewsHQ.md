@@ -1,10 +1,13 @@
 # Why NewsHQ ?
-One year ago, Tom, Guang and I were tracking a searching related issue reported by client.  We log into our searching boxes, ran top commands on each of them to check system summary information, grep searching log to see any eccentric behaviors， check monster chars for historical information.
-During lunchtime, Tom said that he saw a dashboard somewhere online and think it was cool, and he showed to me after lunch. I saw that online dashboard and  said, “it is quite good and it will be cool if monster can be as simple as this ”. And then Tom asked, “Yang, do you want to be a full-stack engineer?” And I said, “Tom, I was an Asp.net developer before join FactSet”, and Tom said, “that’s even better”.
+ Tom, Guang and I were tracking a searching related issue reported by client.  We log into our searching boxes, ran top commands on each of them to check system summary information, grep searching log to see any eccentric behaviors， check monster chars for historical information. And sometimes NewsAlerting folks need to run a bunch of python scripts to search clients-defined alerting criteria to check why clients did not receive alerts they are expecting. All the debug/track operations are time-consuming and they usually happen a short time after market open, 2 or 3 such operations will take away the whole morning, which the most productive time of the whole day.
+
+One year ago,during lunchtime, Tom said that he saw a dashboard somewhere online and think it was cool, and he showed to me after lunch. I saw that online dashboard and  said, “it is quite good and it will be cool if monster can be as simple as this ”. And then Tom asked, “Yang, do you want to be a full-stack engineer?” And I said, “Tom, I was an Asp.net developer before join FactSet”, and Tom said, “ so you have front end experience, that’s even better”.
+
 And that’s how we begin to work on NewsHQ.
+
 NewsHQ is a dashboard that help us to monitor our applications and databases' mission critical key performance metrics like uptime, load time, response time, cpu usage, memory usage and the multitude of other components that help us to deliver a stable end user experience to our clients.
 
-There are inevitably times when things break, when hardware degrade.  A dashboard that monitors your core processes - even just a simple one - can mean the difference between spotting an issue before clients do,   and finding a mountain of support tickets from angry customers. 
+There are inevitably times when things break, when hardware degrade.  A dashboard that monitors your core processes can mean the difference between spotting an issue before clients do,   and finding a mountain of support tickets from angry customers. 
 
 Being  a passive, reactive engineers who sometimes get pushed around by system issues, clients’ complaints is not fun at all. You may be working on developing features that our clients desperately want, our product managers are looking forward to and you may even already gave them an estimated delivery time, and then “boom”, something is not working. And you have to do a “context switch” and  jump on to analyze the issues. 
 
@@ -12,22 +15,20 @@ Being  a passive, reactive engineers who sometimes get pushed around by system i
 
 It save us from tedious manual operation work.
 It reduce our time to track issues.
-It let us know what is not working and also what is working BUT not working WELL.
+It let us know what is not working and also what is working BUT just not working WELL.
 It integrates our scattered around operation tools into one centralized stop.
 It bring better processes/system analysis tools for us to find out what can be improved and what must be fixed.
-It help us from being passive, reactive to be proactive and more productive.
+It help us from being passive, reactive to be more proactive and productive.
 It help us to make patching smooth.
 
 
 # Demo
 
-NewsHQ has a very clear visual hierarchy on each page.
-
 ### Home page
 
-The left panel is "System Overview". It has the process heatmap which lists all the boxes and running process on them.
+The left panel is "System Overview". It has the process heatmap which lists all the boxes and running processes on them.
 Each small square represents a process, "green" means it is running, "red" means it is down.
-When your mouse hover the small square, it will show the process name. And once you click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics, and by default, the uptime/downtime is shown up there.
+When your mouse hover over any small square, it will show the process name. And once you click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics, and by default, the uptime/downtime is shown up there.
 
 On the right panel, we have "Recent Activity" and "Upcoming Events", 
 
@@ -42,17 +43,17 @@ And when any value is changing, the tiny animation will make sure you won't miss
 
 We have 3 health status for all the metrics here. Other than the normal status, if metrics goes up to 50%, it will be shown as in orange text, if goes up to 70%, the text will be highlighted as red.
 
-Now you will understand how this page can help us to be more proactive, because it bring to us a very clear system realtime summary on all our boxes.
+This page brings  us a very clear system realtime summary on all our boxes. It is an example to show that how NewsHQ can help us to be more proactive.
 
 What if you want to get more system information about a specific box?
 
-Just lick any box here, it will begin us to a specifix box page which give you a more detailed system information about that box.
+Just lick any box here, it will guide us to a specifix box page which give you a more detailed system information about that box.
 
 All the information and charts on this page are  updated every 20 seconds.
 
 On the top,  there are Fill Gauge CPU chart and other memory pie charts. 
 
-And then we have CPU line chart and memory bar char which give you realtime view as well as historical information.
+And then we have CPU line chart and memory bar chart which give you realtime view as well as historical information.
 
 By simply clicking the zoom in links, you can get different datetime range, up to 24 hours.
 
@@ -81,9 +82,24 @@ Usually, we can't disable two clusters at the same time for any news feed, that 
 
 Then the feed row will be as "bloody red" as bloody margarita cocktail. And you probably won't miss that.
 
+And we log all the sensitive operations on NewsHQ dashboard, so we can find out "who take what action at what time"?
+
+
 #### Shared Search Server / Alerts look up page
 
+Like I said, previously alerting folks need to run python scripts to get alerts information for a specific client. 
 
+This page give you all the alerts created by any client. All you need to do is input the client's username and serial number.
+
+And if you want to look at the specific information about one alert, just click the "search UUID".
+
+And again, you can modify url to get the alerting information directly.
+
+Example : http://news-hq.factset.io/services/sss/alertinfo?username=TDIAL&userserial=FDS&env=PRODUCTION
+
+
+
+#### Elasticsearch page
 
 
 
