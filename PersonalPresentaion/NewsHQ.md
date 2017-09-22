@@ -1,15 +1,20 @@
 # Why NewsHQ ?
-Tom, Guang and I were tracking a searching related issue reported by client.  We log into our searching boxes, ran top commands on each of them to check system summary information, grep searching log to see any eccentric behaviors， check monster chars for historical information. And sometimes NewsAlerting folks need to run a bunch of python scripts to search clients-defined alerting criteria to check why clients did not receive alerts they are expecting. All the debug/track operations are time-consuming and they usually happen right after market open in the morning. 2 or 3 such operations can easily take away the whole morning, which the most productive time of one day.
 
-And that’s how we begin to work on NewsHQ.
+Being  a passive, reactive engineer who gets pushed around by system/processes issues, clients’ complaints is not fun at all. You may be working on developing features that our clients desperately want, our product managers are looking forward to and you may even already gave them an estimated delivery time, and then “boom”, something is not working. And you have to do a “context switch” and  jump on to analyze the issues.
+
+There are inevitably times when things break, when hardware degrade.  A dashboard that monitors your servers/processes can mean the difference between spotting an issue before clients do,  or prevent those issues from happenning.  And if something bad happens, it also help you track down the issue faster.
+
+A dashboard report helps us monitor and track our servers/processes performance to stay in control of our business at all times. You cannot correct or improve something that cannot be effectively identified and measured. Without effective metrics/KPIs, managers/engineers may not be able to respond to situations correctly and will end up spending a lot of time to anaylyze and debugging issues. And also keeping the project team headed in the right direction cannot be done easily without effective identification and measurement of metrics.
+
+Organizations use dashboards to display the KPIs and metrics that are core to their business to enable broad consumption of data and insights. This encourages a culture of incremental improvements. Even a modest 2% improvement month over month adds up over the long haul. In the spirit of analytics-driven improvements, many organizations are displaying dashboard reports on televisions and wallboards. Nurturing daily data monitoring habits has big results. Dashboards are meant to be viewed.
+
+The future of project management may very well be metric-driven project management.
+
+Larger companies including FactSet maintain own specialist team , for example graphic designers, information architects, or interaction designers. These people maintain expertise in the visual display of both quantitative and qualitative information necessary for informed decision making. They often provide a centralized platforms to query and visualize the metrics. For example, FactSet Monster or CLP. However, the problem is that sometimes these centralized platforms are not easy to use, or lack the features/metrics our own team need. To simply put, you can use these platforms only in a general way but they are not customized for you and you don't own them at all.
+
+And NewsHQ is our own dashboard delicating to serve News team only. You can display any metrics here, use any chart you prefer, customize in any way you want. You are the only owner, designer of it.
 
 NewsHQ is a dashboard that help us to stay on top of our operations by monitoring, tracking, and reporting real-time/historical key metrics about our servers and processes. Whether you're concerned about a major event or keeping an eye on day-to-day activities, you can use NewsHQ Dashboard to focus on what matters most to you. 
-
-With real time or near real time data available, the dashboard tracks the performance of the our servers and processes that keep your business running.
-
-There are inevitably times when things break, when hardware degrade.  A dashboard that monitors your core processes can mean the difference between spotting an issue before clients do,  which can reduce supporting tickets filed by clients. 
-
-Being  a passive, reactive engineers who sometimes get pushed around by system issues, clients’ complaints is not fun at all. You may be working on developing features that our clients desperately want, our product managers are looking forward to and you may even already gave them an estimated delivery time, and then “boom”, something is not working. And you have to do a “context switch” and  jump on to analyze the issues. 
 
 
 ### What can NewsHQ bring to us?
