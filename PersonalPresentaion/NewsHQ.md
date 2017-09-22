@@ -137,6 +137,34 @@ No need to go to details here.
 
 ### Stats page
 
+##### Alerting Notifier page
+The Monster team announced the next generation charting and dashboarding engine, Grafana! With Grafana, users can make dashboards using existing Monster data, and aggregate, pivot and dissect data in ways not previously possible. 
+
+Here I am going to show you how easy it is to integrate Grafana into NewsHQ.
+
+```
+<div class="container-fluid">
+    <div class="col-lg-12">
+        <iframe src="http://grafana.factset.io/dashboard/db/notifier" width="100%" height="1000" frameborder="0"></iframe>
+    </div>
+</div>
+```
+
+##### Searching MATT page
+
+On this page, you can get in-depth information about documents being processed by MATT process.
+
+You can see the queue size, how many bad files, how many attemps have been made for each document on both Elasticsearch queue and MySQL queue.
+
+Of course, you can sort the table by any headers as well.
+
+We also have a simple filter here.
+
+
+
+
+
+
 
 
 
