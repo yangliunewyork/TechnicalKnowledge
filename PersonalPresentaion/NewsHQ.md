@@ -117,7 +117,8 @@ It talks to the Elasticsearch instances directly through their API.
 
 Select the cluster from the dropdown list, and you can get a clear view about the cluster.
 
-Indices tab lists all the indexes of the cluster , with the index information there.
+Indices tab lists all the indexes of the cluster , with the index information there. You can sort by any table headers as well as using the filter textbox. In fact, you can combime them as "filter-then-sort". 
+
 
 You can get the setting information about a specific index on the setting tab.
 
