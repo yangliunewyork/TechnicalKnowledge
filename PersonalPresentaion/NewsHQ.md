@@ -1,15 +1,15 @@
 # Why NewsHQ ?
 
-There are inevitably times when things break, it could be related to hardware/network/project issue.  A dashboard that monitors your servers/processes can help us spot issues before clients do, or even prevent those issues from happening.  And if something bad really happens, it also helps us track down the issue faster.
+There are inevitably times when things break, it could be related to hardware/network/project issues.  A dashboard that monitors our servers/processes can help us spot issues before clients do, or even better prevent those issues from happening.  And if something bad really happens, it also helps us track down the issue faster.
 
 ##### NewsHQ bring better troubleshooting tools
-While, you may want to ask, why spend time building a new dashboard? Doesn't FactSet has monster charts and other tools/platforms already?  Or why not just use an open source one?  Well, one primary reason is that those platforms do a decent job only in general ways,  they barely offer any team/project-specific customization. The consequence is that we still need to build different tools (python scripts, webpages) to help us perform regular operations. And these tools are scattered around everywhere, they could be in perforce, they can be in github, and they are even  stored in someone's local directories.  Our MySQL reader page is still on Joyce Wu's personal webpage instance and right now she is not working in news team anymore. NewsHQ is a platform to integrate all these tools, it is our operations manager. It also bring more troubleshooting features. What's better, NewsHQ has centralized log to audit those operations.
+While, you may want to ask, why spend time building a new dashboard? Doesn't FactSet already have monster charts and other tools/platforms already?  Or why not just use an open source one?  Well, one primary reason is that those platforms do a decent job only in general ways,  they barely offer any team/project-specific customization. The consequence is that we still need to build different tools (python scripts, webpages) to help us perform regular operations. And these tools are scattered around everywhere, they could be in perforce, github, and they are even  stored in someone's local directories.  Our MySQL reader page is still on Joyce Wu's personal webpage instance and right now she is not working in news team anymore. NewsHQ is a platform to integrate all these tools as well as bring more troubleshooting features, it is our operations manager. What's better, NewsHQ has centralized log to audit those operations.
 
 ##### NewsHQ bring better metrics
-Another problem with those platforms is that they are not easy to use, or lack the metrics our own team need, or lack the features our team want. NewsHQ lets us choose whatever metrics we want to use, which is more effective because different teams and different projects need different types of metrics. Moreover, we can use a wide range of interactive charts and tubulars to display our metrics. And you won't get the flexibility from those platforms, they only offer predefined charts and tubulars.
+Other problems with those platforms is that they are not easy to use, or lack the metrics our own team need, or lack the features our team want. NewsHQ lets us choose whatever metrics we want to use, which is more effective because different teams and different projects need different types of metrics. Moreover, we can use a wide range of interactive charts and tubulars to display our metrics. And we won't get the flexibility from those platforms, they only offer predefined charts and tubulars.
 
 ##### NewsHQ enable regular monitoring
-I have to admit it. I only use Monster charts to troubleshoot issues, not for regular monitoring our systems. NewsHQ helps us monitor and track our servers/processes performance to stay in control of our business __at all times__. We believe, daily system/project monitoring is important and bring big results. 
+I have to admit it. I only use Monster charts to troubleshoot issues, not for regular monitoring our systems. NewsHQ helps us monitor and track our servers/processes to stay in control of our business __at all times__. We believe, daily system/project monitoring is important and bring big results. 
 
 # Demo
 
@@ -17,7 +17,7 @@ I have to admit it. I only use Monster charts to troubleshoot issues, not for re
 
 The left panel is "System Overview". It has the process heatmap which lists all the hosts and running processes on them.
 Each small square represents a process, "green" means the process is running, "red" means it is down.
-When your mouse hover over any small square, it will show the process name. Aster you  click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics(process responding time, latency or throughput), and right now by default, the uptime/downtime is shown up there.
+When your mouse hover over any small square, it will show the process name. After you  click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics(process responding time, latency or throughput), and right now by default, the uptime/downtime is shown up there.
 
 On the right panel, we have "Recent Activity" and "Upcoming Events", 
 
@@ -32,7 +32,7 @@ You can click the section-header here to collapse and expand the section.
 
 You can see the CPU/Memory/Disk/Inodes of all the hosts we are concerning about within this single page.
 
-__These metrics are live data and refresh automatically. You don’t need to manually re-run dashboards or sync data every time data updates.__
+__These metrics are live data and refresh automatically. You don’t need to manually re-run dashboards or click refresh button.__
 
 And when any metrics is changing, the small animation will make sure you won't miss that.
 
@@ -46,13 +46,13 @@ All the information and charts on this page are  updated every 20 seconds.
 
 On the top,  there are Fill Gauge CPU chart and other memory pie charts, they provide the realtime information. 
 
-And then we have CPU line chart and memory bar chart which give you realtime as well as historical metrics.
+In the middle, we have CPU line chart and memory bar chart which give you realtime as well as historical metrics.
 
-By simply clickthe zoom in links, you can get different time range, up to 24 hours.
+By simply click the zoom in links, you can get different time range, up to 24 hours.
 
 By hovering above any data point, you can see a detailed information with a tiny tooltip.
 
-__As you can see, NewsHQ has a wide range of charts and visualizations to present data  - from basic ones like line, area to advanced ones like heatmap, gauge and bubble charts.__ We wrote these charts libraries from scratch with Javascript, which means we don't need to pay license fee to third-party charts libraries like Highchart.js. And no matter what kind of chart you see online, we can write a smilar one. Any of our chart simply takes an array of data points to produce dynamic, interactive visualizations. They are very simple to be used and customized.
+__As you can see, NewsHQ has a wide range of charts and visualizations to present data  - from basic ones like line charts, bar charts to advanced ones like heatmap, gauge and bubble charts.__ We wrote these charts libraries from scratch with Javascript, which means we don't need to pay license fee to third-party charts libraries like Highchart.js. Any of our chart simply takes an array of data points to produce dynamic, interactive visualizations. They are very simple to be used and customized.
 
 On the bottom, we have the status information of all the processes running on that host.
 
