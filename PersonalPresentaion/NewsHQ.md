@@ -1,108 +1,85 @@
-# What is NewsHQ
-
-NewsHQ is our own centrailized dashboard delicating to serve News team only. 
-
-It help us to stay on top of our operations by monitoring, tracking, and reporting real-time/historical key metrics about our servers and processes. Whether we're concerned about a major event or keeping an eye on day-to-day activities, we can use NewsHQ Dashboard to focus on what matters most to us.  You can display any metrics here, use any chart you prefer, customize in any way you want. 
-
 # Why NewsHQ ?
 
-##### From being passtive to be proactive
-Being  a passive, reactive engineer who gets pushed around by system/processes issues, clients’ complaints is not fun at all. You may be working on developing features that our clients desperately want, our product managers are looking forward to, and then “boom”, something is not working. And you have to do a “context switch” and  jump on to analyze the issues. That happens a lot, happens to me, happens to you as well. 
-
-We can't sit there and pray nothing is going to break, that's not practical. There are inevitably times when things break, it could be hardware/network/project issue.  A dashboard that monitors your servers/processes can mean the difference between spotting an issue before clients do,  or prevent those issues from happenning.  And if something bad happens, it also help you track down the issue faster.
+There are inevitably times when things break, it could be related to hardware/network/project issue.  A dashboard that monitors your servers/processes can help us spot issues before clients do, or even prevent those issues from happening.  And if something bad really happens, it also helps us track down the issue faster.
 
 ##### NewsHQ bring better troubleshooting tools
-While, you may want to ask, why spend time writing a new dashboard? Doesn't FactSet has monster chart and other  tools/platforms to query and visualize the metrics already?  Or why not just use an open source thrid party tool?  Well, one primary reason is that these platforms do a decent job company-wide only in general ways,  but they barely offer any team/project-specific customization. The consequence is that we need to build different tools(python scripts, webpages) to help us perform regular tasks. And these tools are scatter around everywhere, they could be in perforce, they can be in github, and they can even only be stored in someone's local directories.  Our MySQL reader page is still on Joyce Wu's personal webpage instance and right now she is working in a different team. And all these tools are constantly built/discarded by different developeres to do even the same tasks. How much time we spent to build these tools, and how many tools we have abandon after only use them for a short time? Without effective trouble shooting tools, managers/engineers may not be able to respond to situations quickly or correctly, and will end up spending a lot of time to anaylyze and debugging issues. NewsHQ is a platform to integrate all these tools, it can be our operations manager. It can  bring better troubleshooting features. And NewsHQ also has centralized log to audit those operations.
+While, you may want to ask, why spend time building a new dashboard? Doesn't FactSet has monster charts and other tools/platforms already?  Or why not just use an open source one?  Well, one primary reason is that those platforms do a decent job only in general ways,  they barely offer any team/project-specific customization. The consequence is that we still need to build different tools (python scripts, webpages) to help us perform regular operations. And these tools are scattered around everywhere, they could be in perforce, they can be in github, and they are even  stored in someone's local directories.  Our MySQL reader page is still on Joyce Wu's personal webpage instance and right now she is not working in news team anymore. NewsHQ is a platform to integrate all these tools, it is our operations manager. It also bring more troubleshooting features. What's better, NewsHQ has centralized log to audit those operations.
 
 ##### NewsHQ bring better metrics
-Some other problems are that sometimes these platforms are not easy to use, or lack the metrics our own team need(for example, the response timve, latency and throughput for a process), or lack the features you team want(for example, you can't use them to talk to your processes directly, perform  datacenter switchover). Effective metris is important. As a matter of fact, many engineers say that modern project management may very well be metric-driven project management. NewsHQ  let us choose whatever metrics we want to use, which is more effective because different teams and different processes/databases need different types of metrics. Moreover, we can use a wide range of interactive charts and tabulars to display our metrics. And you won't get those flexibity from those centralized monitoring platforms.
+Another problem with those platforms is that they are not easy to use, or lack the metrics our own team need, or lack the features our team want. NewsHQ lets us choose whatever metrics we want to use, which is more effective because different teams and different projects need different types of metrics. Moreover, we can use a wide range of interactive charts and tubulars to display our metrics. And you won't get the flexibility from those platforms, they only offer predefined charts and tubulars.
 
 ##### NewsHQ enable regular monitoring
-__Nurturing daily system/project monitoring habits has big results.__  NewsHQ helps us monitor and track our servers/processes performance to stay in control of our business __at all times__. Let's admit it, you only use monster charts to look at metrics when something suspicious happens. That's not we call "daily monitoring". You can't not ensure stability and availability of our systems and processes if they are not being monitored effectively on regular basis.
-
-
-### What can NewsHQ bring to us?
-
-It save us from tedious manual operation work.
-It reduce our time to track issues.
-It let us know what is not working and also what is working BUT just not working WELL.
-It integrates our scattered around operation tools into one centralized stop.
-It bring better processes/system analysis tools for us to find out what can be improved and what must be fixed.
-It help us from being passive, reactive to be more proactive and productive.
-It help us to make patching smooth.
- 
-
+I have to admit it. I only use Monster charts to troubleshoot issues, not for regular monitoring our systems. NewsHQ helps us monitor and track our servers/processes performance to stay in control of our business __at all times__. We believe, daily system/project monitoring is important and bring big results. 
 
 # Demo
 
 ### Home page
 
-The left panel is "System Overview". It has the process heatmap which lists all the boxes and running processes on them.
+The left panel is "System Overview". It has the process heatmap which lists all the hosts and running processes on them.
 Each small square represents a process, "green" means the process is running, "red" means it is down.
-When your mouse hover over any small square, it will show the process name. And you can click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics(process responding time, latency or throughput), and by default, the uptime/downtime is shown up there.
+When your mouse hover over any small square, it will show the process name. Aster you  click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics(process responding time, latency or throughput), and right now by default, the uptime/downtime is shown up there.
 
 On the right panel, we have "Recent Activity" and "Upcoming Events", 
 
 
 ### Host Page
 
-We have a slogan for host page, which is "every box in one page". It is very clear and straightforward.
+This page brings us a very clear view of system realtime information on all our hosts.
 
-You can see the CPU/Memory/Disk/Inodes of all the boxes we are concerning about within one page.
+These hosts are divided into 3 groups, production/staging/development.
 
-And when any value is changing, the tiny animation will make sure you won't miss that.
+You can click the section-header here to collapse and expand the section.
 
-__NewsHQ provide these real-time key performance indicators  and metrics that show live data and refresh automatically. You don’t need to manually re-run dashboards or sync data every time your data updates.They just update automatically.__
+You can see the CPU/Memory/Disk/Inodes of all the hosts we are concerning about within this single page.
 
-We have 3 health status for all the metrics here. Other than the normal status, if metrics goes up to 50%, it will be shown as in orange text, if goes up to 70%, the text will be highlighted as red.
+__These metrics are live data and refresh automatically. You don’t need to manually re-run dashboards or sync data every time data updates.__
 
-This page brings  us a very clear system realtime summary on all our boxes. It is an example to show that how NewsHQ can help us to be more proactive.
+And when any metrics is changing, the small animation will make sure you won't miss that.
+
+If metrics goes up to 50%, it will be highlighted as yellow, if goes up to 70%, the text will be highlighted as red.
 
 What if you want to get more system information about a specific host?
 
-Just lick any host here, it will guide you to a specifix host page which give you a more detailed system information about that host.
+Just lick any host here, it will guide you to a specifix host page which gives you a more detailed system information about that host.
 
 All the information and charts on this page are  updated every 20 seconds.
 
-On the top,  there are Fill Gauge CPU chart and other memory pie charts. 
+On the top,  there are Fill Gauge CPU chart and other memory pie charts, they provide the realtime information. 
 
-And then we have CPU line chart and memory bar chart which give you realtime as well as historical information.
+And then we have CPU line chart and memory bar chart which give you realtime as well as historical metrics.
 
-By simply clicking the zoom in links, you can get different datetime range, up to 24 hours.
+By simply clickthe zoom in links, you can get different time range, up to 24 hours.
 
 By hovering above any data point, you can see a detailed information with a tiny tooltip.
 
-__NewsHQ has a wide range of charts and visualizations to present data  - from basic ones like line, area, scatter plot to advanced ones like heatmap, gauge and bubble charts.__ We wrote these charts libraries from scratch with D3.js, which means we don't need to pay license fee to third-party charts libraries like Highchart. And no matter what kind of chart you see online, we can write a smilar or even a better one. Any of our chart simply take an array of key-value pairs for x-axis and y-axis data to produce dynamic, interactive visualizations. They are very simple to be used and customized.
+__As you can see, NewsHQ has a wide range of charts and visualizations to present data  - from basic ones like line, area to advanced ones like heatmap, gauge and bubble charts.__ We wrote these charts libraries from scratch with Javascript, which means we don't need to pay license fee to third-party charts libraries like Highchart.js. And no matter what kind of chart you see online, we can write a smilar one. Any of our chart simply takes an array of data points to produce dynamic, interactive visualizations. They are very simple to be used and customized.
 
 On the bottom, we have the status information of all the processes running on that host.
 
-Click any process will direct you to the process page, which by default give you uptime/downtime information as well as the general process information. For example, the process's owner group and their notification email address. 
+Click any process will direct you to the process page, which by default give you uptime/downtime information as well as the general process information. For example, the process's owner group and their notification email address. And you can go back to the host page by click the host link here.
 
 ### Services page
 
-News HQ services page lists all the services we are concerning about.  Click any service tile will direct you to that service page, which lists all the operations you can do about that service there.
+NewsHQ services page lists all the services we are concerning about.  Click any service tile will direct you to that service page, which lists all the operations you can do about that service there.
 
-As you can see, NewsHQ has a very clear visual hierarchy layout. We don't need to give you a manual about it and you won't get lost here. And NewsHQ's URL reveals the hierarhy as well,  you can consider the URL as the street sign which can guide you here and make the navigation easier.
-
+As you can see, NewsHQ has a very clear visual hierarchy layout. We don't need to give you a manual about it and you won't get lost here.  The URL also reveals the hierarhy as well,  you can consider the URL as the street sign which can guide you here and make the navigation easier.
 
 #### NSS redirection page
 
 News searching have two database clusters, A and B. If one of the data centers fails then we need a way to redirect traffic to the other data center. Previously, we need to ssh to the NSS boxes and modify the configuration files there and restart NSS instances.
 
-Right now we have this redirection page which can perform traffic switch over within as minimal as 2 clicks, and can be grandular down to news feed basis. It's just that simple. It is as simple as Amazon one-click payment. Maybe we should file a patent for this too?
+Right now we have this redirection page which can talk to NSS instances directly and perform traffic switch over within as minimal as 2 clicks, and you switch the traffic for any news feed. It's just that simple. It is as simple as Amazon one-click payment.
 
-We can also use the filter box to narrow down the news feeds we looking for, it's quite convinient.
+We can also use the filter box to narrow down the news feeds we are looking for, it's quite convinient.
 
-Usually, we can't disable two clusters at the same time for any news feed, that means the requests to that feed will be send to nowhere. And we don't want to do that accidentally. What if we did?
+Usually, we can't disable two clusters at the same time for any news feed, that means the requests to that feed will be send to nowhere. And we don't want to do that accidentally. If you do that, the row will be highlighted as red before you click the submit button. And you probably won't miss that.
 
-Then the feed row will be as "bloody red" as bloody margarita cocktail. And you probably won't miss that.
-
-And we log all the sensitive operations on NewsHQ dashboard, so we can find out "who take what action at what time"?
+And we log all the sensitive operations on NewsHQ, so we can find out "who take what action at what time"?
 
 
 #### Shared Search Server / Alerts look up page
 
-Like I said, previously alerting folks need to run python scripts to get alerts information for a specific client. 
+Previously alerting folks need to run different python scripts to get alerts information for a specific client. 
 
 This page give you all the alerts created by any client. All you need to do is input the client's username and serial number.
 
@@ -121,16 +98,15 @@ It talks to the Elasticsearch instances directly through their API.
 
 Select the cluster from the dropdown list, and you can get a clear view about the cluster.
 
-Indices tab lists all the indexes of the cluster , with the index information there. You can sort by any table headers as well as using the filter textbox. In fact, you can combime them as "filter-then-sort". 
-
+Indices tab lists all the indexes of the cluster , with the index information there. You can sort by any table headers as well as using the filter textbox. In fact, you can combine them as "filter-then-sort". 
 
 You can get the setting information about a specific index on the setting tab.
 
-If you wan to check the mapping information about an index or just a feed, you can go to the mapping tab.
+If you wan to check the mapping information about an index or just a feed of that index, you can go to the mapping tab.
 
 Cluster health tab give the JVM heap usage and CPU usage information of all the boxes in the selected cluster.
 
-Finally, the statistics tab give you information about how many documents each news feed has in the cluster. You can even choose a any datetime range, even just seconds.
+Finally, the statistics tab give you information about how many documents each news feed has in the cluster. You can even choose  any datetime range, even just seconds.
 
 ##### MATT page
 
@@ -142,9 +118,9 @@ No need to go to details here.
 ### Stats page
 
 ##### Alerting Notifier page
-The Monster team announced the next generation charting and dashboarding engine, Grafana! With Grafana, users can make dashboards using existing Monster data, and aggregate, pivot and dissect data in ways not previously possible. 
+The Monster team announced their new dashboarding engine, Grafana! With Grafana, users can make dashboards using existing Monster data. 
 
-Here I am going to show you how easy it is to integrate Grafana into NewsHQ.
+Here I am going to show you how easy it is to integrate Grafana chart into NewsHQ.
 
 ```
 <div class="container-fluid">
@@ -165,7 +141,11 @@ Of course, you can sort the table by any headers as well.
 We also have a simple filter here.
 
 
+# In Summary
 
+NewsHQ is our own dashboard helping us to stay on top of our operations by monitoring, tracking, and reporting real-time/historical metrics about our servers and processes. It also acts as a proxy to manage our processes/databases directly. Whether we're concerned about a major event or keeping an eye on day-to-day activities, we can use NewsHQ Dashboard to focus on what matters most to us.  We can display any metrics here, use any chart we prefer, customize in any way we want. 
+
+Question?
 
 
 
