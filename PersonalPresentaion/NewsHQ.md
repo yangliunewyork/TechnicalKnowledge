@@ -12,11 +12,18 @@ Other problems with those platforms is that they are not easy to use, or lack th
 
 ### Home page
 
-The left panel is "System Overview". It has the process heatmap which lists all the hosts and running processes on them.
+The left side is "System Overview". It has the process heatmap which lists all the hosts and running processes on them.
 Each small square represents a process, "green" means the process is running, "red" means it is down.
 When your mouse hover over any small square, it will show the process name. After you  click it, a new tab will be open and direct you to the corresponding process page. Each process page can be cunstomized by monitoring different metrics(process responding time, latency or throughput), and right now by default, the uptime/downtime is shown up there.
 
-On the right panel, we have "Recent Activity" and "Upcoming Events", 
+On the top of right side, we have “Recent Activity” section, which is a timeline of all our rpd states.
+You can filter the rpd by environment or status as well as using the dropdown filter.
+For each rpd, you can see the "time last updated", status, title. assignee. 
+Click the RPD link you will be redirected the the actual rpd feed.
+
+On the bottome of the right side, we have a section shows you the important upcoming events like unix patching or Elasticsearch patching. 
+
+
 
 
 ### Host Page
