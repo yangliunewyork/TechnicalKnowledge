@@ -125,6 +125,7 @@ No need to go to details here.
 The Monster team announced their new dashboarding engine, Grafana! With Grafana, users can make dashboards using existing Monster data. 
 
 Here I am going to show you how easy it is to integrate Grafana chart into NewsHQ.
+An iframe is an object that allows you to embed external content in your HTML page.
 
 ```
 <div class="container-fluid">
