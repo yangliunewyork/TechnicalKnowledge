@@ -461,6 +461,91 @@ Riak keeps all communication between clients and database nodes local to one dat
 
 ### Detecting Concurrent Writes
 
+Dynamo-style databases allow several clients to concurrently write to the same key, which means that conflicts will occur even if strict quorums are used. The situation is similar to multi-leader replication, although in Dynamo-style databases conflicts can also arise during read repair or hinted handoff.
 
+The problem is that events may arrive in a different order at different nodes, due to variable network delays and partial failures.In order to become eventually consistent, the replicas should converge toward the same value. How do they do that? One might hope that replicated databases would handle this automatically, but unfortunately most implementations are quite poor: if you want to avoid losing data, you—the application developer—need to know a lot about the internals of your database’s conflict handling.
 
+#### Last write wins (discarding concurrent writes)
+
+One approach for achieving eventual convergence is to declare that each replica need only store the most “recent” value and allow “older” values to be overwritten and dis‐ carded. Then, as long as we have some way of unambiguously determining which write is more “recent,” and every write is eventually copied to every replica, the repli‐ cas will eventually converge to the same value.
+
+Even though the writes don’t have a natural ordering, we can force an arbitrary order on them. For example, we can attach a timestamp to each write, pick the biggest timestamp as the most “recent,” and discard any writes with an earlier timestamp. This conflict resolution algorithm, called __last write wins (LWW)__, is the only supported conflict resolution method in Cassandra, and an optional feature in Riak.
+
+LWW achieves the goal of eventual convergence, but at the cost of durability: if there are several concurrent writes to the same key, even if they were all reported as successful to the client (because they were written to w replicas), only one of the writes will survive and the others will be silently discarded.Moreover, LWW may even drop writes that are not concurrent.
+
+There are some situations, such as caching, in which lost writes are perhaps acceptable. __If losing data is not acceptable, LWW is a poor choice for conflict resolution.__
+
+The only safe way of using a database with LWW is to ensure that a key is only writ‐ ten once and thereafter treated as immutable, thus avoiding any concurrent updates to the same key. For example, a recommended way of using Cassandra is to use a UUID as the key, thus giving each write operation a unique key.
+
+#### The “happens-before” relationship and concurrency
+
+Thus, whenever you have two operations A and B, there are three possibilities: either A happened before B, or B happened before A, or A and B are concurrent. What we need is an algorithm to tell us whether two operations are concurrent or not. If one operation happened before another, the later operation should overwrite the earlier operation, but if the operations are concurrent, we have a conflict that needs to be resolved.
+
+#### Capturing the happens-before relationship
+
+Let’s look at an algorithm that determines whether two operations are concurrent, or whether one happened before another. To keep things simple, let’s start with a database that has only one replica. Once we have worked out how to do this on a single replica, we can generalize the approach to a leaderless database with multiple replicas.
+
+Note that the server can determine whether two operations are concurrent by looking at the version numbers—it does not need to interpret the value itself (so the value could be any data structure). The algorithm works as follows:
+
+* The server maintains a version number for every key, increments the version number every time that key is written, and stores the new version number along with the value written.  
+* When a client reads a key, the server returns all values that have not been over‐ written, as well as the latest version number. A client must read a key before writing.  
+* When a client writes a key, it must include the version number from the prior read, and it must merge together all values that it received in the prior read. (The response from a write request can be like a read, returning all current values, which allows us to chain several writes like in the shopping cart example.)  
+* When the server receives a write with a particular version number, it can over‐ write all values with that version number or below (since it knows that they have been merged into the new value), but it must keep all values with a higher ver‐ sion number (because those values are concurrent with the incoming write).  
+
+When a write includes the version number from a prior read, that tells us which previous state the write is based on. If you make a write without including a version number, it is concurrent with all other writes, so it will not overwrite anything—it will just be returned as one of the values on subsequent reads.
+
+#### Merging concurrently written values
+
+This algorithm ensures that no data is silently dropped, but it unfortunately requires that the clients do some extra work: if several operations happen concurrently, clients have to clean up afterward by merging the concurrently written values. Riak calls these concurrent values _siblings_.
+
+Merging sibling values is essentially the same problem as conflict resolution in multi- leader replication, which we discussed previously. A simple approach is to just pick one of the values based on a version number or timestamp (last write wins), but that implies losing data. So, you may need to do something more intelligent in application code.
+
+With the example of a shopping cart, a reasonable approach to merging siblings is to just take the union. In Figure 5-14, the two final siblings are [milk, flour, eggs, bacon] and [eggs, milk, ham]; note that milk and eggs appear in both, even though they were each only written once. The merged value might be something like [milk, flour, eggs, bacon, ham], without duplicates.
+
+However, if you want to allow people to also remove things from their carts, and not just add things, then taking the union of siblings may not yield the right result: if you merge two sibling carts and an item has been removed in only one of them, then the removed item will reappear in the union of the siblings. To prevent this problem, an item cannot simply be deleted from the database when it is removed; instead, the system must leave a marker with an appropriate version number to indicate that the item has been removed when merging siblings. Such a deletion marker is known as a _tombstone_.
+
+As merging siblings in application code is complex and error-prone, there are some efforts to design data structures that can perform this merging automatically. For example, Riak’s datatype support uses a family of data structures called CRDTs  that can automatically merge siblings in sensible ways, including preserving deletions.
+
+#### Version vectors
+
+The example in Figure 5-13 used only a single replica. How does the algorithm change when there are multiple replicas, but no leader?
+
+Figure 5-13 uses a single version number to capture dependencies between operations, but that is not sufficient when there are multiple replicas accepting writes concurrently. Instead, we need to use a version number per replica as well as per key. Each replica increments its own version number when processing a write, and also keeps track of the version numbers it has seen from each of the other replicas. This information indicates which values to overwrite and which values to keep as siblings.
+
+The collection of version numbers from all the replicas is called a __version vector__. A few variants of this idea are in use, but the most interesting is probably the __dotted version vector__, which is used in Riak 2.0. 
+
+Like the version numbers in Figure 5-13, version vectors are sent from the database replicas to clients when values are read, and need to be sent back to the database when a value is subsequently written. (Riak encodes the version vector as a string that it calls causal context.) The version vector allows the database to distinguish between overwrites and concurrent writes.
+
+Also, like in the single-replica example, the application may need to merge siblings. The version vector structure ensures that it is safe to read from one replica and subse‐ quently write back to another replica. Doing so may result in siblings being created, but no data is lost as long as siblings are merged correctly.
+
+> Version vectors and vector clocks : A version vector is sometimes also called a vector clock, even though they are not quite the same. The difference is subtle—please see the references for details. In brief, when comparing the state of replicas, version vectors are the right data structure to use.
+
+# Summary
+
+Replication can serve several purposes:
+
+* High availability : Keeping the system running, even when one machine (or several machines, or an entire datacenter) goes down
+* Disconnected operation : Allowing an application to continue working when there is a network interruption
+* Latency : Placing data geographically close to users, so that users can interact with it faster
+* Scalability : Being able to handle a higher volume of reads than a single machine could handle, by performing reads on replicas
+
+Despite being a simple goal—keeping a copy of the same data on several machines— replication turns out to be a remarkably tricky problem. It requires carefully thinking about concurrency and about all the things that can go wrong, and dealing with the consequences of those faults. At a minimum, we need to deal with unavailable nodes and network interruptions (and that’s not even considering the more insidious kinds of fault, such as silent data corruption due to software bugs).
+
+We discussed three main approaches to replication:
+
+* Single-leader replication : Clients send all writes to a single node (the leader), which sends a stream of data change events to the other replicas (followers). Reads can be performed on any replica, but reads from followers might be stale.
+* Multi-leader replication : Clients send each write to one of several leader nodes, any of which can accept writes. The leaders send streams of data change events to each other and to any follower nodes.
+* Leaderless replication : Clients send each write to several nodes, and read from several nodes in parallel in order to detect and correct nodes with stale data.
+
+Each approach has advantages and disadvantages. Single-leader replication is popular because it is fairly easy to understand and there is no conflict resolution to worry about. Multi-leader and leaderless replication can be more robust in the presence of faulty nodes, network interruptions, and latency spikes—at the cost of being harder to reason about and providing only very weak consistency guarantees.
+
+Replication can be synchronous or asynchronous, which has a profound effect on the system behavior when there is a fault. Although asynchronous replication can be fast when the system is running smoothly, it’s important to figure out what happens when replication lag increases and servers fail. If a leader fails and you promote an asynchronously updated follower to be the new leader, recently committed data may be lost.
+
+We looked at some strange effects that can be caused by replication lag, and we discussed a few consistency models which are helpful for deciding how an application should behave under replication lag:
+
+* Read-after-write consistency : Users should always see data that they submitted themselves.  
+* Monotonic reads : After users have seen the data at one point in time, they shouldn’t later see the data from some earlier point in time.  
+* Consistent prefix reads : Users should see the data in a state that makes causal sense: for example, seeing a question and its reply in the correct order.  
+
+Finally, we discussed the concurrency issues that are inherent in multi-leader and leaderless replication approaches: because they allow multiple writes to happen con‐ currently, conflicts may occur. We examined an algorithm that a database might use to determine whether one operation happened before another, or whether they hap‐ pened concurrently. We also touched on methods for resolving conflicts by merging together concurrent updates.
 
