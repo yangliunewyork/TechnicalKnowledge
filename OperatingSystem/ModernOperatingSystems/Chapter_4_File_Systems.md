@@ -82,6 +82,29 @@ Files exist to store information and allow it to be retrieved later. Different s
 
 ## 4.2 DIRECTORIES
 
+To keep track of files, file systems normally have __directories__ or __folders__, which are themselves files.
+
+The ability for users to create an arbitrary number of subdirectories provides a powerful structuring tool for users to organize their work. For this reason, nearly all modern file systems are organized in this manner.
+
+### 4.2.3 Path Names
+
+When the file system is organized as a directory tree, some way is needed for specifying file names. Two different methods are commonly used. In the first method, each file is given an __absolute path name__ consisting of the path from the root directory to the file.
+
+The other kind of name is the __relative path name__. This is used in conjunction with the concept of the __working directory__ (also called the current directory). A user can designate one directory as the current working directory, in which case all path names not beginning at the root directory are taken relative to the working directory.
+
+__Some programs need to access a specific file without regard to what the working directory is. In that case, they should always use absolute path names.__ For example, a spelling checker might need to read /usr/lib/dictionary to do its work. It should use the full, absolute path name in this case because it does not know what the working directory will be when it is called. The absolute path name will always work, no matter what the working directory is. Of course, if the spelling checker needs a large number of files from /usr/lib, an alternative approach is for it to issue a system call to change its working directory to /usr/lib, and then use just dictionary as the first parameter to open. By explicitly changing the working directory, it knows for sure where it is in the directory tree, so it can then use relative paths.
+
+Each process has its own working directory, so when it changes its working directory and later exits, no other processes are affected and no traces of the change are left behind in the file system. In this way, it is always perfectly safe for a process to change its working directory whenever it finds that to be convenient. On the other hand, if a __library procedure__ changes the working directory and does not change back to where it was when it is finished, the rest of the program may not work since its assumption about where it is may now suddenly be invalid. For this reason, library procedures rarely change the working directory, and when they must, they always change it back again before returning.
+
+![alt](https://crybit.com/wp-content/uploads/2014/02/fig15-07.jpg)
+
+__Linking__ is a technique that allows a file to appear in more than one directory. This system call specifies an existing file and a path name, and creates a link from the existing file to the name specified by the path. In this way, the same file may appear in multiple directories. A link of this kind, which increments the counter in the file’s i-node (to keep track of the number of directory entries containing the file), is sometimes called a __hard link__. A variant on the idea of linking files is the __symbolic link__. Instead, of having two names point to the same internal data structure representing a file, a name can be created that points to a tiny file naming another file. When the first file is used, for example, opened, the file system follows the path and finds the name at the end. Then it starts the lookup process all over using the new name. Symbolic links have the advantage that they can cross disk boundaries and even name files on remote computers. Their implementation is somewhat less efficient than hard links though.
+
+## 4.3 FILE-SYSTEM IMPLEMENTATION
+
+
+
+
 
 
 
