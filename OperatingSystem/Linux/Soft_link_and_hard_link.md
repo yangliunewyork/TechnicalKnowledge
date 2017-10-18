@@ -26,3 +26,67 @@ Most file systems that support hard links use reference counting. An integer val
 
 The maintenance of this value assists users in preventing data loss, for operating system's kernel guarantees that there will be no dangling hard links pointing nowhere (which can and does happen with symbolic links) and that filesystem file and associated inode will be preserved as long as a single hard link (directory reference) points to it or any process keeps the associated file open, relieving the burden of this accounting from programmer or user. This is a simple method for the file system to track the use of a given area of storage, as zero values indicate free space and nonzero values indicate used space.
 
+
+# Soft link vs hard link
+
+![alt](https://i.stack.imgur.com/f7Ijz.jpg)
+
+Create two files:
+
+```
+$ touch blah1   
+$ touch blah2
+```
+
+Enter some data into them:
+
+```
+$ echo "Cat" > blah1
+$ echo "Dog" > blah2
+```
+
+And as expected:
+
+```
+$cat blah1; cat blah2
+Cat
+Dog
+```
+
+Let's create hard and soft links:
+
+```
+$ ln blah1 blah1-hard
+$ ln -s blah2 blah2-soft
+```
+Let's see what just happened:
+
+```
+$ ls -ltr
+
+-rw-r--r-- 2 yaliu dev 4 2017-10-18 11:49 blah1-hard
+-rw-r--r-- 2 yaliu dev 4 2017-10-18 11:49 blah1
+-rw-r--r-- 1 yaliu dev 4 2017-10-18 11:49 blah2
+lrwxrwxrwx 1 yaliu dev 5 2017-10-18 11:50 blah2-soft -> blah2
+```
+
+Changing the name of blah1 does not matter:
+
+```
+$ mv blah1 blah1-new
+$ cat blah1-hard
+Cat
+``
+
+blah1-hard points to the inode, the contents, of the file - that wasn't changed.
+
+```
+$ mv blah2 blah2-new
+$ ls blah2-soft
+blah2-soft
+$ cat blah2-soft  
+cat: blah2-soft: No such file or directory
+```
+
+The contents of the file could not be found because the soft link points to the name, that was changed, and not to the contents.
+Similarly, If blah1 is deleted, blah1-hard still holds the contents; if blah2 is deleted, blah2-soft is just a link to a non-existing file.
