@@ -156,6 +156,18 @@ The steps involved in establishing a socket on the server side are as follows âˆ
 
 ![alt](https://www.tutorialspoint.com/unix_sockets/images/socket_client_server.gif)
 
+### Ports and Services
+
+When a client process wants to a connect a server, the client must have a way of identifying the server that it wants to connect. If the client knows the 32-bit Internet address of the host on which the server resides, it can contact that host. But how does the client identify the particular server process running on that host?
+
+To resolve the problem of identifying a particular server process running on a host, both TCP and UDP have defined a group of well-known ports.
+
+For our purpose, a port will be defined as an integer number between 1024 and 65535. This is because all port numbers smaller than 1024 are considered well-known -- for example, telnet uses port 23, http uses 80, ftp uses 21, and so on.
+
+The port assignments to network services can be found in the file /etc/services. If you are writing your own server then care must be taken to assign a port to your server. You should make sure that this port should not be assigned to any other server.
+
+Normally it is a practice to assign any port number more than 5000. But there are many organizations who have written servers having port numbers more than 5000. For example, Yahoo Messenger runs on 5050, SIP Server runs on 5060, etc.
+
 
 
 
