@@ -59,6 +59,7 @@ Let's create hard and soft links:
 $ ln blah1 blah1-hard
 $ ln -s blah2 blah2-soft
 ```
+
 Let's see what just happened:
 
 ```
@@ -72,6 +73,7 @@ lrwxrwxrwx 1 yaliu dev 5 2017-10-18 11:50 blah2-soft -> blah2
 
 Changing the name of blah1 does not matter:
 
+
 ```
 $ mv blah1 blah1-new
 $ cat blah1-hard
@@ -79,6 +81,7 @@ Cat
 ``
 
 blah1-hard points to the inode, the contents, of the file - that wasn't changed.
+
 
 ```
 $ mv blah2 blah2-new
