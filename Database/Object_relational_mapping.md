@@ -19,7 +19,7 @@ A variety of difficulties arise when considering how to match an object system t
 
 An alternative to implementing ORM is use of the native procedural languages provided with every major database. These can be called from the client using SQL statements. The __Data Access Object (DAO)__ design pattern is used to abstract these statements and offer a lightweight object-oriented interface to the rest of the application.
 
-
+> The object-relational impedance mismatch is a set of conceptual and technical difficulties that are often encountered when a relational database management system (RDBMS) is being served by an application program (or multiple application programs) written in an object-oriented programming language or style, particularly because objects or class definitions must be mapped to database tables defined by a relational schema. The term object-relational impedance mismatch is derived from the electrical engineering term impedance matching.
 
 
 
