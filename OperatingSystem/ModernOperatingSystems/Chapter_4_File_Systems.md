@@ -186,6 +186,8 @@ In the second solution, B links to one of C’s files by having the system creat
 
 Each of these methods has its drawbacks. In the first method, at the moment that B links to the shared file, the i-node records the file’s owner as C. Creating a link does not change the ownership (see Fig. 4-17), but it does increase the link count in the i-node, so the system knows how many directory entries currently point to the file.
 
+![alt](http://slideplayer.com/slide/5243473/16/images/10/Shared+Files+(2)+Figure+4-17.+(a)+Situation+prior+to+linking.+(b)+After+the+link+is+created.+(c)+After+the+original+owner+removes+the+file..jpg)
+
 If C subsequently tries to remove the file, the system is faced with a problem. If it removes the file and clears the i-node, B will have a directory entry pointing to an invalid i-node. If the i-node is later reassigned to another file, B’s link will point to the wrong file. The system can see from the count in the i-node that the file is still in use, but there is no easy way for it to find all the directory entries for the file, in order to erase them. Pointers to the directories cannot be stored in the inode because there can be an unlimited number of directories.
 
 The only thing to do is remove C’s directory entry, but leave the i-node intact, with count set to 1, as shown in Fig. 4-17(c). We now hav e a situation in which B is the only user having a directory entry for a file owned by C. If the system does accounting or has quotas, C will continue to be billed for the file until B decides to remove it, if ever, at which time the count goes to 0 and the file is deleted.
