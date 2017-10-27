@@ -15,9 +15,47 @@ _Translation units define a scope_, roughly file scope, and functioning similarl
 C does not have a notion of modules. However, separate object files (and hence also the translation units used to produce object files) function similarly to separate modules, and if a source file does not include other source files, internal linkage (translation unit scope) may be thought of as "file scope, including all header files".
 
 
+# Other
+
+Before going to linkage types, you have to understand what does a translation unit mean.
+
+A translation unit, is the input of any C compiler, that is your source file after passing the preprocessing step, so that preprocessor macros are expanded, all external libraries and header files are included.
+
+External linkage, means that the variable could be defined somewhere else outside the file you are working on, which means you can define it inside any other translation unit rather your current one (you will have to use the keyword extern when defining it in the other source code).
+
+Internal linkage, means that the variable must be defined in your translation unit scope, which means it should either be defined in any of the included libraries, or in the same file scope.
+
+None linkage, points to the default functions and braces  scopes, such as defining an auto variable inside a function, this will make the variable only accessable within that function's scope.
+
+Note that:
+
+* Any global object is externally linked by default, you can disable that by using the keyword static.
+* Any constant global object is internally linked by default, you can disable that by using the keyword extern.
+
+Example:
+
+```cpp
+int n;
+const int z=1;
+static int a;
+extern const int b;
+ 
+void bla()
+{
+     int y;     
+}
+```
 
 
+In this snippet of code, you can notice that:
 
+```
+variable n: is externally linked by default.
+variable z: is internally linked by default.
+variable a: is internally linked.
+variable b : is externally linked.
+variable y: is a local variable.
+```
 
 
 
