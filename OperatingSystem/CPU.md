@@ -34,3 +34,47 @@ The form, design and implementation of CPUs have changed over the course of thei
 
 Most modern CPUs are microprocessors, meaning they are contained on a single integrated circuit (IC) chip. An IC that contains a CPU may also contain memory, peripheral interfaces, and other components of a computer; such integrated devices are variously called microcontrollers or systems on a chip (SoC). Some computers employ a multi-core processor, which is a single chip containing two or more CPUs called "cores"; in that context, one can speak of such single chips as "sockets". Array processors or vector processors have multiple processors that operate in parallel, with no unit considered central. There also exists the concept of virtual CPUs which are an abstraction of dynamical aggregated computational resources.
 
+# CPU vs core vs processor
+
+![alt](https://i.stack.imgur.com/RaFrm.png)
+
+__A core is usually the basic computation unit of the CPU - it can run a single program context (or multiple ones if it supports hardware threads such as hyperthreading on Intel CPUs), maintaining the correct program state, registers, and correct execution order, and performing the operations through ALUs.__ For optimization purposes, a core can also hold on-core caches with copies of frequently used memory chunks.
+
+A CPU may have one or more cores to perform tasks at a given time. These tasks are usually software processes and threads that the OS schedules. Note that the OS may have many threads to run, but the CPU can only run X such tasks at a given time, where ```X = number cores * number of hardware threads per core```. The rest would have to wait for the OS to schedule them whether by preempting currently running tasks or any other means.
+
+In addition to the one or many cores, the CPU will include some interconnect that connects the cores to the outside world, and usually also a large "last-level" shared cache. There are multiple other key elements required to make a CPU work, but their exact locations may differ according to design. You'll need a memory controller to talk to the memory, I/O controllers (display, PCIe, USB, etc..). In the past these elements were outside the CPU, in the complementary "chipset", but most modern design have integrated them into the CPU.
+
+In addition the CPU may have an integrated GPU, and pretty much everything else the designer wanted to keep close for performance, power and manufacturing considerations. CPU design is mostly trending in to what's called system on chip (SoC).
+
+This is a "classic" design, used by most modern general-purpose devices (client PC, servers, and also tablet and smartphones). You can find more elaborate designs, usually in the academy, where the computations is not done in basic "core-like" units.
+
+```
+alvas@server:~$ lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                96
+On-line CPU(s) list:   0-95
+Thread(s) per core:    2
+Core(s) per socket:    12
+Socket(s):             4
+NUMA node(s):          4
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 62
+Model name:            Intel(R) Xeon(R) CPU E5-4657L v2 @ 2.40GHz
+Stepping:              4
+CPU MHz:               2700.000
+CPU max MHz:           2900.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              4801.91
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              30720K
+NUMA node0 CPU(s):     0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,68,72,76,80,84,88,92
+NUMA node1 CPU(s):     1,5,9,13,17,21,25,29,33,37,41,45,49,53,57,61,65,69,73,77,81,85,89,93
+NUMA node2 CPU(s):     2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62,66,70,74,78,82,86,90,94
+NUMA node3 CPU(s):     3,7,11,15,19,23,27,31,35,39,43,47,51,55,59,63,67,71,75,79,83,87,91,95
+```
