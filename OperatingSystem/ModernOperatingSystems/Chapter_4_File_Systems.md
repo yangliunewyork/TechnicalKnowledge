@@ -224,6 +224,47 @@ The bookkeeping here is nontrivial, since when a file block is written back to a
 
 ### 4.3.6 Journaling File Systems
 
+While log-structured file systems are an interesting idea, they are not widely used, in part due to their being highly incompatible with existing file systems. Nevertheless, one of the ideas inherent in them, robustness in the face of failure, can be easily applied to more conventional file systems. The basic idea here is to keep a log of what the file system is going to do before it does it, so that if the system crashes before it can do its planned work, upon rebooting the system can look in the log to see what was going on at the time of the crash and finish the job. Such file systems, called __journaling file systems__, are actually in use. Microsoft抯 NTFS file system and the Linux ext3 and ReiserFS file systems all use journaling. OS X offers journaling file systems as an option. Below we will give a brief introduction to this topic.
+
+To see the nature of the problem, consider a simple garden-variety operation that happens all the time: removing a file. This operation (in UNIX) requires three steps:
+
+1. Remove the file from its directory.  
+2. Release the i-node to the pool of free i-nodes.  
+3. Return all the disk blocks to the pool of free disk blocks.  
+
+What the journaling file system does is first write a log entry listing the three actions to be completed. The log entry is then written to disk (and for good measure, possibly read back from the disk to verify that it was, in fact, written correctly). Only after the log entry has been written, do the various operations begin. After the operations complete successfully, the log entry is erased. If the system now crashes, upon recovery the file system can check the log to see if any operations were pending. If so, all of them can be rerun (multiple times in the event of repeated crashes) until the file is correctly removed.
+
+To make journaling work, the logged operations must be __idempotent__, which means they can be repeated as often as necessary without harm. Operations such as ‘‘Update the bitmap to mark i-node k or block n as free’’ can be repeated until the cows come home with no danger. Similarly, searching a directory and removing any entry called foobar is also idempotent. On the other hand, adding the newly freed blocks from i-node K to the end of the free list is not idempotent since they may already be there. The more-expensive operation ‘‘Search the list of free blocks and add block n to it if it is not already present’’ is idempotent. Journaling file systems have to arrange their data structures and loggable operations so they all are idempotent. Under these conditions, crash recovery can be made fast and secure. 
+
+For added reliability, a file system can introduce the database concept of an __atomic transaction__. When this concept is used, a group of actions can be bracketed by the begin transaction and end transaction operations. The file system then knows it must complete either all the bracketed operations or none of them, but not any other combinations.
+
+
+### 4.3.7 Virtual File Systems
+
+## 4.4 FILE-SYSTEM MANAGEMENT AND OPTIMIZATION
+
+### 4.4.1 Disk-Space Management
+
+Files are normally stored on disk, so management of disk space is a major concern to file-system designers. Two general strategies are possible for storing an n byte file: n consecutive bytes of disk space are allocated, or the file is split up into a number of (not necessarily) contiguous blocks. The same trade-off is present in memory-management systems between pure segmentation and paging.
+
+As we have seen, storing a file as a contiguous sequence of bytes has the obvious problem that if a file grows, it may have to be moved on the disk. The same problem holds for segments in memory, except that moving a segment in memory is a relatively fast operation compared to moving a file from one disk position to another. For this reason, _nearly all file systems chop files up into fixed-size blocks that need not be adjacent_.
+
+##### Block Size
+
+Once it has been decided to store files in fixed-size blocks, the question arises how big the block should be. Given the way disks are organized, the sector, the track, and the cylinder are obvious candidates for the unit of allocation (although these are all device dependent, which is a minus). In a paging system, the page size is also a major contender. 
+
+_Having a large block size means that every file, even a 1-byte file, ties up an entire cylinder. It also means that small files waste a large amount of disk space. On the other hand, a small block size means that most files will span multiple blocks and thus need multiple seeks and rotational delays to read them, reducing performance. Thus if the allocation unit is too large, we waste space; if it is too small, we waste time._
+
+![alt](http://slideplayer.com/slide/5871994/19/images/41/Disk+Space+Management+Block+Size+(2).jpg)
+
+What the curves show, however, is that performance and space utilization are inherently in conflict. Small blocks are bad for performance but good for diskspace utilization. For these data, no reasonable compromise is available. The size closest to where the two curves cross is 64 KB, but the data rate is only 6.6 MB/sec and the space efficiency is about 7%, neither of which is very good. _Historically, file systems have chosen sizes in the 1-KB to 4-KB range, but with disks now exceeding 1 TB, it might be better to increase the block size to 64 KB and accept the wasted disk space._ Disk space is hardly in short supply any more.
+
+##### Keeping Track of Free Blocks
+
+
+
+
+
 
 
 
