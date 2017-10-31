@@ -231,6 +231,44 @@ With this approach, the kernel is aware of only the kernel-level threads and sch
 
 ### 2.2.7 Scheduler Activations
 
+### 2.2.8 Pop-Up Threads
+
+### 2.2.9 Making Single-Threaded Code Multithreaded
+
+## 2.3 INTERPROCESS COMMUNICATION
+
+Processes frequently need to communicate with other processes. For example, in a shell pipeline, the output of the first process must be passed to the second process, and so on down the line. Thus there is a need for communication between processes, preferably in a well-structured way not using interrupts. In the following sections we will look at some of the issues related to this __InterProcess Communication__, or __IPC__. 
+
+Very briefly, there are three issues here. The first was alluded to above: how one process can pass information to another. The second has to do with making sure two or more processes do not get in each other's way, for example, two processes in an airline reservation system each trying to grab the last seat on a plane for a different customer. The third concerns proper sequencing when dependencies are present: if process A produces data and process B prints them, B has to wait until A has produced some data before starting to print. We will examine all three of these issues starting in the next section. 
+
+It is also important to mention that two of these issues apply equally well to threads. The first one - passing information- is easy for threads since they share a common address space (threads in different address spaces that need to communicate fall under the heading of communicating processes). However, the other two - keeping out of each other's hair and proper sequencing - apply equally well to threads. The same problems exist and the same solutions apply. Below we will discuss the problem in the context of processes, but please keep in mind that the same problems and solutions also apply to threads.
+
+### 2.3.1 Race Conditions
+
+In some operating systems, processes that are working together may share some common storage that each one can read and write. The shared storage may be in main memory (possibly in a kernel data structure) or it may be a shared file; the location of the shared memory does not change the nature of the communication or the problems that arise.
+
+Two or more processes(threads) are reading or writing some shared data and the final result depends on who runs precisely when, are called __race conditions__. Debugging programs containing race conditions is no fun at all. The results of most test runs are fine, but once in a blue moon something weird and unexplained happens. Unfortunately, with increasing parallelism due to increasing numbers of cores, race condition are becoming more common.
+
+### 2.3.2 Critical Regions
+
+How do we avoid race conditions? The key to preventing trouble here and in many other situations involving shared memory, shared files, and shared everything else is to find some way to prohibit more than one process from reading and writing the shared data at the same time. Put in other words, what we need is __mutual exclusion__, that is, some way of making sure that if one process is using a shared variable or file, the other processes will be excluded from doing the same thing. The difficulty above occurred because process B started using one of the shared variables before process A was finished with it. The choice of appropriate primitive operations for achieving mutual exclusion is a major design issue in any operating system, and a subject that we will examine in great detail in the following sections. 
+
+The problem of avoiding race conditions can also be formulated in an abstract way. Part of the time, a process is busy doing internal computations and other things that do not lead to race conditions. However, sometimes a process has to access shared memory or files, or do other critical things that can lead to races. That part of the program where the shared memory is accessed is called the __critical region__ or __critical section__. If we could arrange matters such that no two processes were ever in their critical regions at the same time, we could avoid races. 
+
+Although this requirement avoids race conditions, it is not sufficient for having parallel processes cooperate correctly and efficiently using shared data. We need four conditions to hold to have a good solution:
+
+1. No two processes may be simultaneously inside their critical regions.  
+2. No assumptions may be made about speeds or the number of CPUs.  
+3. No process running outside its critical region may block any process.  
+4. No process should have to wait forever to enter its critical region.  
+
+### 2.3.3 Mutual Exclusion with Busy Waiting
+
+
+
+
+
+
 
 
 
