@@ -300,6 +300,12 @@ In fact, this solution requires that the two processes strictly alternate in ent
 
 ##### Peterson's Solution
 
+##### The TSL Instruction
+
+### 2.3.4 Sleep and Wakeup
+
+Both Peterson’s solution and the solutions using TSL or XCHG are correct, but both have the defect of requiring busy waiting. In essence, what these solutions do is this: when a process wants to enter its critical region, it checks to see if the entry is allowed. If it is not, the process just sits in a tight loop waiting until it is.
+
 
 
 
