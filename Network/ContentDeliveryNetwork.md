@@ -49,3 +49,19 @@ Many websites use third-party libraries like Twitter Bootstrap to improve their 
 
 Services like Bootstrap CDN let users load the CSS and Javascript files for Twitter Bootstrap from a CDN. This reduces server load and speeds up access for users. Additionally, users can avoid re-downloading the files if they’ve already visited a site that uses the same files on Bootstrap CDN.
 
+# The Differences Between Push And Pull CDNs
+
+### Push CDN
+
+![alt](https://i.cdn.net/wp-content/uploads/2016/12/Picture1-1.png)
+
+Content is distributed proactively to edge servers in your chosen CDN locations and the web content is automatically populated in the CDN PoP closest to your end-user’s location. So when the end-user sends a request for a file (html, video, css etc) the CDN has it all ready it a neat package and it’s delivered seamlessly into their browser.
+
+The catch: Push CDN means the user (that’s YOU) has to form these links to files, and format it all to “push” it out to the CDN, and this will need to be maintained. So whenever there’s an update or change in the content you need to PUSH it back out to the CDN.
+
+### Pull CDN
+
+When the end-user sends the request for the web content it “pulls” it down from the nearest edge server (cdn location). All the content is cached in one place and the CDN does the work to pull it down into the end-users browser.
+
+The catch: It needs to be said, that the first person to send a request to a new CDN location will find it hasn’t yet pulled that information and cached it ready for viewing. Making their experience seem no different to a site without CDN enabled. But once that first request has been made, the content is cached, and there it will stay until you tell it otherwise.
+
