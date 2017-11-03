@@ -5,14 +5,15 @@
 #include <queue>
 #include <condition_variable>
 
+// This mutex is used to make sure only one thread can access the thread at anytime
 std::mutex my_mutex;
+
 std::queue<int> my_queue;
 std::condition_variable cv;
 bool finished(false);
 
-
+// The producer thread will produce n items in total.
 void producer(int n) {
-  // Push items into the queue
   for (int i=0;i<n;++i) {
     // Using brackets to create the local scope so that lock_gard get unlocked
     // Otherwise, the waiting thread will only wake up and find that the mutex is still locked
@@ -21,7 +22,8 @@ void producer(int n) {
       my_queue.push(i);
       std::cout << "pushing " << i << std::endl;
     }
-
+    // Unblocks all threads currently waiting for this condition.
+    // If no threads are waiting, the function does nothing.
     cv.notify_all();
   }
 
