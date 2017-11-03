@@ -5,7 +5,7 @@
 #include <queue>
 #include <condition_variable>
 
-// This mutex is used to make sure only one thread can access the thread at anytime
+// This mutex is used to make sure only one thread can access the queue at anytime
 std::mutex my_mutex;
 
 std::queue<int> my_queue;
