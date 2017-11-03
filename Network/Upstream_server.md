@@ -1,0 +1,5 @@
+In computer networking, __upstream server__ refers to a server that provides service to another server. In other words, upstream server is a server that is located higher in the hierarchy of servers. The highest server in the hierarchy is sometimes called the origin server. The inverse term, __downstream server__, is rarely used.
+
+The terms are exclusively used in contexts where requests and responses move in opposite ways. It is not used when discussing hierarchical routing or hierarchical network topologies, as packets can be transferred both ways.
+
+For example, in the domain name system, a name server in a company's local area network often forwards requests to the internet service provider's (ISP's) name servers, instead of resolving the domain name directly — it can be said that the ISP's name servers are upstream to the local server. Conversely, the ISP's servers typically resolve domain names from the domain's authoritative origin servers — the authoritative servers are said to be upstream to the ISP's servers. Note that the hierarchy of resolvers is unrelated to the actual domain name hierarchy.
