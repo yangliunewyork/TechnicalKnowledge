@@ -62,11 +62,11 @@ void consumer(const std:: string thread_name) {
 int main() {
   std::thread p1(producer, 100);
 
-  std::thread c1(consumer, "Thread 1");
-  std::thread c2(consumer, "Thread 2");
-  std::thread c3(consumer, "Thread 3");
-  std::thread c4(consumer, "Thread 4");
-  std::thread c5(consumer, "Thread 5");
+  std::thread c1(consumer, "Consumer 1");
+  std::thread c2(consumer, "Consumer 2");
+  std::thread c3(consumer, "Consumer 3");
+  std::thread c4(consumer, "Consumer 4");
+  std::thread c5(consumer, "Consumer 5");
 
   c1.join();
   c2.join();
