@@ -1,3 +1,6 @@
+// This is an example of one producer and multipel consumer.
+
+
 #include <thread>
 #include <iostream>
 #include <mutex>
@@ -33,10 +36,10 @@ void producer(int n) {
     finished = true;
   }
 
-  cv.notify_all();
+  cv.notify_all(); // Let all consumer knows that producer quit!
 }
 
-void consumer() {
+void consumer(const std:: string thread_name) {
   while (true) {
 
     // lock_guard doesn't work with condition variable,
@@ -47,21 +50,32 @@ void consumer() {
     cv.wait(lock, []{ return !my_queue.empty() || finished; });
 
     while (!my_queue.empty()) {
-      std::cout << "consuming " << my_queue.front() << std::endl;
+      std::cout << thread_name << " is consuming " << my_queue.front() << std::endl;
       my_queue.pop();
     }
 
-    if (finished) break;
+    if (finished) break; // No items in queue and producer quit, let's quit too.
   }
 }
 
-int main() {
-  std::thread t1(producer, 100);
-  std::thread t2(consumer);
 
-  t2.join();
-  t1.join();
+int main() {
+  std::thread p1(producer, 100);
+
+  std::thread c1(consumer, "Thread 1");
+  std::thread c2(consumer, "Thread 2");
+  std::thread c3(consumer, "Thread 3");
+  std::thread c4(consumer, "Thread 4");
+  std::thread c5(consumer, "Thread 5");
+
+  c1.join();
+  c2.join();
+  c3.join();
+  c4.join();
+  c5.join();
+  p1.join();
 
   std::cout << "finished!" << std::endl;
   return 0;
+
 }
