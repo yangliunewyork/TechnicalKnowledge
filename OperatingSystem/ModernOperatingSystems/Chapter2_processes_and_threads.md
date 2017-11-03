@@ -350,6 +350,31 @@ The other use of semaphores is for synchronization. The full and empty semaphore
 
 ### 2.3.6 Mutexes
 
+When the semaphore’s ability to count is not needed, a simplified version of the semaphore, called a mutex, is sometimes used. Mutexes are good only for managing mutual exclusion to some shared resource or piece of code. They are easy and efficient to implement, which makes them especially useful in thread packages that are implemented entirely in user space. 
+
+A __mutex__ is a shared variable that can be in one of two states: unlocked or locked. Consequently, only 1 bit is required to represent it, but in practice an integer often is used, with 0 meaning unlocked and all other values meaning locked. Two procedures are used with mutexes. When a thread (or process) needs access to a critical region, it calls __mutex\_lock__. If the mutex is currently unlocked (meaning that the critical region is available), the call succeeds and the calling thread is free to enter the critical region.On the other hand, if the mutex is already locked, the calling thread is blocked until the thread in the critical region is finished and calls __mutex\_unlock__. If multiple threads are blocked on the mutex, one of them is chosen at random and allowed to acquire the lock.
+
+Because mutexes are so simple, they can easily be implemented in user space provided that a TSL or XCHG instruction is available.The code for mutex lock and mutex unlock for use with a user-level threads package are shown in Fig. 2-29. The solution with XCHG is essentially the same.
+
+![alt](http://slideplayer.com/slide/3511861/12/images/12/Figure+2-29.+Implementation+of+mutex+lock+and+mutex+unlock..jpg)
+
+The code of _mutex\_lock_ is similar to the code of _enter\_region_ of Fig. 2-25 but with a crucial difference. When enter region fails to enter the critical region, it keeps testing the lock repeatedly (busy waiting). Eventually, the clock runs out and some other process is scheduled to run. Sooner or later the process holding the lock gets to run and releases it. With (user) threads, the situation is different because there is no clock that stops threads that have run too long. Consequently, a thread that tries to acquire a lock by busy waiting will loop forever and never acquire the lock because it never allows any other thread to run and release the lock. 
+
+__That is where the difference between _enter\_region_ and _mutex\_lock_ comes in. When the later fails to acquire a lock, it calls thread yield to give up the CPU to another thread. Consequently there is no busy waiting. When the thread runs the next time, it tests the lock again.__
+
+Since _thread\_yield_ is just a call to the thread scheduler in user space, it is very fast. As a consequence, neither _mutex\_lock_ nor _mutex\_unlock_ requires any kernel calls. Using them, user-level threads can synchronize entirely in user space using procedures that require only a handful of instructions.
+
+
+The mutex system that we have described above is a bare-bones set of calls. With all software, there is always a demand for more features, and synchronization primitives are no exception. For example, sometimes a thread package offers a call _mutex\_trylock_ that either acquires the lock or returns a code for failure, but does not block. This call gives the thread the flexibility to decide what to do next if there are alternatives to just waiting.
+
+There is a subtle issue that up until now we hav e glossed over but which is worth at least making explicit. With a user-space threads package there is no problem with multiple threads having access to the same mutex, since all the threads operate in a common address space. However, with most of the earlier solutions, such as Peterson’s algorithm and semaphores, there is an unspoken assumption that multiple processes have access to at least some shared memory, perhaps only one word, but something. If processes have disjoint address spaces, as we have consistently said, how can they share the turn variable in Peterson’s algorithm, or semaphores or a common buffer?
+
+There are two answers. First, some of the shared data structures, such as the semaphores, can be stored in the kernel and accessed only by means of system calls. This approach eliminates the problem. Second, most modern operating systems (including UNIX and Windows) offer a way for processes to share some portion of their address space with other processes. In this way, buffers and other data structures can be shared. In the worst case, that nothing else is possible, a shared file can be used.
+
+If two or more processes share most or all of their address spaces, the distinction between processes and threads becomes somewhat blurred but is nevertheless present. Two processes that share a common address space still have different open files, alarm timers, and other per-process properties, whereas the threads within a single process share them. And it is always true that multiple processes sharing a common address space never hav e the efficiency of user-level threads since the kernel is deeply involved in their management.
+
+
+
 
 
 
