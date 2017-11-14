@@ -221,3 +221,16 @@ In a __distributed DoS (DDoS)__ attack, the attacker controls multiple sources a
 
 ##### The bad guys can sniff packets
 
+Many users today access the Internet via wireless devices, such as WiFi-connected laptops or handheld devices with cellular Internet connections. While ubiquitous Internet access is extremely convenient and enables marvelous new applications for mobile users, it also creates a major security vulnerability—by placing a passive receiver in the vicinity of the wireless transmitter, that receiver can obtain a copy of every packet that is transmitted! These packets can contain all kinds of sensitive information, including passwords, social security numbers, trade secrets, and private personal messages. A passive receiver that records a copy of every packet that flies by is called a __packet sniffer__.
+
+Sniffers can be deployed in wired environments as well. In wired broadcast envi- ronments, as in many Ethernet LANs, a packet sniffer can obtain copies of broadcast packets sent over the LAN. As described in Section 1.2, cable access technologies also broadcast packets and are thus vulnerable to sniffing. Furthermore, a bad guy who gains access to an institution’s access router or access link to the Internet may be able to plant a sniffer that makes a copy of every packet going to/from the organi- zation. Sniffed packets can then be analyzed offline for sensitive information.
+
+Because packet sniffers are passive—that is, they do not inject packets into the channel—they are difficult to detect. So, when we send packets into a wireless chan- nel, we must accept the possibility that some bad guy may be recording copies of our packets. As you may have guessed, some of the best defenses against packet sniffing involve cryptography. 
+
+##### The bad guys can masquerade as someone you trust
+
+It is surprisingly easy (you will have the knowledge to do so shortly as you proceed through this text!) to create a packet with an arbitrary source address, packet con- tent, and destination address and then transmit this hand-crafted packet into the Internet, which will dutifully forward the packet to its destination. Imagine the unsuspecting receiver (say an Internet router) who receives such a packet, takes the (false) source address as being truthful, and then performs some command embed- ded in the packet’s contents (say modifies its forwarding table). The ability to inject packets into the Internet with a false source address is known as __IP spoofing__, and is but one of many ways in which one user can masquerade as another user.
+
+To solve this problem, we will need end-point authentication, that is, a mecha- nism that will allow us to determine with certainty if a message originates from where we think it does.
+
+
