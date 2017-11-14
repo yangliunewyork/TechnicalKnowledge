@@ -1,3 +1,18 @@
+# What is Ethernet ?
+
+![alt](https://www.elprocus.com/wp-content/uploads/2014/02/29.jpg)
+
+Ethernet /ˈiːθərnɛt/ is a family of computer networking technologies commonly used in local area networks (LAN), metropolitan area networks (MAN) and wide area networks (WAN). It was commercially introduced in 1980 and first standardized in 1983 as IEEE 802.3, and has since been refined to support higher bit rates and longer link distances. 
+
+The original 10BASE5 Ethernet uses _coaxial cable_ as a shared medium, while the newer Ethernet variants use _twisted pair_ and _fiber optic_ links in conjunction with _hubs_ or _switches_. Over the course of its history, Ethernet data transfer rates have been increased from the original 2.94 megabits per second (Mbit/s) to the latest 100 gigabits per second (Gbit/s). The Ethernet standards comprise several wiring and signaling variants of the OSI physical layer in use with Ethernet.
+
+Systems communicating over Ethernet divide a stream of data into shorter pieces called frames. Each frame contains source and destination addresses, and error-checking data so that damaged frames can be detected and discarded; most often, higher-layer protocols trigger retransmission of lost frames. As per the OSI model, Ethernet provides services up to and including the data link layer.
+
+
+
+# Internet vs Ethernet
+
+Ethernet is to Internet as roads are to the transportation of goods.   Ethernet is one kind of technology used to carry packets of information that can also travel by other means.    Ethernet uses wires of one kind or another; roads are flat-(ish).   WiFi uses no wires, and goes through the air.  Internet is the space you can reach by any technology that has compatible packets, addresses, and connected routes over any technology.
 
 
 # Wi-Fi vs. Ethernet
