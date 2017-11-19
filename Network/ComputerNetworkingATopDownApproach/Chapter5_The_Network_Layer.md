@@ -204,6 +204,26 @@ At the destination, the payload of the datagram is passed to the transport layer
 
 ### 4.4.2 IPv4 Addressing
 
+Before discussing IP addressing, however, we’ll need to say a few words about how hosts and routers are connected into the network. _A host typically has only a single link into the network; when IP in the host wants to send a datagram, it does so over this link. The boundary between the host and the physical link is called an __interface__._ Now consider a router and its interfaces. Because a router’s job is to receive a datagram on one link and forward the datagram on some other link, a router necessarily has two or more links to which it is connected. The boundary between the router and any one of its links is also called an interface. _A router thus has multiple interfaces, one for each of its links._ Because every host and router is capable of sending and receiving IP datagrams, IP requires each host and router interface to have its own IP address. Thus, an IP address is technically associated with an interface, rather than with the host or router containing that interface.
+
+Each IP address is 32 bits long (equivalently, 4 bytes), and there are thus a total of 2^32 possible IP addresses. By approximating 2^10 by 10^3, it is easy to see that there are about 4 billion possible IP addresses. These addresses are typically written in so-called __dotted-decimal notation__, in which each byte of the address is written in its decimal form and is separated by a period (dot) from other bytes in the address. For example, consider the IP address 193.32.216.9. The 193 is the decimal equiv- alent of the first 8 bits of the address; the 32 is the decimal equivalent of the second 8 bits of the address, and so on. Thus, the address 193.32.216.9 in binary notation is ```11000001 00100000 11011000 00001001```.
+
+_Each interface on every host and router in the global Internet must have an IP address that is globally unique_ (except for interfaces behind NATs). These addresses cannot be chosen in a willy-nilly manner, however. _A portion of an interface’s IP address will be determined by the subnet to which it is connected._
+
+Figure 4.15 provides an example of IP addressing and interfaces. In this figure, one router (with three interfaces) is used to interconnect seven hosts. Take a close look at the IP addresses assigned to the host and router interfaces, as there are several things to notice. The three hosts in the upper-left portion of Figure 4.15, and the router inter- face to which they are connected, all have an IP address of the form 223.1.1.xxx. That is, they all have the same leftmost 24 bits in their IP address. The four interfaces are also interconnected to each other by a network that contains no routers. This network could be interconnected by an Ethernet LAN, in which case the interfaces would be interconnected by an Ethernet switch, or by a wireless access point. 
+
+![alt](http://netlab.ulusofona.pt/rc/book/4-network/4_04/04-15.jpg)
+
+In IP terms, this network interconnecting three host interfaces and one router interface forms a __subnet__ [RFC 950]. (A subnet is also called an IP network or simply a network in the Internet literature.) IP addressing assigns an address to this subnet: 223.1.1.0/24, where the /24 notation, sometimes known as a __subnet mask__, indicates that the leftmost 24 bits of the 32-bit quantity define the subnet address. The subnet 223.1.1.0/24 thus consists of the three host interfaces (223.1.1.1, 223.1.1.2, and 223.1.1.3) and one router interface (223.1.1.4). Any additional hosts attached to the 223.1.1.0/24 subnet would be required to have an address of the form 223.1.1.xxx. There are two additional subnets shown in Figure 4.15: the 223.1.2.0/24 network and the 223.1.3.0/24 subnet. Figure 4.16 illustrates the three IP subnets present in Figure 4.15.
+
+![alt](http://d2vlcm61l7u1fs.cloudfront.net/media%2F314%2F314727ed-9931-427d-929f-0b7a3e591ea3%2FphpttZbTx.png)
+
+For a general interconnected system of routers and hosts, we can use the following recipe to define the subnets in the system:
+
+> To determine the subnets, detach each interface from its host or router, creating islands of isolated networks, with interfaces terminating the end points of the isolated networks. Each of these isolated networks is called a subnet.
+
+### 4.4.3 Internet Control Message Protocol (ICMP)
+
 
 
 
