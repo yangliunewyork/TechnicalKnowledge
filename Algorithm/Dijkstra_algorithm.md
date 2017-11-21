@@ -2,6 +2,8 @@ __Dijkstra's algorithm__ is an algorithm for finding the __shortest paths__ betw
 
 The algorithm exists in many variants; Dijkstra's original variant found the shortest path between two nodes, but a more common variant fixes a single node as the "source" node and finds shortest paths from the source to all other nodes in the graph, producing a __shortest-path tree__.
 
+The implementation based on a min-priority queue implemented by a Fibonacci heap and running in  __O( (|E|+|V|) * log |V|)__  (where  |E| is the number of edges) is due to Fredman & Tarjan 1984. This is asymptotically the fastest known single-source shortest-path algorithm for arbitrary directed graphs with unbounded non-negative weights.
+
 # Algorithm
 
 Let the node at which we are starting be called the initial node. Let the distance of node Y be the distance from the initial node to Y. Dijkstra's algorithm will assign some initial distance values and will try to improve them step by step.
