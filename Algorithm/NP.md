@@ -1,0 +1,2 @@
+In computational complexity theory, NP (for __nondeterministic polynomial__ time) is a complexity class used to describe certain types of decision problems. Informally, NP is the set of all decision problems for which the instances where the answer is "yes" have efficiently verifiable proofs. More precisely, these proofs have to be verifiable by deterministic computations that can be performed in polynomial time.
+
