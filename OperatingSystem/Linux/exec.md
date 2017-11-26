@@ -1,0 +1,3 @@
+In computing, __exec__ is a functionality of an operating system that _runs an executable file in the context of an already existing process, replacing the previous executable_. This act is also referred to as an __overlay__. It is especially important in Unix-like systems, although other operating systems implement it as well. _Since a new process is not created, the original process identifier (PID) does not change, but the machine code, data, heap, and stack of the process are replaced by those of the new program._
+
+The exec call is supported in many programming languages, including compilable languages and some scripting languages. In OS command interpreters, the exec built-in command replaces the shell process with the specified program.
