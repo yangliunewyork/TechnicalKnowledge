@@ -19,11 +19,13 @@ You might be thinking that doing a full table scan sounds inefficient for someth
 
 ## What is an index?
 
-So, what is an index? Well, an index is a data structure (most commonly a B- tree) that stores the values for a specific column in a table. An index is created on a column of a table. So, the key points to remember are that an index consists of column values from one table, and that those values are stored in a data structure. The index is a data structure – remember that.
+So, what is an index? Well, __an index is a data structure (most commonly a B- tree) that stores the values for a specific column in a table__. An index is created on a column of a table. So, the key points to remember are that an index consists of column values from one table, and that those values are stored in a data structure. The index is a data structure – remember that.
 
 ## What kind of data structure is an index?
 
-B- trees are the most commonly used data structures for indexes. The reason B- trees are the most popular data structure for indexes is due to the fact that they are time efficient – because look-ups, deletions, and insertions can all be done in logarithmic time. And, another major reason B- trees are more commonly used is because the data that is stored inside the B- tree can be sorted. The RDBMS typically determines which data structure is actually used for an index. But, in some scenarios with certain RDBMS’s, you can actually specify which data structure you want your database to use when you create the index itself.
+__B- trees are the most commonly used data structures for indexes. The reason B- trees are the most popular data structure for indexes is due to the fact that they are time efficient – because look-ups, deletions, and insertions can all be done in logarithmic time. And, another major reason B- trees are more commonly used is because the data that is stored inside the B- tree can be sorted.__ The RDBMS typically determines which data structure is actually used for an index. But, in some scenarios with certain RDBMS’s, you can actually specify which data structure you want your database to use when you create the index itself.
+
+![alt](https://dbainsider.files.wordpress.com/2014/12/index1.jpg)
 
 ### How does a hash table index work?
 
@@ -31,7 +33,7 @@ Hash tables are another data structure that you may see being used as indexes �
 
 ### The disadvantages of a hash index
 
-Hash tables are not sorted data structures, and there are many types of queries which hash indexes can not even help with. For instance, suppose you want to find out all of the employees who are less than 40 years old. How could you do that with a hash table index? Well, it’s not possible because a hash table is only good for looking up key value pairs – which means queries that check for equality (like “WHERE name = ‘Jesus'”). What is implied in the key value mapping in a hash table is the concept that the keys of a hash table are not sorted or stored in any particular order. This is why hash indexes are usually not the default type of data structure used by database indexes – because they aren’t as flexible as B- trees when used as the index data structure.
+_Hash tables are not sorted data structures, and there are many types of queries which hash indexes can not even help with. For instance, suppose you want to find out all of the employees who are less than 40 years old. How could you do that with a hash table index? Well, it’s not possible because a hash table is only good for looking up key value pairs – which means queries that check for equality (like “WHERE name = ‘Jesus'”)._ What is implied in the key value mapping in a hash table is the concept that the keys of a hash table are not sorted or stored in any particular order. This is why hash indexes are usually not the default type of data structure used by database indexes – because they aren’t as flexible as B- trees when used as the index data structure.
 
 ### How does an index improve performance?
 
@@ -41,7 +43,7 @@ Let’s say that we create a B- tree index on the Employee_Name column This mean
 
 ### What exactly is inside a database index?
 
-So, now you know that a database index is created on a column in a table, and that the index stores the values in that specific column. But, it is important to understand that a database index does not store the values in the other columns of the same table. For example, if we create an index on the Employee_Name column, this means that the Employee_Age and Employee_Address column values are not also stored in the index. If we did just store all the other columns in the index, then it would be just like creating another copy of the entire table – which would take up way too much space and would be very inefficient.
+So, now you know that a __database index is created on a column in a table, and that the index stores the values in that specific column__. But, it is important to understand that a database index does not store the values in the other columns of the same table. For example, if we create an index on the Employee_Name column, this means that the Employee_Age and Employee_Address column values are not also stored in the index. If we did just store all the other columns in the index, then it would be just like creating another copy of the entire table – which would take up way too much space and would be very inefficient.
 
 ### An index also stores a pointer to the table row
 
@@ -73,7 +75,7 @@ A very good analogy is to think of a database index as an index in a book. If yo
 
 ### What is the cost of having a database index?
 
-So, what are some of the disadvantages of having a database index? Well, for one thing it takes up space – and the larger your table, the larger your index. Another performance hit with indexes is the fact that whenever you add, delete, or update rows in the corresponding table, the same operations will have to be done to your index. Remember that an index needs to contain the same up to the minute data as whatever is in the table column(s) that the index covers.
+__So, what are some of the disadvantages of having a database index? Well, for one thing it takes up space – and the larger your table, the larger your index. Another performance hit with indexes is the fact that whenever you add, delete, or update rows in the corresponding table, the same operations will have to be done to your index. Remember that an index needs to contain the same up to the minute data as whatever is in the table column(s) that the index covers.__
 
 As a general rule, an index should only be created on a table if the data in the indexed column will be queried frequently.
 
