@@ -94,3 +94,5 @@ A more general problem would be to find all the shortest paths between source an
 
 # Running time
 
+With a self-balancing binary search tree or binary heap, the algorithm requires O( (|E|+|V|) * log |V|).
+
