@@ -125,7 +125,7 @@ struct Edge {
 };
 
 VertexPtr GetUnvisitedMinDistanceVertex(const std::unordered_set<VertexPtr> &unvisited,
-										const std::unordered_map<VertexPtr, long> &distance_from_source) {
+					const std::unordered_map<VertexPtr, long> &distance_from_source) {
 	VertexPtr reval = nullptr;
 	for (const VertexPtr &vertex : unvisited) {
 		if (!reval) {
