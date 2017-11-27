@@ -96,3 +96,154 @@ A more general problem would be to find all the shortest paths between source an
 
 With a self-balancing binary search tree or binary heap, the algorithm requires O( (|E|+|V|) * log |V|).
 
+### Sample code
+
+Notice that below code does not use priority queue， that's because C++ doesn't have good built-in priority queue to support update priority.
+
+Another thing I want to point out is that below solution, Edge is unidirectional. Of source, bidirectional works basically the same.
+
+
+```cpp
+struct Vertex;
+typedef std::shared_ptr<Vertex> VertexPtr;
+struct Edge;
+typedef std::shared_ptr<Edge> EdgePtr;
+
+struct Vertex
+ {
+	 Vertex(std::string name) : m_vertex_name(name){}
+	 std::string m_vertex_name;
+	 std::unordered_set<EdgePtr> m_to_edges;
+};
+
+// Here is an unidirectional edge.
+struct Edge {
+	Edge(VertexPtr from, VertexPtr to, int weight) : m_from_vertex(from), m_to_vertex(to), m_weight(weight) {}
+	VertexPtr m_from_vertex;
+	VertexPtr m_to_vertex;
+	int m_weight;
+};
+
+VertexPtr GetUnvisitedMinDistanceVertex(const std::unordered_set<VertexPtr> &unvisited,
+										const std::unordered_map<VertexPtr, long> &distance_from_source) {
+	VertexPtr reval = nullptr;
+	for (const VertexPtr &vertex : unvisited) {
+		if (!reval) {
+			reval = vertex;
+		} else {
+			if (distance_from_source.at(vertex) < distance_from_source.at(reval)) {
+				reval = vertex;
+			}
+		}
+	}
+	return reval;
+}
+
+
+// Return values:
+// distance_from_source : Store the distance from source to here.
+// prev : Store previous vertex in shortest path
+void Dijkstra(const std::vector<VertexPtr> &graph, 
+			  VertexPtr source,
+			  std::unordered_map<VertexPtr, long> &distance_from_source,
+			  std::unordered_map<VertexPtr, VertexPtr> &prev) {
+
+	std::unordered_set<VertexPtr> unvisited;
+
+	for (const VertexPtr &vertex : graph) {
+		if (vertex != source) {
+			distance_from_source[vertex] = LONG_MAX;
+		}
+		prev[vertex] = nullptr;
+		unvisited.insert(vertex);
+	}
+
+	distance_from_source[source] = 0;
+
+	while (!unvisited.empty()) {
+		VertexPtr curr = GetUnvisitedMinDistanceVertex(unvisited, distance_from_source);
+		unvisited.erase(curr);
+		for (const EdgePtr& edge : curr->m_to_edges) {
+			int alternative_distance = distance_from_source[curr] + edge->m_weight;
+			if (alternative_distance < distance_from_source[edge->m_to_vertex]) {
+				distance_from_source[edge->m_to_vertex] = alternative_distance;
+				prev[edge->m_to_vertex] = curr;
+			}
+		}
+	}
+}
+
+std::vector<VertexPtr> GetShortestPathTo(const std::unordered_map<VertexPtr, VertexPtr> &prev,
+						const VertexPtr &source,
+					   const VertexPtr &destination) {
+	std::vector<VertexPtr> path;
+	VertexPtr curr = destination;
+	while (curr) {
+		path.emplace_back(curr);
+		curr = prev.at(curr);
+	}
+	std::reverse(path.begin(), path.end());
+	return path;
+}
+
+void PrintPath(const std::vector<VertexPtr>  &vertices) {
+	std::ostringstream oss;
+	for (const VertexPtr& vertex : vertices) {
+		oss << vertex->m_vertex_name;
+		oss << "->";
+	}
+	std::cout << oss.str() << std::endl;
+}
+
+void UnitTest() {
+	VertexPtr one = std::make_shared<Vertex>("1");
+	VertexPtr two = std::make_shared<Vertex>("2");
+	VertexPtr three = std::make_shared<Vertex>("3");
+	VertexPtr four = std::make_shared<Vertex>("4");
+	VertexPtr five = std::make_shared<Vertex>("5");
+	VertexPtr six = std::make_shared<Vertex>("6");
+
+	one->m_to_edges.insert(std::make_shared<Edge>(one, two, 7));
+	one->m_to_edges.insert(std::make_shared<Edge>(one, three, 9));
+	one->m_to_edges.insert(std::make_shared<Edge>(one, six, 14));
+
+	two->m_to_edges.insert(std::make_shared<Edge>(two, three, 10));
+	two->m_to_edges.insert(std::make_shared<Edge>(two, four, 15));
+
+	three->m_to_edges.insert(std::make_shared<Edge>(three, four, 11));
+	three->m_to_edges.insert(std::make_shared<Edge>(three, six, 2));
+
+	four->m_to_edges.insert(std::make_shared<Edge>(four, five, 6));
+
+	six->m_to_edges.insert(std::make_shared<Edge>(six, five, 9));
+
+	std::vector<VertexPtr> graph;
+	graph.push_back(one);
+	graph.push_back(two);
+	graph.push_back(three);
+	graph.push_back(four);
+	graph.push_back(five);
+	graph.push_back(six);
+
+	std::unordered_map<VertexPtr, long> distance_from_source;
+	std::unordered_map<VertexPtr, VertexPtr> prev;
+	Dijkstra(graph, one, distance_from_source, prev);
+	
+	assert(distance_from_source[one] == 0);
+	assert(distance_from_source[two] == 7);
+	assert(distance_from_source[three] == 9);
+	assert(distance_from_source[four] == 20);
+	assert(distance_from_source[five] == 20);
+	assert(distance_from_source[six] == 11);
+
+	std::vector<VertexPtr> shortest_path = GetShortestPathTo(prev, one, five);
+	PrintPath(shortest_path);
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	UnitTest();
+	return 0;
+}
+
+```
