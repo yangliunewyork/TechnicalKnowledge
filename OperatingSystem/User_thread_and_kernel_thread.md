@@ -76,6 +76,34 @@ __POSIX threads are kernel threads.__ Kernel threads are "normal" threads; you'd
 
 Java threads are also kernel threads, usually. On Unix-like systems, they may use POSIX threads; on Windows, they use Windows threads. It is conceivable that there is a JVM for a system without threads, and it implements threads itself (as user threads).
 
+
+# Q & A
+
+##### What is the difference between user-level threads and kernel-level threads?
+
+One of the roles of a multitasking operating system kernel is scheduling: determining which thread of execution to execute when. So such a kernel has some notion of thread or process. A thread is a sequential piece of code that is executing, and has its own stack and sometimes other data. In an operating system context, people usually use process to mean a thread that has its own memory space, and thread to mean a thread that shares its memory space with other threads. A process can have one or more threads.
+
+Some operating systems, for example older unix systems, only provide processes: every thread that the kernel manages has its own memory space. Other operating systems, for example most modern unix systems, allow processes to contain multiple threads of execution: they provide a kernel-level notion of threads.
+
+It's also possible for a process to manage its own threading. In cooperative multithreading, the code of each thread contains instructions to switch to another thread. In preemptive multithreading, the process requests periodic asynchronous notifications from the kernel, and reacts to these notifications by switching to a different thread. This way, multithreading is implemented with no kernel cooperation, at the user level, in a library.
+
+A system can offer both kernel-level and user-level threads; this is known as __hybrid threading__.
+
+User- and kernel-level threads each have their benefits and downsides. Switching between user-level threads is often faster, because it doesn't require resetting memory protections to switch to the in-kernel scheduler and again to switch back to the process. This mostly matters for massively concurrent systems that use a large number of very short-lived threads, such as some high-level languages (Erlang in particular) and their green threads. User-level threads require less kernel support, which can make the kernel simpler. Kernel-level threads allow a thread to run while another thread in the same process is blocked in a system call; processes with user-level threads must take care not to make blocking system calls, as these block all the threads of the process. Kernel-level threads can run simultaneously on multiprocessor machines, which purely user-level threads cannot achieve.
+
+##### What is the purpose of M:N (Hybrid) threading?
+
+I think hybrid threading is very similar to a thread pool.
+
+In thread pool, you are using NN kernel threads to execute MM “tasks”, where MM can be much higher than NN. The advantage over using one thread for each task (kernel only threading) is that you consume less resources, like memory (both virtual and physical) and kernel objects (at least in the specific case of Windows threads, but I imagine other OSes are similar in this regard). You also get less context switches, which increases performance (in the ideal case, where you have as many running threads as you have processors, you may have almost no context switches).
+
+The advantage over user only threading is that you can take advantage of multiple CPUs or multiple CPU cores. And if one task blocks, you can create another kernel thread to use the available CPU more efficiently.
+
+So, you get the advantages of both approaches, at the expense of some additional user-mode scheduling.
+
+A disadvantage over kernel only scheduling is possibly bigger latency: if all the threads in the pool are busy and you add new short task, you may wait a long time before it starts executing.
+
+
 # Summary
 
 A process is an instance of a running program. Process layout in memory consists of four main sections [Code, Data, Heap, Stack, PC, PCB, CPU Registers]. Like a process, a thread has its own private stack, program counter, CPU registers. A thread shares code, data and heap with parent process. In a multitasking environment, alternating CPU between processes or threads is called a context switch. It is simply saving and restoring execution states. State in its simplest forms is what instruction to execute next and what arguments (i.e. program counter and CPU registers). Managing context switches can be done in user level code through a user space library. In this case, threads are called user level threads. If threads are managed by the OS kernel, then they are called kernel level threads. Multithreading implementation follows certain threading models. User level threads are an example on a many to one threading model. Kernel level threads are an example on one to one threading model. Many to many threading models attempt to get the advantages of both without the downside but the implantation is of a challenge. That is all for now. Any thoughts or corrections please use the comment section below.
