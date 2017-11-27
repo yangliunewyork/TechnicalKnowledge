@@ -48,3 +48,49 @@ function Dijkstra(Graph, source):
 22
 23      return dist[], prev[]
 ```
+
+If we are only interested in a shortest path between vertices source and target, we can terminate the search after line 15 if u = target. Now we can read the shortest path from source to target by reverse iteration:
+
+```
+1  S ← empty sequence
+2  u ← target
+3  while prev[u] is defined:                  // Construct the shortest path with a stack S
+4      insert u at the beginning of S         // Push the vertex onto the stack
+5      u ← prev[u]                            // Traverse from target to source
+6  insert u at the beginning of S             // Push the source onto the stack
+```
+
+Now sequence S is the list of vertices constituting one of the shortest paths from source to target, or the empty sequence if no path exists.
+
+A more general problem would be to find all the shortest paths between source and target (there might be several different ones of the same length). Then instead of storing only a single node in each entry of prev[] we would store all nodes satisfying the relaxation condition. For example, if both r and source connect to target and both of them lie on different shortest paths through target (because the edge cost is the same in both cases), then we would add both r and source to prev[target]. When the algorithm completes, prev[] data structure will actually describe a graph that is a subset of the original graph with some edges removed. Its key property will be that if the algorithm was run with some starting node, then every path from that node to any other node in the new graph will be the shortest path between those nodes in the original graph, and all paths of that length from the original graph will be present in the new graph. Then to actually find all these shortest paths between two given nodes we would use a path finding algorithm on the new graph, such as depth-first search.
+
+#### Using a priority queue
+
+```
+1  function Dijkstra(Graph, source):
+2      dist[source] ← 0                                    // Initialization
+3
+4      create vertex set Q
+5
+6      for each vertex v in Graph:           
+7          if v ≠ source
+8              dist[v] ← INFINITY                          // Unknown distance from source to v
+9              prev[v] ← UNDEFINED                         // Predecessor of v
+10
+11         Q.add_with_priority(v, dist[v])
+12
+13
+14     while Q is not empty:                              // The main loop
+15         u ← Q.extract_min()                            // Remove and return best vertex
+16         for each neighbor v of u:                      // only v that is still in Q
+17             alt ← dist[u] + length(u, v) 
+18             if alt < dist[v]
+19                 dist[v] ← alt
+20                 prev[v] ← u
+21                 Q.decrease_priority(v, alt)
+22
+23     return dist[], prev[]
+```
+
+# Running time
+
