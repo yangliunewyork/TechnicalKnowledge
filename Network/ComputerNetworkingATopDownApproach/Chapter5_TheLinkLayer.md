@@ -8,5 +8,29 @@ Let’s begin with some important terminology. We’ll find it convenient in thi
 
 ### 5.1.1 The Services Provided by the Link Layer
 
+Although the basic service of any link layer is to move a datagram from one node to an adjacent node over a single communication link, the details of the provided service can vary from one link-layer protocol to the next. Possible services that can be offered by a link-layer protocol include:
+
+* Framing. Almost all link-layer protocols encapsulate each network-layer data- gram within a link-layer frame before transmission over the link. A frame con- sists of a data field, in which the network-layer datagram is inserted, and a number of header fields. The structure of the frame is specified by the link-layer protocol.   
+
+* Link access. A medium access control (MAC) protocol specifies the rules by which a frame is transmitted onto the link. For point-to-point links that have a single sender at one end of the link and a single receiver at the other end of the link, the MAC protocol is simple (or nonexistent)—the sender can send a frame whenever the link is idle. The more interesting case is when multiple nodes share a single broadcast link—the so-called multiple access problem. Here, the MAC protocol serves to coordinate the frame transmissions of the many nodes.  
+
+* Reliable delivery. When a link-layer protocol provides reliable delivery service, it guarantees to move each network-layer datagram across the link without error. Recall that certain transport-layer protocols (such as TCP) also provide a reliable delivery service. Similar to a transport-layer reliable delivery service, a link-layer reliable delivery service can be achieved with acknowledgments and retransmissions. A link-layer reliable delivery service is often used for links that are prone to high error rates, such as a wireless link, with the goal of correcting an error locally—on the link where the error occurs—rather than forcing an end-to- end retransmission of the data by a transport- or application-layer protocol. How- ever, link-layer reliable delivery can be considered an unnecessary overhead for low bit-error links, including fiber, coax, and many twisted-pair copper links. For this reason, many wired link-layer protocols do not provide a reliable delivery service.  
+
+* Error detection and correction. The link-layer hardware in a receiving node can incorrectly decide that a bit in a frame is zero when it was transmitted as a one, and vice versa. Such bit errors are introduced by signal attenuation and electro- magnetic noise. Because there is no need to forward a datagram that has an error, many link-layer protocols provide a mechanism to detect such bit errors. This is done by having the transmitting node include error-detection bits in the frame, and having the receiving node perform an error check. Recall from Chapters 3 and 4 that the Internet’s transport layer and network layer also provide a limited form of error detection—the Internet checksum. Error detection in the link layer is usually more sophisticated and is implemented in hardware. Error correction is similar to error detection, except that a receiver not only detects when bit errors have occurred in the frame but also determines exactly where in the frame the errors have occurred (and then corrects these errors).  
+
+### 5.1.2 Where Is the Link Layer Implemented?
+
+![alt](http://www.networkinginfoblog.com/contentsimages/Network%20adapter.JPG) 
+
+Figure 5.2 shows a typical host architecture. For the most part, the link layer is implemented in a __network adapter__, also sometimes known as a __network interface card (NIC)__. At the heart of the network adapter is the link-layer controller, usually a single, special-purpose chip that implements many of the link-layer services (framing, link access, error detection, and so on). Thus, much of a link-layer con- troller’s functionality is implemented in hardware.
+
+On the sending side, the controller takes a datagram that has been created and stored in host memory by the higher layers of the protocol stack, encapsulates the datagram in a link-layer frame (filling in the frame’s various fields), and then transmits the frame into the communication link, following the link-access proto- col. On the receiving side, a controller receives the entire frame, and extracts the network-layer datagram. If the link layer performs error detection, then it is the sending controller that sets the error-detection bits in the frame header and it is the receiving controller that performs error detection.
+
+Figure 5.2 shows a network adapter attaching to a host’s bus (e.g., a PCI or PCI-X bus), where it looks much like any other I/O device to the other host com- ponents. Figure 5.2 also shows that _while most of the link layer is implemented in hardware, part of the link layer is implemented in software that runs on the host’s CPU_. The software components of the link layer implement higher-level link-layer functionality such as assembling link-layer addressing information and acti- vating the controller hardware. On the receiving side, link-layer software responds to controller interrupts (e.g., due to the receipt of one or more frames), handling error conditions and passing a datagram up to the network layer. Thus, __the link layer is a combination of hardware and software—the place in the protocol stack where software meets hardware__.
+
+## 5.2 Error-Detection and -Correction Techniques
+
+In the previous section, we noted that bit-level error detection and correction— detecting and correcting the corruption of bits in a link-layer frame sent from one node to another physically connected neighboring node—are two services often provided by the link layer. We saw in Chapter 3 that error-detection and -correction services are also often offered at the transport layer as well. 
+
 
 
