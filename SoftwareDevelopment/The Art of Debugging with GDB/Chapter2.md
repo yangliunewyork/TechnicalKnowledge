@@ -412,5 +412,79 @@ End with a line saying just "end".
 
 ## 2.12 Watchpoints
 
+A __watchpoint__ is a special kind of breakpoint which, like a normal breakpoint, is an instruction that tells GDB to pause execution of your program. The difference is that watchpoints don’t “live” at a line of source code. Instead, a watchpoint is an instruction that tells GDB to pause execution whenever an expression changes value. That expression can be quite simple, like the name of a variable:
+
+```
+(gdb) watch i
+```
+
+which will make GDB pause whenever i changes value. The expression can also be quite complex:
+
+```
+(gdb) watch (i | j > 12) && i > 24 && strlen(name) > 6
+```
+
+Although watchpoints and breakpoints are managed the same way, there is an important difference between them. A breakpoint is associated with a location within your source code. Since your code doesn’t change, there is no risk of a line of code “going out of scope.” Because C has rigid scoping rules, you can only watch a variable that exists and is in scope. Once the vari- able no longer exists in any frame of the call stack (when the function con- taining a local variable returns), GDB automatically deletes the watchpoint.
+
+Having GDB break any time a variable changes can be something of a nuisance in tightly wrapped loops or repetitive code. Although watch- points sound great, well-placed breakpoints may be far more useful. How- ever, watchpoints are invaluable if one of your variables changes, especially a global variable, and you have no idea where or how it changed. If you’re dealing with threaded code, watchpoints have limited usefulness; GDB is only capable of watching a variable within a single thread.
+
+### 2.12.1 Setting Watchpoints
+
+When the variable _var_ exists and is within scope, you can set a watchpoint on it by using the command:
+
+```
+watch var
+```
+
+which will cause GDB to break whenever the value for the variable var changes. This is how many people think of watchpoints, because it’s simple and con- venient; however, there’s a bit more to the story. What GDB really does is break if the _memory location_ for var changes value. Normally, it doesn’t matter whether you think of a watchpoint as watching the variable or the address of the variable, but it may be important in special cases, like when dealing with pointers to pointers.
+
+Let’s look at one example scenario in which watchpoints would be very useful. Suppose you have two int variables, x and y, and somewhere in the code you perform p = &y when you meant to do p = &x. This could result in y mysteriously changing value somewhere in the code. The actual location of the resulting bug may be well hidden, so a breakpoint may not be very useful. However, by setting a watchpoint, you could instantly know when and where y changes value.
+
+There’s even more to the story. You aren’t limited to watching a variable. In fact, you can watch an __expression__ involving variables. Whenever the expression changes value, GDB will break. As an example, consider the following code:
+
+```c
+#include <stdio.h>
+int i = 0;
+
+ int main(void)
+ {
+   i = 3;
+   printf("i is %d.\n", i);
+
+   i = 5;
+   printf("i is %d.\n", i);
+
+   return 0;
+ }
+```
+
+Now that i is in scope, set the watchpoint and tell GDB to continue exe- cuting the program. We fully expect that i > 4 becomes true at line 9.
+
+```c
+(gdb) watch i > 4
+ Hardware watchpoint 2: i > 4
+(gdb) continue
+ Continuing.
+ Hardware watchpoint 2: i > 4
+
+ Old value = 0
+ New value = 1
+ main () at test2.c:10
+```
+
+Sure enough, GDB is paused between lines 9 and 10, where the expres- sion i > 4 changed value from 0 (not true) to 1 (true).
+
+### 2.12.2 Expressions
+
+We saw an example of using an expression with GDB’s watch command. It turns out that there are quite a few GDB commands, like print, that also accept expression arguments. Therefore, we should probably mention a bit more about them.
+
+An expression in GDB can contain many things:
+
+* GDB convenience variables  
+* Any in-scope variable from your program, like i from the previous example  
+* Any kind of string, numerical, or character constant  
+* Pre-processor macros, if the program was compiled to include pre-preprocessor debugging information  
+* The conditionals, function calls, casts, and operators defined by the language you're using  
+
 
 
