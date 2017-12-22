@@ -147,8 +147,201 @@ A number of complexities are involved in building such an architecture. You’ll
 Lucene provides no facilities for scaling. However, both Solr and Nutch, projects under the Apache Lucene umbrella, provide support for index sharding and replication. The Katta open source project, hosted at http://katta.sourceforge.net and based on Lucene, also provides this functionality. Elastic search, at http://www.elasticsearch. com, is another option that’s also open source and based on Lucene. Before you build your own approach, it’s best to have a solid look at these existing solutions.
 
 
+## 1.4 Lucene in action: a sample application
 
+### 1.4.1 Creating an index
 
+```java
+package com.company;
+
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Indexer {
+    public static void main(String[] args) throws Exception {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Usage: java " +
+                    Indexer.class.getName()
+                    + " <index dir> <data dir>");
+        }
+        String indexDir = args[0]; // Create index in this directory
+        String dataDir = args[1]; // Index all *.txt files within this directory
+        long start = System.currentTimeMillis();
+        Indexer indexer = new Indexer(indexDir);
+        int numIndexed;
+        try {
+            numIndexed = indexer.index(dataDir, new TextFilesFilter());
+        } finally {
+            indexer.close();
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("Indexing " + numIndexed + " files took "
+                + (end - start) + " milliseconds");
+    }
+    private IndexWriter writer;
+    public Indexer(String indexDir) throws IOException {
+        Directory dir = FSDirectory.open(new File(indexDir));
+        // Create Lucene IndexWriter
+        writer = new IndexWriter(dir,
+                new StandardAnalyzer(
+                        Version.LUCENE_30),
+                true,
+                IndexWriter.MaxFieldLength.UNLIMITED);
+    }
+
+    public void close() throws IOException {
+        writer.close(); // Close IndexWriter
+    }
+
+    public int index(String dataDir, FileFilter filter)
+            throws Exception {
+        File[] files = new File(dataDir).listFiles();
+        for (File f: files) {
+            if (!f.isDirectory() &&
+                    !f.isHidden() &&
+                    f.exists() &&
+                    f.canRead() &&
+                    (filter == null || filter.accept(f))) {
+                indexFile(f);
+            }
+        }
+        return writer.numDocs(); // Return number of documents indexed
+    }
+
+    private static class TextFilesFilter implements FileFilter {
+        public boolean accept(File path) {
+            // Index .txt files only, by using Filefilter
+            return path.getName().toLowerCase()
+                    .endsWith(".txt");
+        }
+    }
+    protected Document getDocument(File f) throws Exception {
+        Document doc = new Document();
+        // Index file content
+        doc.add(new Field("contents", new FileReader(f)));
+        // Index filename
+        doc.add(new Field("filename", f.getName(),
+                Field.Store.YES, Field.Index.NOT_ANALYZED));
+        // Index file full path
+        doc.add(new Field("fullpath", f.getCanonicalPath(),
+                Field.Store.YES, Field.Index.NOT_ANALYZED));
+        return doc;
+    }
+
+    // Add document to Lucene index
+    private void indexFile(File f) throws Exception {
+        System.out.println("Indexing " + f.getCanonicalPath());
+        Document doc = getDocument(f);
+        writer.addDocument(doc);
+    }
+}
+```
+
+Indexer is simple. The static main method parses  the incoming arguments, creates an Indexer instance, locates G \*.txt in the provided data directory, and prints how many documents were indexed and how much time was required. The code involving the Lucene APIs includes creating  and closing  the IndexWriter, creating the document, adding the document to the index, and returning the number of documents indexed.
+
+##### RUNNING INDEXER
+
+The simplest way to run Indexer is to use Apache Ant. You’ll first have to unpack the zip file containing source code with this book, which you can download from Manning’s site at http://www.manning.com/hatcher3, and change to the directory lia2e. If you don’t see the file build.xml in your working directory, you’re not in the right directory. If this is the first time you’ve run any targets, Ant will compile all the example sources, build the test index, and finally run Indexer, first prompting you for the index and document directory, in case you’d like to change the defaults. It’s also fine to run Indexer using Java from the command line; just ensure your classpath includes the JARs under the lib subdirectory as well as the build/classes directory.
+
+By default the index will be placed under the subdirectory indexes/MeetLucene, and the sample documents under the directory src/lia/meetlucene/data will be indexed. This directory contains a sampling of modern open source licenses. Go ahead and type ant Indexer, and you should see output like this:
+
+### 1.4.2 Searching an index
+
+In the previous section, we indexed a directory of text files. The index in this example resides in a directory of its own on the file system. We instructed Indexer to create a Lucene index in the indexes/MeetLucene directory, relative to the directory from which we invoked Indexer. As you saw in listing 1.1, this index contains the indexed contents of each file, along with the absolute path. Now we need to use Lucene to search that index in order to find files that contain a specific piece of text. For instance, we may want to find all files that contain the keyword patent or redistribute, or we may want to find files that include the phrase modified version. Let’s do some searching now.
+
+```java
+package com.company;
+
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
+
+import java.io.File;
+import java.io.IOException;
+
+public class Searcher {
+    public static void main(String[] args) throws IllegalArgumentException,
+            IOException, ParseException {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Usage: java " +
+                    Searcher.class.getName()
+                    + " <index dir> <query>");
+        }
+        // We parse command-line arguments (index directory, query string).
+        String indexDir = args[0];
+        String q = args[1];
+        search(indexDir, q);
+    }
+    public static void search(String indexDir, String q)
+            throws IOException, ParseException {
+        // We use Lucene’s Directory and IndexSearcher classes to open our index for searching.
+        Directory dir = FSDirectory.open(new File(indexDir));
+        IndexSearcher is = new IndexSearcher(dir);
+        // We use QueryParser to parse a human-readable search text into Lucene’s Query class.
+        QueryParser parser = new QueryParser(Version.LUCENE_30,
+                "contents",
+                new StandardAnalyzer(
+                        Version.LUCENE_30));
+        Query query = parser.parse(q);
+        long start = System.currentTimeMillis();
+        // Searching returns hits in the form of a TopDocs object.
+        TopDocs hits = is.search(query, 10);
+        long end = System.currentTimeMillis();
+        // Print details on the search (how many hits were found and time taken)
+        System.err.println("Found " + hits.totalHits +
+                " document(s) (in " + (end - start) +
+                " milliseconds) that matched query '" +
+                q + "':");
+        //Note that the TopDocs object contains only references to the underlying documents.
+        //In other words, instead of being loaded immediately upon search, matches are loaded
+        //from the index in a lazy fashion—only when requested with the Index-
+        //Searcher.doc(int) call. That call returns a Document object from which we can then
+        //retrieve individual field values.
+        for(ScoreDoc scoreDoc : hits.scoreDocs) {
+            Document doc = is.doc(scoreDoc.doc);
+            System.out.println(doc.get("fullpath"));
+        }
+        // Close the IndexSearcher when we’re done.
+        is.close();
+    }
+}
+```
+
+## 1.5 Understanding the core indexing classes
+
+### 1.5.1 IndexWriter
+
+IndexWriter is the central component of the indexing process. This class creates a new index or opens an existing one, and adds, removes, or updates documents in the index. Think of IndexWriter as an object that gives you write access to the index but doesn't let you read or search it. IndexWriter needs somewhere to store its index, and that's what Directory is for.
+
+### 1.5.2 Directory 
+
+The Directory class represents the location of a Lucene index. It’s an abstract class that allows its subclasses to store the index as they see fit. In our Indexer example, we used FSDirectory.open to get a suitable concrete FSDirectory implementation that stores real files in a directory on the file system, and passed that in turn to Index- Writer’s constructor. 
+
+### 1.5.3 Analyzer
+
+Before text is indexed, it’s passed through an analyzer. The analyzer, specified in the IndexWriter constructor, is in charge of extracting those tokens out of text that should be indexed and eliminating the rest. If the content to be indexed isn’t plain text, you should first extract plain text from it before indexing.
+
+Analyzer is an abstract class, but Lucene comes with several implementations of it. Some of them deal with skipping stop words (frequently used words that don’t help distinguish one document from the other, such as a, an, the, in, and on); some deal with conversion of tokens to lowercase letters, so that searches aren’t case sensitive; and so on. Analyzers are an important part of Lucene and can be used for much more than simple input filtering. For a developer integrating Lucene into an application, the choice of analyzer(s) is a critical element of application design.
+
+### 1.5.4 Document
 
 
 
