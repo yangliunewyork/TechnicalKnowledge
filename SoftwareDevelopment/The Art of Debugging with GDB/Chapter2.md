@@ -288,3 +288,129 @@ In fact, what _until_ really does is execute until it reaches a machine instruct
 
 ## 2.10 Conditional Breakpoints
 
+### 2.10.1 GDB
+
+The syntax for setting a conditional breakpoint is:
+
+```
+break break-args if (condition)
+```
+
+Conditional breaking is also extremely flexible. You can do much more than just test a variable for equality or inequality. What kinds of things can you use in a condition? Pretty much any expression you can use in a valid C conditional statement. Whatever you use needs to have a Boolean value, that is, true (nonzero) or false (zero). This includes:
+
+* Equality, logical, and inequality operators (<, <=, ==, !=, >, >=, &&, ||, etc.);
+
+e.g.:
+
+```
+break 180 if string==NULL && i < 0
+```
+
+* Bitwise and shift operators (&, |, ^, >>, <<, etc.); e.g.:
+
+```
+break test.c:34 if (x & y) == 1
+```
+
+* Arithmetic operators (+, -, x, /, %); e.g.:
+
+```
+break myfunc if i % (j + 3) != 0
+```
+* Your own functions, as long as they’re linked into the program; .e.g:
+
+```
+break test.c:myfunc if ! check_variable_sanity(i)
+```
+
+* Library functions, as long as the library is linked into your code; e.g.:
+
+```
+break 44 if strlen(mystring) == 0
+```
+
+Order of precedence rules are in effect, so you may need to use paren- theses around constructs like (x & y) == 0.
+
+Also, if you use a library function in a GDB expression, and the library was not compiled with debugging symbols (which is almost certainly the case), the only return values you can use in your breakpoint conditions are those of type int. In other words, without debugging information, GDB as- sumes the return value of a function is an int. When this assumption isn’t correct, the function’s return value will be misinterpreted.
+
+```
+(gdb) print cos(0.0)
+$1 = 14368
+```
+
+Unfortunately, typecasting doesn't help, either:
+
+```
+(gdb) print (double) cos(0.0)
+$2 = 14336
+```
+
+## 2.11 Breakpoint Command Lists
+
+After GDB hits a breakpoint, you’ll almost always inspect a variable. If the same breakpoint gets hit repeatedly (as with a breakpoint inside a loop), you’ll inspect the same variable repeatedly. Wouldn’t it be nice to automate the procedure by telling GDB to automatically perform a set of commands each time it reaches a breakpoint? In fact, you can do just this with “breakpoint command lists.” We’ll use GDB’s _printf_ command to illustrate command lists. You haven’t been formally introduced to it yet, but _printf_ basically works the same way in GDB as it does in C, but the parentheses are optional.
+
+You set command lists using the commands command:
+
+```
+commands breakpoint-number
+...
+commands
+...
+end
+```
+
+where breakpoint-number is the identifier for the breakpoint you want to add the commands to, and commands is a newline-separated list of any valid GDB commands. You enter the commands one by one, and then type end to sig- nify that you’re done entering commands. Thereafter, whenever GDB breaks at this breakpoint, it’ll execute whatever commands you gave it. Let’s take a look at an example. Consider the following program:
+
+```c
+#include <stdio.h>
+int fibonacci(int n);
+int main(void)
+{
+ printf("Fibonacci(3) is %d.\n", fibonacci(3));
+ return 0;
+}
+int fibonacci(int n)
+{
+ if ( n <= 0 || n == 1 )
+   return 1;
+ else
+  return fibonacci(n-1) + fibonacci(n-2);
+}
+```
+
+We’d like to see what values are passed to fibonacci() and in what order. However, you don’t want to stick printf() statements in and recompile the code. First of all, that would be gauche in a book on debugging, wouldn’t it? But more importantly, it would take time to insert code and recompile/link, and to later remove that code and recompile/link after you fix this partic- ular bug, especially if your program is large. Moreover, it would clutter up your code with statements not related to the code, thus making it harder to read during the debugging process.
+
+You could step through the code and print n with each invocation of fibonacci(), but command lists are better, because they alleviate the need to repeatedly type the print command. Let’s see.
+
+First, set a breakpoint at the top of fibonacci(). This breakpoint will be assigned identifier 1, since it't the first breakpoint you抳e set. Then set a command on breakpoint 1 to print the variable n.
+
+```
+$ gdb fibonacci
+(gdb) break fibonacci
+Breakpoint 1 at 0x80483e0: file fibonacci.c, line 13.
+(gdb) commands 1
+Type commands for when breakpoint 1 is hit, one per line.
+End with a line saying just "end".
+>printf "fibonacci was passed %d.\n", n
+>end
+(gdb)
+```
+
+Now run the program and see what happens.
+
+Well, that’s pretty much what we expected, but the output is too ver- bose. After all, we already know where the breakpoint is. Fortunately, you can make GDB more quiet about triggering breakpoints using the silent command, which needs to be the first item in the command list. Let’s take a look at silent in action. Note how we’re redefining the command list by placing a new command list “over” the one we previously set:
+
+```
+(gdb) commands 1
+Type commands for when breakpoint 1 is hit, one per line.
+End with a line saying just "end".
+>silent
+>printf "fibonacci was passed %d.\n", n
+>end
+(gdb)
+```
+
+## 2.12 Watchpoints
+
+
+
