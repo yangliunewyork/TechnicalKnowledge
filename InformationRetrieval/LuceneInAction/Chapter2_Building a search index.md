@@ -72,9 +72,117 @@ Naturally, over time the index will accumulate many segments, especially if you 
 
 ## 2.3 Basic index operations
 
+### 2.3.1 Adding documents to an index
 
+Let's look at how to create a new index and add documents to it. There are two methods for adding documents: 
 
+* addDocument(Document) - adds the document using the default analyzer, which you specified when creating the IndexWriter, for tokenization. 
 
+* addDocument(Document, Analyzer) - adds the document using the provided analyzer for tokenization. But be careful! In order for searches to work correctly, you need the analyzer used at search time to "match" the tokens produced by the analyzers at indexing time. 
 
+```java
 
+import junit.framework.TestCase;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
+
+public class IndexingTest extends TestCase {
+
+    protected String[] ids = {"1", "2"};
+    protected String[] unindexed = {"Netherlands", "Italy"};
+    protected String[] unstored = {"Amsterdam has lots of bridges",
+            "Venice has lots of canals"};
+    protected String[] text = {"Amsterdam", "Venice"};
+    private Directory directory;
+    protected void setUp() throws Exception {
+        // First creates a new RAMDirectory, to hold the index.
+        directory = new RAMDirectory();
+        // Freates an IndexWriter on this Directory. We created the getWriter convenience
+        //method because we need to get the IndexWriter in many places.
+        IndexWriter writer = getWriter();
+        // Iterates over our content, creating a Document and Fields, and then
+        // adds the Document to the index.
+        for (int i = 0; i < ids.length; i++)
+        {
+            Document doc = new Document();
+            doc.add(new Field("id", ids[i],
+                    Field.Store.YES,
+                    Field.Index.NOT_ANALYZED));
+            doc.add(new Field("country", unindexed[i],
+                    Field.Store.YES,
+                    Field.Index.NO));
+            doc.add(new Field("contents", unstored[i],
+                    Field.Store.NO,
+                    Field.Index.ANALYZED));
+            doc.add(new Field("city", text[i],
+                    Field.Store.YES,
+                    Field.Index.ANALYZED));
+            writer.addDocument(doc);
+        }
+        writer.close();
+    }
+    private IndexWriter getWriter() throws IOException {
+        return new IndexWriter(directory, new WhitespaceAnalyzer(),
+                IndexWriter.MaxFieldLength.UNLIMITED);
+    }
+
+    // We create the IndexSearcher and execute a basic single-term query with the specified
+    //string, returning the number of documents that matched.
+    protected int getHitCount(String fieldName, String searchString)
+            throws IOException {
+        IndexSearcher searcher = new IndexSearcher(directory);
+        Term t = new Term(fieldName, searchString);
+        Query query = new TermQuery(t);
+        int hitCount = TestUtil.hitCount(searcher, query);
+        searcher.close();
+        return hitCount;
+    }
+
+    // We verify the documents counts according to IndexReader and IndexWriter matches
+    //how many documents we added.
+    public void testIndexWriter() throws IOException {
+        IndexWriter writer = getWriter();
+        assertEquals(ids.length, writer.numDocs());
+        writer.close();
+    }
+    public void testIndexReader() throws IOException {
+        IndexReader reader = IndexReader.open(directory);
+        assertEquals(ids.length, reader.maxDoc());
+        assertEquals(ids.length, reader.numDocs());
+        reader.close();
+    }
+}
+```
+
+### 2.3.2 Deleting documents from an index
+
+Although most applications are more concerned with getting documents into a Lucene index, some also need to remove them. For instance, a newspaper publisher may want to keep only the last week’s worth of news in its searchable indexes. Other applications may want to remove all documents that contain a certain term or replace an old version of a document with a newer one whenever the original source of the document has changed. IndexWriter provides various methods to remove documents from an index:
+
+* deleteDocuments(Term) deletes all documents containing the provided term.
+* deleteDocuments(Term[])deletes all documents containing any of the terms in the provided array.
+* deleteDocuments(Query) deletes all documents matching the provided query.
+* deleteDocuments(Query[])deletes all documents matching any of the queries in the provided array.
+* deleteAll() deletes all documents in the index. This is exactly the same as closing the writer and opening a new writer with create=true, without having to close your writer.
+
+In each case, the deletes aren't done immediately. Instead, they're buffered in memory, just like the added documents, and periodically flushed to the directory. As with added documents, you must call commit() or close() on your writer to commit the changes to the index. Even once the deletes are flushed to the directory, the disk space consumed by that document isn't immediately freed. Rather, the documents are simply marked as deleted.
+
+### 2.3.3 Updating documents in the index
+
+In many applications, after initially indexing a document you may still want to make further changes to it, requiring you to reindex it. For example, if your documents are crawled from a web server, one way to detect that the content has changed is to look for a changed ETag HTTP header. If it’s different from when you last indexed the document, that means changes have been made to the content and you should update the document in the index.
+
+__In some cases you may want to update only certain fields of the document. Perhaps the title changed but the body was unchanged. Unfortunately, although this is a frequently requested feature, Lucene can’t do that: instead, it deletes the entire previous document and then adds a new document to the index.__ This requires that the new document contains all fields, even unchanged ones, from the original document. IndexWriter provides two convenience methods to replace a document in the index:
+
+* updateDocument(Term, Document) first deletes all documents containing the provided term and then adds the new document using the writer’s default analyzer.  
+* updateDocument(Term, Document, Analyzer) does the same but uses the provided analyzer instead of the writer’s default analyzer.  
+
+## 2.4 Field options
 
