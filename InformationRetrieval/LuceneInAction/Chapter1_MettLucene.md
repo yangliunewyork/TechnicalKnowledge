@@ -343,5 +343,65 @@ Analyzer is an abstract class, but Lucene comes with several implementations of 
 
 ### 1.5.4 Document
 
+The ```Document``` class represents a collection of fields. Think of it as a virtual document? a chunk of data, such as a web page, an email message, or a text file - that you want to make retrievable at a later time. Fields of a document represent the document or metadata associated with that document. The original source (such as a database record, a Microsoft Word document, a chapter from a book, and so on) of document data is irrelevant to Lucene. It's the text that you extract from such binary documents, and add as a Field instance, that Lucene processes. The metadata (such as author, title, subject and date modified) is indexed and stored separately as fields of a document.
+
+Lucene only deals with text and numbers. Lucene’s core doesn’t itself handle anything but java.lang.String, java.io.Reader, and native numeric types (such as int or float). Although various types of documents can be indexed and made searchable, processing them isn’t as straightforward as processing purely textual or numeric content.
+
+In our Indexer, we’re concerned with indexing text files. So, for each text file we find, we create a new instance of the ```Document``` class, populate it with fields (described next), and add that document to the index, effectively indexing the file. Similarly, in your application, you must carefully design how a Lucene document and its fields will be constructed to match specific needs of your content sources and application.
+
+A document is simply a container for multiple fields; ```Field``` is the class that holds the textual content to be indexed.
+
+### 1.5.5 Field
+
+Each document in an index contains one or more named fields, embodied in a class called ```Field```. Each field has a name and corresponding value, and a bunch of options,  that control precisely how Lucene will index the field’s value. A document may have more than one field with the same name. In this case, the values of the fields are appended, during indexing, in the order they were added to the document. When searching, it’s exactly as if the text from all the fields were concatenated and treated as a single text field.
+
+## 1.6 Understanding the core searching classes
+
+The basic search interface that Lucene provides is as straightforward as the one for indexing. Only a few classes are needed to perform the basic search operation:
+
+* IndexSearcher  
+* Term  
+* Query  
+* TermQuery  
+* TopDocs  
+
+### 1.6.1 IndexSearcher
+
+```IndexSearcher``` is to searching what ```IndexWriter``` is to indexing: the central link to the index that exposes several search methods. You can think of IndexSearcher as a class that opens an index in a read-only mode. It requires a Directory instance, holding the previously created index, and then offers a number of search methods, some of which are implemented in its abstract parent class Searcher; the simplest takes a Query object and an int topN count as parameters and returns a TopDocs object. A typical use of this method looks like this:
+
+```java
+Directory dir = FSDirectory.open(new File("/tmp/index"));
+IndexSearcher searcher = new IndexSearcher(dir);
+Query q = new TermQuery(new Term("contents", "lucene"));
+TopDocs hits = searcher.search(q, 10);
+searcher.close();
+```
+
+### 1.6.2 Term
+
+A ```Term``` is the basic unit for searching. Similar to the Field object, it consists of a pair of string elements: the name of the field and the word (text value) of that field. Note that Term objects are also involved in the indexing process. However, they’re created by Lucene’s internals, so you typically don’t need to think about them while indexing. During searching, you may construct Term objects and use them together with TermQuery:
+
+```
+Query q = new TermQuery(new Term("contents", "lucene"));
+TopDocs hits = searcher.search(q, 10);
+```
+
+This code instructs Lucene to find the top 10 documents that contain the word lucene in a field named contents, sorting the documents by descending relevance. Because the TermQuery object is derived from the abstract parent class Query, you can use the Query type on the left side of the statement.
+
+### 1.6.3 Query
+
+Lucene comes with a number of concrete Query subclasses. So far in this chapter we’ve mentioned only the most basic Lucene Query: TermQuery. Other Query types are BooleanQuery, PhraseQuery, PrefixQuery, PhrasePrefixQuery, TermRangeQuery, NumericRangeQuery, FilteredQuery, and SpanQuery. All of these are covered in chapters 3 and 5. Query is the common, abstract parent class. It contains several utility methods, the most interesting of which is setBoost(float), which enables you to tell Lucene that certain subqueries should have a stronger contribution to the final relevance score than other subqueries. The setBoost method is described in section 3.5.12. Next we cover TermQuery, which is the building block for most complex queries in Lucene.
+
+### 1.6.4 TermQuery
+
+TermQuery is the most basic type of query supported by Lucene, and it’s one of the primitive query types. It’s used for matching documents that contain fields with specific values, as you’ve seen in the last few paragraphs. Finally, wrapping up our brief tour of the core classes used for searching, we touch on TopDocs, which represents the result set returned by searching.
+
+### 1.6.5 TopDocs
+
+The TopDocs class is a simple container of pointers to the top N ranked search results documents that match a given query. For each of the top N results, TopDocs records the int docID (which you can use to retrieve the document) as well as the float score. 
+
+## 1.7 Summary
+
+In this chapter, you’ve gained some healthy background knowledge on the architecture of search applications, as well as some initial Lucene knowledge. You now know that Lucene is an information retrieval library, not a ready-to-use standalone product, and that it most certainly doesn’t contain a web crawler, document filters, or a search user interface, as people new to Lucene sometimes think. However, as confirmation of Lucene’s popularity, there are numerous projects that integrate with or build on Lucene, and that could be a good fit for your application. In addition, you can choose among numerous ways to access Lucene’s functionality from programming environments other than Java. You’ve also learned a bit about how Lucene came to be and about the key people and the organization behind it.
 
 
