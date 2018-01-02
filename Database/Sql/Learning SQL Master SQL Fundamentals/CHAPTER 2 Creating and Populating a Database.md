@@ -89,5 +89,14 @@ While database servers store temporal data in various ways, the purpose of a for
 
 # Table Creation
 
+##### What Is Null? 
+
+In some cases, it is not possible or applicable to provide a value for a particular column in your table. For example, when adding data about a new customer order, the ship_date column cannot yet be determined. In this case, the column is said to be null (note that I do not say that it equals null), which indicates the absence of a value. Null is used for various cases where a value cannot be supplied, such as:
+
+* Not applicable  
+* Unknown  
+* Empty set  
+
+When designing a table, you may specify which columns are allowed to be null (the default), and which columns are not allowed to be null (designated by adding the keywords not null after the type definition).
 
 
