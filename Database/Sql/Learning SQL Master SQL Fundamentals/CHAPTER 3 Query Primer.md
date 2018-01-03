@@ -76,3 +76,7 @@ mysql> SELECT d.name, count(e.emp_id) num_employees
 -> HAVING count(e.emp_id) > 2;
 ```
 
+#### The order by Clause
+
+The ORDER BY clause is the mechanism for sorting your result set using either raw column data or expressions based on column data.
+
