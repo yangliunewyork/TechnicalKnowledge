@@ -42,7 +42,7 @@ Each of these table types may be included in a query’s from clause. By now, yo
 
 A __subquery__ is a query contained within another query. Subqueries are surrounded by parentheses and can be found in various parts of a select statement; within the from clause, however, a subquery serves the role of generating a temporary table that is visible from all other query clauses and can interact with other tables named in the from clause.
 
-```
+```sql
 mysql> SELECT e.emp_id, e.fname, e.lname
 -> FROM (SELECT emp_id, fname, lname, start_date, title
 -> FROM employee) e;
@@ -50,7 +50,7 @@ mysql> SELECT e.emp_id, e.fname, e.lname
 
 A view is a query that is stored in the data dictionary. It looks and acts like a table, but there is no data associated with a view (this is why I call it a virtual table). When you issue a query against a view, your query is merged with the view definition to create a final query to be executed.
 
-```
+```sql
 mysql> CREATE VIEW employee_vw AS
 -> SELECT emp_id, fname, lname,
 -> YEAR(start_date) start_year
@@ -62,6 +62,17 @@ When the view is created, no additional data is generated or stored: the server 
 
 Views are created for various reasons, including to hide columns from users and to simplify complex database designs.
 
+#### The where Clause
 
+The where clause is the mechanism for filtering out unwanted rows from your result set.
 
+All the queries thus far have retrieved raw data without any manipulation. Sometimes, however, you will want to find trends in your data that will require the database server to cook the data a bit before you retrieve your result set. One such mechanism is the group by clause, which is used to group data by column values. For example, rather than looking at a list of employees and the departments to which they are assigned, you might want to look at a list of departments along with the number of employees assigned to each department. When using the __group by__ clause, you may also use the __having__ clause, which allows you to filter group data in the same way the __where__ clause lets you filter raw data.
+
+```sql
+mysql> SELECT d.name, count(e.emp_id) num_employees
+-> FROM department d INNER JOIN employee e
+-> ON d.dept_id = e.dept_id
+-> GROUP BY d.name
+-> HAVING count(e.emp_id) > 2;
+```
 
