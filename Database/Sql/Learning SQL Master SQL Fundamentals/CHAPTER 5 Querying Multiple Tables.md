@@ -74,6 +74,80 @@ You have already seen several examples of queries that use three tables, but the
 
 ### Using the Same Table Twice
 
+If you are joining multiple tables, you might find that you need to join the same table more than once.
+
+```sql
+mysql> SELECT a.account_id, e.emp_id,
+-> b_a.name open_branch, b_e.name emp_branch
+-> FROM account a INNER JOIN branch b_a
+-> ON a.open_branch_id = b_a.branch_id
+-> INNER JOIN employee e
+-> ON a.open_emp_id = e.emp_id
+-> INNER JOIN branch b_e
+-> ON e.assigned_branch_id = b_e.branch_id
+-> WHERE a.product_cd = 'CHK';
+```
+
+This query shows who opened each checking account, what branch it was opened at, and to which branch the employee who opened the account is currently assigned. The branch table is included twice, with aliases b_a and b_e. By assigning different aliases to each instance of the branch table, the server is able to understand which instance you are referring to: the one joined to the account table, or the one joined to the employee table. Therefore, this is one example of a query that requires the use of table aliases.
+
+### Self-Joins
+
+Not only can you include the same table more than once in the same query, but you can actually join a table to itself. This might seem like a strange thing to do at first, but there are valid reasons for doing so. The employee table, for example, includes a __self-referencing foreign key__, which means that it includes a column (superior_emp_id) that points to the primary key within the same table. This column points to the employee’s manager (unless the employee is the head honcho, in which case the column is null). Using a __self-join__, you can write a query that lists every employee’s name along with the name of his or her manager:
+
+```sql
+mysql> SELECT e.fname, e.lname,
+-> e_mgr.fname mgr_fname, e_mgr.lname mgr_lname
+-> FROM employee e INNER JOIN employee e_mgr
+-> ON e.superior_emp_id = e_mgr.emp_id;
+```
+
+### Equi-Joins Versus Non-Equi-Joins
+
+All of the multitable queries shown thus far have employed __equi-joins__, meaning that values from the two tables must match for the join to succeed. An equi-join always employs an equals sign, as in:
+
+```ON e.assigned_branch_id = b.branch_id```
+
+While the majority of your queries will employ equi-joins, you can also join your tables via ranges of values, which are referred to as __non-equi-joins__. Here’s an example of a query that joins by a range of values:
+
+```sql
+SELECT e.emp_id, e.fname, e.lname, e.start_date
+FROM employee e INNER JOIN product p
+ON e.start_date >= p.date_offered
+AND e.start_date <= p.date_retired
+WHERE p.name = 'no-fee checking';
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
