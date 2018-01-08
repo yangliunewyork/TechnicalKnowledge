@@ -6,7 +6,7 @@ As stated earlier, aspects help to modularize cross-cutting concerns. In short, 
 
 This figure represents a typical application that’s broken down into modules. Each module’s main concern is to provide services for its particular domain. But each module also requires similar ancillary functionality, such as security and transaction management.
 
-![alt](http://images2015.cnblogs.com/blog/653056/201603/653056-20160303133717346-1855137261.png)
+![alt](http://apprize.info/javascript/spring_1/spring_1.files/image037.jpg)
 
 A common object-oriented technique for reusing common functionality is to apply inheritance or delegation. But inheritance can lead to a brittle object hierarchy if the same base class is used throughout an application, and delegation can be cumbersome because complicated calls to the delegate object may be required.
 
