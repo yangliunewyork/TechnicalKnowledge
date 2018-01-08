@@ -99,6 +99,69 @@ public void setCompactDisc(CompactDisc cd) {
 
 ## 2.3 Wiring beans with Java
 
+Although automatic Spring configuration with component scanning and automatic wiring is preferable in many cases, there are times when automatic configuration isn’t an option and you must configure Spring explicitly. For instance, let’s say that you want to wire components from some third-party library into your application. Because you don’t have the source code for that library, there’s no opportunity to annotate its classes with @Component and @Autowired. Therefore, automatic configuration isn’t an option. In that case, you must turn to explicit configuration. You have two choices for explicit configuration: Java and XML.
+
+JavaConfig is the preferred option for explicit configuration because it’s more powerful, type-safe, and refactor-friendly. That’s because it’s just Java code, like any other Java code in your application.
+
+At the same time, it’s important to recognize that JavaConfig code isn’t just any other Java code. It’s conceptually set apart from the business logic and domain code in your application. Even though it’s expressed in the same language as those components, JavaConfig is configuration code. This means it shouldn’t contain any business logic, nor should JavaConfig invade any code where business logic resides. In fact, although it’s not required, JavaConfig is often set apart in a separate package from the rest of an application’s logic so there’s no confusion as to its purpose.
+
+### 2.3.1 Creating a configuration class
+
+```java
+package soundsystem;
+import org.springframework.context.annotation.Configuration;
+@Configuration
+    public class CDPlayerConfig {
+}
+```
+
+The key to creating a JavaConfig class is to annotate it with @Configuration. The @Configuration annotation identifies this as a configuration class, and it’s expected to contain details on beans that are to be created in the Spring application context.
+
+### 2.3.2 Declaring a simple bean
+
+To declare a bean in JavaConfig, you write a method that creates an instance of the desired type and annotate it with @Bean. For example, the following method declares the CompactDisc bean:
+
+```java
+@Bean
+public CompactDisc sgtPeppers() {
+return new SgtPeppers();
+}
+```
+
+The @Bean annotation tells Spring that this method will return an object that should be registered as a bean in the Spring application context. The body of the method contains logic that ultimately results in the creation of the bean instance.
+
+### 2.3.3 Injecting with JavaConfig
+
+The CompactDisc bean you declared was simple and had no dependencies of its own. But now you must declare the CDPlayer bean, which depends on a CompactDisc. How can you wire that up in JavaConfig? The simplest way to wire up beans in JavaConfig is to refer to the referenced bean’s method. For example, here’s how you might declare the CDPlayer bean:
+
+```java
+@Bean
+public CDPlayer cdPlayer() {
+return new CDPlayer(sgtPeppers());
+}
+```
+
+The cdPlayer() method, like the sgtPeppers() method, is annotated with @Bean to indicate that it will produce an instance of a bean to be registered in the Spring application context. The ID of the bean will be cdPlayer, the same as the method’s name.
+
+The body of the cdPlayer() method differs subtly from that of the sgtPeppers() method. Rather than construct an instance via its default method, the CDPlayer instance is created by calling its constructor that takes a CompactDisc.
+
+It appears that the CompactDisc is provided by calling sgtPeppers, but that抯 not exactly true. Because the sgtPeppers() method is annotated with @Bean, Spring will intercept any calls to it and ensure that the bean produced by that method is returned rather than allowing it to be invoked again.
+
+If the call to sgtPeppers() was treated like any other call to a Java method, then each CDPlayer would be given its own instance of SgtPeppers. That would make sense if we were talking about real CD players and compact discs. If you have two CD players, there’s no physical way for a single compact disc to simultaneously be inserted into two CD players. 
+
+In software, however, there’s no reason you couldn’t inject the same instance of SgtPeppers into as many other beans as you want. __By default, all beans in Spring are singletons__, and there’s no reason you need to create a duplicate instance for the second CDPlayer bean. So Spring intercepts the call to sgtPeppers() and makes sure that what is returned is the Spring bean that was created when Spring itself called sgtPeppers() to create the CompactDisc bean. Therefore, both CDPlayer beans will be given the same instance of SgtPeppers.
+
+## 2.4 Wiring beans with XML
+
+
+
+
+
+
+
+
+
+
 
 
 
