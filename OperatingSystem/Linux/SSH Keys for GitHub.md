@@ -6,6 +6,14 @@ SSH keys come in pairs, a public key that gets shared with services like GitHub,
 
 The cryptography behind SSH keys ensures that no one can reverse engineer your private key from the public one.
 
+There are two scenarioes regarding to Public-key cryptography:
+ 
+(a): Everybody can encrypt something, but only the owner of the private key can decrypt it.
+
+(b): The owner "encrypt" something with his private key and everybody can decrypt it, what ensures, the it were really the owner, that encrypts the data and not somebody else.
+
+git(hub) makes use of the second scenario: If you push something, it its signed with your private key. The receiver now validates the signature againts the public key it knows from you. If its match, everything is fine.
+
 ### Generating an SSH key pair
 
 The first step in using SSH authorization with GitHub is to generate your own key pair.
