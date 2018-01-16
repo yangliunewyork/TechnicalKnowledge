@@ -1,4 +1,11 @@
-This is a quick tutorial to have func with Logstash and Filebeat.
+This is a quick tutorial to have fun with Logstash and Filebeat.
+
+Logstash is an open source, server-side data processing pipeline that ingests data from a multitude of sources simultaneously, transforms it, and then sends it to your favorite “stash.”
+https://www.elastic.co/products/logstash
+
+Filebeat is a log data shipper for local files. Installed as an agent on your servers, Filebeat monitors the log directories or specific log files, tails the files, and forwards them either to Elasticsearch or Logstash for indexing.
+
+https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html
 
 # Download and Install
 
