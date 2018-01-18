@@ -107,7 +107,7 @@ mysql> SELECT account_id, product_cd, cust_id
 
 This version of the query performs the same function as the previous example, but with a single subquery that returns two columns instead of two subqueries that each return a single column.
 
-
+# Correlated Subqueries
 
 
 
