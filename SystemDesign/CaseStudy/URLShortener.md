@@ -1,3 +1,8 @@
+## Why to use URL shortener
+
+https://www.livechatinc.com/url-shortener/8-reasons-why-to-use-url-shortener/
+
+
 ## Reference
 * https://www.interviewbit.com/problems/tiny-url/
 * https://www.interviewcake.com/question/java/url-shortener
