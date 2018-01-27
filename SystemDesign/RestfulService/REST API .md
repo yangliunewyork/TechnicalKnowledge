@@ -284,8 +284,10 @@ POST http://www.example.com/customers
 To read a customer with Customer ID# 33245:
 
 ```
-GET http://www.example.com/customers/33245 The same URI would be used for PUT and DELETE, to update and delete, respectively.
+GET http://www.example.com/customers/33245 
 ```
+
+The same URI would be used for PUT and DELETE, to update and delete, respectively.
 
 Here are proposed URIs for products:
 
