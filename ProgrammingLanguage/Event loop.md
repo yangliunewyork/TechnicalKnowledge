@@ -1,0 +1,4 @@
+In computer science, the event loop, __message dispatcher__, message loop, message pump, or run loop is a programming construct that waits for and dispatches events or messages in a program. It works by making a request to some internal or external "event provider" (that generally blocks the request until an event has arrived), and then it calls the relevant event handler ("dispatches the event"). The event-loop may be used in conjunction with a reactor, if the event provider follows the file interface, which can be selected or 'polled' (the Unix system call, not actual polling). The event loop almost always operates asynchronously with the message originator.
+
+When the event loop forms the central control flow construct of a program, as it often does, it may be termed the main loop or main event loop. This title is appropriate, because such an event loop is at the highest level of control within the program.
+
