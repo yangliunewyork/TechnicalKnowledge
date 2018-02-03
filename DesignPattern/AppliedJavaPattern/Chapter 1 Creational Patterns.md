@@ -225,7 +225,7 @@ public class FrenchAddress extends Address{
 ```
 
 FrenchPhoneNumber.java
-```
+```java
 public class FrenchPhoneNumber extends PhoneNumber{
   private static final String COUNTRY_CODE = "33";
   private static final int NUMBER_LENGTH = 9;
