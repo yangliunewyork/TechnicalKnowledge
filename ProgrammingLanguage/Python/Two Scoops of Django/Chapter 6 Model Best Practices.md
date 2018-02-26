@@ -9,3 +9,9 @@ Here’s a quick list of the model-related Django packages that we use in practi
 
 ## 6.1 Basics
 
+Model inheritance in Django is a tricky subject. Django provides three ways to do model inheritance: 
+
+* __abstract base classes__
+* __multi-table inheritance__  
+* __proxy models__  
+
