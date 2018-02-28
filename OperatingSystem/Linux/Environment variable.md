@@ -8,11 +8,11 @@ __In all Unix and Unix-like systems, each process has its own separate set of en
 
 Shell scripts and batch files use environment variables to communicate data and preferences to child processes. They can also be used to store temporary values for reference later in a shell script. However, in Unix, other variables are usually used for this.
 
-In Unix, an environment variable that is changed in a script or compiled program will only affect that process and possibly child processes. The parent process and any unrelated processes will not be affected. In MS-DOS, changing or removing a variable's value inside a batch file will change the variable for the duration of COMMAND.COM's existence.
+In Unix, an environment variable that is changed in a script or compiled program will only affect that process and possibly child processes. The parent process and any unrelated processes will not be affected. 
 
-In Unix, the environment variables are normally initialized during system startup by the system init scripts, and hence inherited by all other processes in the system. Users can, and often do, augment them in the profile script for the command shell they are using. In Microsoft Windows, each environment variable's default value is stored in the Windows registry or set in the AUTOEXEC.BAT file.
+In Unix, the environment variables are normally initialized during system startup by the system init scripts, and hence inherited by all other processes in the system. Users can, and often do, augment them in the profile script for the command shell they are using.
 
-On Unix, a setuid program is given an environment chosen by its caller, but it runs with different authority from its caller. The dynamic linker will usually load code from locations specified by the environment variables $LD_LIBRARY_PATH and $LD_PRELOAD and run it with the process's authority. If a setuid program did this, it would be insecure, because its caller could get it to run arbitrary code and hence misuse its authority. For this reason, libc unsets these environment variables at startup in a setuid process. setuid programs usually unset unknown environment variables and check others or set them to reasonable values.
+On Unix, a ```setuid``` program is given an environment chosen by its caller, but it runs with different authority from its caller. The dynamic linker will usually load code from locations specified by the environment variables $LD_LIBRARY_PATH and $LD_PRELOAD and run it with the process's authority. If a setuid program did this, it would be insecure, because its caller could get it to run arbitrary code and hence misuse its authority. For this reason, libc unsets these environment variables at startup in a setuid process. setuid programs usually unset unknown environment variables and check others or set them to reasonable values.
 
 # Syntax
 
@@ -33,4 +33,12 @@ A few simple principles govern how environment variables achieve their effect:
 In Unix shells, variables may be assigned without the ```export``` keyword. Variables defined in this way are displayed by the ```set``` command, but are not true environment variables, as they are stored only by the shell and not recognized by the kernel. The printenv command will not display them, and child processes do not inherit them.
 
 The persistence of an environment variable can be session-wide or system-wide.
+
+# Commands
+
+##### Check environment variables for process
+
+```
+cat /proc/<pid>/environ
+```
 
