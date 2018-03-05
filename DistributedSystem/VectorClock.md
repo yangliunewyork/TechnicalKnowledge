@@ -1,3 +1,5 @@
+A very good tutorial : https://www.youtube.com/watch?v=jD4ECsieFbE
+
 Firstly, as others have pointed out, using the physical timestamp of a record is no good because you can't guarantee that time will move forward in a uniform manner across all nodes in the cluster, which means a 'later' record might have an earlier timestamp than some record produced before it.
 
 You could instead use a logical timestamp, otherwise known as a Lamport Clock. A Lamport Clock is a single integer value that is passed around the cluster with every message sent between nodes. Each node keeps a record of what it thinks the latest (i.e. highest) Lamport Clock value is, and if it hears a larger value from some other node, it updates its own value.
