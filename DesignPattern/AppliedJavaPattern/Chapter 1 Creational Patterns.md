@@ -71,172 +71,110 @@ A further benefit of this pattern is that it can simplify testing the rest of th
 
 To realize the benefits of this pattern, carefully consider how to define a suitably generic interface for the abstract product. If the abstract product is improperly defined, producing some of the desired concrete products can be difficult or impossible.
 
-### Example
 
-AddressFactory.java
-```java
-public interface AddressFactory {
-  public Address createAddress();
-  public PhoneNumber createPhoneNumber();
-}
-```
+# Builder
 
-Note that the AddressFactory defines two factory methods, createAddress and createPhoneNumber. The methods produce the abstract products Address and PhoneNumber, which define methods that these products support.
+#### Purpose
 
-Address.java
+To simplify complex object creation by defining a class whose purpose is to build instances of another class. The Builder produces one main product, such that there might be more than one class in the product, but there is always one main class.
 
-```java
-public abstract class Address {
-  private String street;
-  private String city;
-  private String region;
-  private String postalCode;
+#### Applicability
 
-  public static final String EOL_STRING = System.getProperty("line.separator");
-  public static final String SPACE = " ";
+Use the Builder pattern when a class:
 
-  public String getStreet() {
-    return street;
-  }
+* Has complex internal structure (especially one with a variable set of related objects).
+* Has attributes that depend on each other. One of the things a Builder can do is enforce staged construction of a complex object. This would be required when the Product attributes depend on one another. For instance, suppose you’re building an order. You might need to ensure that you have a state set before you move on to "building" the shipping method, because the state would impact the sales tax applied to the Order itself.
+* Uses other objects in the system that might be difficult or inconvenient to obtain during creation.
 
-  public String getCity() {
-    return city;
-  }
+#### Description
 
-  public String getPostalCode() {
-    return postalCode;
-  }
-  public String getRegion() {
-    return region;
-  }
+Because this pattern is concerned with building a complex object from possibly multiple different sources, it is called the Builder. As object creation increases in complexity, managing object creation from within the constructor method can become difficult. This is especially true if the object does not depend exclusively on resources that are under its own control.
 
-  public abstract String getCountry();
+Business objects often fall into this category. They frequently require data from a database for initialization and might need to associate with a number of other business objects to accurately represent the business model.
 
-  public String getFullAddress() {
-    return street + EOL_STRING +
-    city + SPACE + postalCode + EOL_STRING;
-  }
+Another example is that of composite objects in a system, such as an object representing a drawing in a visual editing program. Such an object might need to be related to an arbitrary number of other objects as soon as it’s created.
 
-}
-```
+In cases like this, it is convenient to define another class (the Builder) that is responsible for the construction. The Builder coordinates the assembly of the product object: creating resources, storing intermediate results, and providing functional structure for the creation. Additionally, the Builder can acquire system resources required for construction of the product object.
 
-PhoneNumber.java
-```java
-public abstract class PhoneNumber{
-  private String phoneNumber;
-  public abstract String getCountryCode();
+#### Implementation
 
-  public String getPhoneNumber() {
-  return phoneNumber;
-}
+<img src="https://i.ytimg.com/vi/EHS4h2noiMQ/maxresdefault.jpg" height="400" width="800">
 
-  public void setPhoneNumber(String newNumber) {
-    try {
-      Long.parseLong(newNumber);
-      phoneNumber = newNumber;
-    }
-    catch (NumberFormatException exc) {
-    }
-  }
-}
-```
+To implement the Builder pattern, you need:
 
-Address and PhoneNumber are abstract classes in this example, but could easily be defined as interfaces if you did not need to define code to be used for all concrete products.
+* __Director__ – Has a reference to an AbstractBuilder instance. The Director calls the creational methods on its builder instance to have the different parts and the Builder build.  
+* __AbstractBuilder__ – The interface that defines the available methods to create the separate parts of the product.  
+* __ConcreteBuilder__ – Implements the AbstractBuilder interface. The ConcreteBuilder implements all the methods required to create a real Product. The implementation of the methods knows how to process information from the Director and build the respective parts of a Product. The ConcreteBuilder also has either a getProduct method or a creational method to return the Product instance.  
+* __Product__ – The resulting object. You can define the product as either an interface (preferable) or class.  
 
-To provide concrete functionality for the system, you need to create Concrete Factory and Concrete Product classes. In this case, you define a class that implements AddressFactory, and subclass the Address and PhoneNumber classes. The three following classes show how to do this for U.S. address information.
+#### Benefits and Drawbacks
 
-USAddressFactory.java
-```java
-public class USAddressFactory implements AddressFactory{
-  public Address createAddress(){
-    return new USAddress();
-  }
+The Builder pattern makes it easier to manage the overall flow during the creation of complex objects. This
+manifests itself in two ways:
 
-  public PhoneNumber createPhoneNumber(){
-    return new USPhoneNumber();
-  }
-}
-```
+For objects that require phased creation (a sequence of steps to make the object fully active), the Builder acts as a higher-level object to oversee the process. It can coordinate and validate the creation of all resources and if necessary provide a fallback strategy if errors occur.
 
-USAddress.java
+For objects that need existing system resources during creation, such as database connections or existing business objects, the Builder provides a convenient central point to manage these resources. The Builder also provides a single point of creational control for its product, which other objects within the system can use. Like other creational patterns, this makes things easier for clients in the software system, since they need only access the Builder object to produce a resource.
 
-```java
-public class USAddress extends Address{
-  private static final String COUNTRY = "UNITED STATES";
-  private static final String COMMA = ",";
+The main drawback of this pattern is that there is tight coupling among the Builder, its product, and any other creational delegates used during object construction. Changes that occur for the product created by the Builder often result in modifications for both the Builder and its delegates.
 
-  public String getCountry(){ return COUNTRY; }
+#### Pattern Variants
 
-  public String getFullAddress(){
-    return getStreet() + EOL_STRING +
-      getCity() + COMMA + SPACE + getRegion() +
-      SPACE + getPostalCode() + EOL_STRING +
-      COUNTRY + EOL_STRING;
-  }
-}
-```
+At the most fundamental level, it is possible to implement a bare-bones Builder pattern around a single Builder class with a creational method and its product. For greater flexibility, designers often extend this base pattern with one or more of the following approaches:
+
+* Create an abstract Builder. By defining an abstract class or interface that specifies the creational methods, you can produce a more generic system that can potentially host many different kinds of builders.
+* Define multiple create methods for the Builder. Some Builders define multiple methods (essentially, they overload their creational method) to provide a variety of ways to initialize the constructed resource.
+* Develop creational delegates. With this variant, a Director object holds the overall Product create method and calls a series of more granular create methods on the Builder object. In this case, the Director acts as the manager for the Builder’s creation process.
+
+# Factory Method
+
+Factory Method is also known as Virtual Constructor.
+
+#### Pattern Properties
+
+Type: Creational
+Level: Class
+
+#### Purpose
+
+To define a standard method to create an object, apart from a constructor, but the decision of what kind of an object to create is left to subclasses.
+
+#### Applicability
+
+Use Factory Method pattern when:
+
+* You want to create an extensible framework. This means allowing flexibility by leaving some decisions, like the specific kind of object to create, until later.  
+* You want a subclass, rather than its superclass, to decide what kind of an object to create.  
+* You know when to create an object, but not what kind of an object. 
+* You need several overloaded constructors with the same parameter list, which is not allowed in Java. Instead, use several Factory Methods with different names.  
+
+#### Description
+
+This pattern is called Factory Method because it creates (manufactures) objects when you want it to.  
+
+When you start writing an application, it’s often not clear yet what kind of components you will be using. Normally you will have a general idea of the operations certain components should have, but the implementation is done at some other time and will not be of consequence at that moment.  
+
+This flexibility can be achieved by using interfaces for these components. But the problem with programming to interfaces is that you cannot create an object from an interface. You need an implementing class to get an object. Instead of coding a specific implementing class in your application, you extract the functionality of the constructor and put it in a method. That method is the factory method.
+
+To create these objects, instead of coding a specific implementing class in your application, you extract the functionality of the constructor and put it in a method. This produces a ```ConcreteCreator``` whose responsibility it is to create the proper objects. That ConcreteCreator creates instances of an implementation (```ConcreteProduct```) of an interface (```Product```).
+
+#### Implementation
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Factory_Method_UML_class_diagram.svg" height="300" width="600">
+
+To implement the Factory Method you need:
+
+* __Product__ – The interface of objects created by the factory.   
+* __ConcreteProduct__ – The implementing class of Product. Objects of this class are created by the ConcreteCreator.    
+* __Creator__ – The interface that defines the factory method(s) (factoryMethod).    
+* __ConcreteCreator__ – The class that extends Creator and that provides an implementation for the factoryMethod. This can return any object that implements the Product interface.   
+
+#### Benefits and Drawbacks
+
+The drawback to this pattern is the fact that to add a new type of product, you must add another new implementing class, and you must either change an existing ConcreteCreator or create a new class that implements Product.
 
 
-USPhoneNumber.java
-```java
-public class USPhoneNumber extends PhoneNumber{
-  private static final String COUNTRY_CODE = "01";
-  private static final int NUMBER_LENGTH = 10;
+# Prototype
 
-  public String getCountryCode(){ return COUNTRY_CODE; }
 
-  public void setPhoneNumber(String newNumber){
-    if (newNumber.length() == NUMBER_LENGTH){
-      super.setPhoneNumber(newNumber);
-    }
-  }
-}
-```
-
-The generic framework from AddressFactory, Address, and PhoneNumber makes it easy to extend the system to support additional countries. With each additional country, define an additional Concrete Factory class and a matching Concrete Product class. These are files for French address information.
-
-FrenchAddressFactory.java
-
-```java
-public class FrenchAddressFactory implements AddressFactory{
- public Address createAddress(){
-  return new FrenchAddress();
-  }
-
-  public PhoneNumber createPhoneNumber(){
-    return new FrenchPhoneNumber();
-  }
-}
-```
-
-FrenchAddress.java
-```java
-public class FrenchAddress extends Address{
- private static final String COUNTRY = "FRANCE";
-
- public String getCountry(){ return COUNTRY; }
-
- public String getFullAddress(){
-  return getStreet() + EOL_STRING +
-    getPostalCode() + SPACE + getCity() +
-    EOL_STRING + COUNTRY + EOL_STRING;
-  }
-}
-```
-
-FrenchPhoneNumber.java
-```java
-public class FrenchPhoneNumber extends PhoneNumber{
-  private static final String COUNTRY_CODE = "33";
-  private static final int NUMBER_LENGTH = 9;
-
-  public String getCountryCode(){ return COUNTRY_CODE; }
-
-  public void setPhoneNumber(String newNumber){
-    if (newNumber.length() == NUMBER_LENGTH){
-      super.setPhoneNumber(newNumber);
-    }
-  }
-}
-```
 
