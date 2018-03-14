@@ -3,7 +3,8 @@
 #### Test analyzer
 
 ```
-curl -s -u username:password "HOST:PORT/INDEX_NAME/_analyze?pretty&analyzer=ANALYZER" -d '<html>heLLo,<title>this is a test</title><html>'
+curl -s -u username:password "HOST:PORT/INDEX_NAME/_analyze?pretty&analyzer=ANALYZER" 
+-d '<html>heLLo,<title>this is a test</title><html>'
 ```
 
 #### Update template
