@@ -37,3 +37,9 @@ curl "164.55.92.127:9200/_health"
 ```
 curl "164.55.92.127:9200/nss_requests/_stats"
 ```
+
+#### Count documents of an index
+
+```
+curl "164.55.92.127:9200/INDEX_NAME/_count"
+```
