@@ -18,3 +18,10 @@ curl -s -u  username:password -XPUT "HOST:PORT/_template/TEMPLATE_NAME" -d @edg_
 ```
 curl -s -u username:password "HOST:PORT/_cat/indices"
 ```
+
+#### create an index
+
+```
+curl -s -u username:password -XPUT "HOST:PORT/INDEX_NAME" 
+-d ' { "settings": { "number_of_shards": 3, "number_of_replicas": 2 } }'
+```
