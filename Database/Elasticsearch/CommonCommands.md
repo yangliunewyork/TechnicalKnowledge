@@ -25,3 +25,15 @@ curl -s -u username:password "HOST:PORT/_cat/indices"
 curl -s -u username:password -XPUT "HOST:PORT/INDEX_NAME" 
 -d ' { "settings": { "number_of_shards": 3, "number_of_replicas": 2 } }'
 ```
+
+#### Check cluster health
+
+```
+curl "164.55.92.127:9200/_health"
+```
+
+#### Check index status
+
+```
+curl "164.55.92.127:9200/nss_requests/_stats"
+```
