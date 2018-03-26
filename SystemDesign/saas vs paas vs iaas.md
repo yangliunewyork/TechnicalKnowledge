@@ -4,6 +4,11 @@ While the cloud is an extremely hot topic from small businesses all the way to g
 
 There are usually three models of cloud service to compare: Software as a Service (SaaS), Platform as a Service (PaaS), and Infrastructure as a Service (IaaS). Each of these has its own benefits as well variances and it is necessary to understand the differences among SaaS, PaaS, and IaaS to know how to best choose one for your organization.
 
+
+#### Pizza!
+
+<img src="http://hostingadvice.digitalbrandsinc.netdna-cdn.com/wp-content/uploads/2017/05/pizza.jpg" height="600" width="800"/>
+
 ### Summary of Key Differences
 
 <img src="http://blogs.bmc.com/wp-content/uploads/2017/09/iaas-paas-saas-comparison-1024x759.jpg" height="600" width="800"/>
