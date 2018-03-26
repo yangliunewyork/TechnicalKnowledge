@@ -1,6 +1,6 @@
 ## What is service-oriented architecture ?
 
-![alt](https://eclipse.org/edt/papers/images/egl_serv_oriented_app.gif)
+<img src="https://image.slidesharecdn.com/ole-soa-bpm-overview-1229534561537601-1/95/service-oriented-architecture-and-business-process-modeling-overview-4-728.jpg" height="600" width="800">
 
 A service-oriented architecture (SOA) is a style of software design where services are provided to the other components by application components, through a communication protocol over a network. The basic principles of service oriented architecture are independent of vendors, products and technologies. A service is a discrete unit of functionality that can be accessed remotely and acted upon and updated independently, such as retrieving a credit card statement online.
 
