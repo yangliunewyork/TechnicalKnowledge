@@ -1,4 +1,16 @@
-In computer programming, a software framework is an abstraction in which software providing generic functionality can be selectively changed by additional user-written code, thus providing application-specific software. A software framework provides a standard way to build and deploy applications. A software framework is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions. Software frameworks may include support programs, compilers, code libraries, tool sets, and application programming interfaces (APIs) that bring together all the different components to enable development of a project or system.
+# What is software framework?
+
+__A software framework is software written to help you be productive. It is a skeleton, a complete set of tools that was built with the purpose of allowing you to focus on one or more specific tasks. You take that skeleton and build your application on top of it.__
+
+Frameworks of all kinds are extremely important nowadays, because of the time factor. When building something you will need to invest a lot of your time in building the logic for your application - and you don't want to be forced to program any kind of low-level functionality. Software frameworks do that, they take care of the low-level stuff for you.
+
+If you are making a website you will be highly productive with a web framework, which is a subtype of software framework that targets the web, and offers you the tools needed to be productive when making web applications so that you can only worry about your application logic.
+
+Django (one of the many web frameworks available out there) for example is called: "Web framework for perfectionists with deadlines" - I think that's pretty self-explanatory, what a framework does.
+
+# Defination
+
+In computer programming, __a software framework is an abstraction in which software providing generic functionality can be selectively changed by additional user-written code, thus providing application-specific software__. A software framework provides a standard way to build and deploy applications. A software framework is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions. Software frameworks may include support programs, compilers, code libraries, tool sets, and application programming interfaces (APIs) that bring together all the different components to enable development of a project or system.
 
 Frameworks have key distinguishing features that separate them from normal libraries:
 
