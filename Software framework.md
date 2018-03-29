@@ -29,3 +29,19 @@ However, once a framework is learned, future projects can be faster and easier t
 The issue continues, but a decade-plus of industry experience has shown that the most effective frameworks turn out to be those that evolve from re-factoring the common code of the enterprise, instead of using a generic "one-size-fits-all" framework developed by third parties for general purposes. An example of that would be how the user interface in such an application package as an office suite grows to have common look, feel, and data-sharing attributes and methods, as the once disparate bundled applications grow unified into a suite which is tighter and smaller; the newer/evolved suite can be a product that shares integral utility libraries and user interfaces.
 
 This trend in the controversy brings up an important issue about frameworks. Creating a framework that is elegant, versus one that merely solves a problem, is still an art rather than a science. "Software elegance" implies clarity, conciseness, and little waste (extra or extraneous functionality, much of which is user defined). For those frameworks that generate code, for example, "elegance" would imply the creation of code that is clean and comprehensible to a reasonably knowledgeable programmer (and which is therefore readily modifiable), versus one that merely generates correct code. The elegance issue is why relatively few software frameworks have stood the test of time: the best frameworks have been able to evolve gracefully as the underlying technology on which they were built advanced. Even there, having evolved, many such packages will retain legacy capabilities bloating the final software as otherwise replaced methods have been retained in parallel with the newer methods.
+
+# platform vs framework
+
+### Framework
+
+A framework could be compared to a skeleton which needs to get some flesh attached to it. This programmatic flesh is usually provided by a specific application that links to and uses parts of the skeleton. So the actual work, ie. filling the holes and connecting the dots, is done by the application.
+
+In programming, frameworks allow programmers to concentrate on the actual tasks they are faced with rather than to waste their time reinventing the wheel. Usually, frameworks are shipped with a set of predefined functions and classes. When using Spring (Java) or Symfony (PHP) for example, programmers do not need to think about things such as persistence, routing and session management too much because the work is done by standardized framework components.
+
+### Platform
+
+A platform, on the other hand, provides both the hardware and the software tools needed to run an application - be it a standalone program or one which has been built on top of a framework. Mostly, it comes in the flavor of Platform-as-a-Service (PaaS), meaning that the code-basis of the platform software itself is not distributed or licensed. Rather, it is part of a hosted solution running in a cloud which can be accessed via APIs or GUIs.
+
+Typically, platforms are built as scalable multi-tenancy systems, providing access to many users at the same time, thus using economies of scale to be able to offer services with an affordable price tag. Developers can then use platforms such as force.com or Google App Engine to build and run their own applications. In many cases, these applications are more light-weight than standalone programs because most of the business logic is contained in the platform.
+
+
