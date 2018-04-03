@@ -27,6 +27,8 @@ Swap space usage becomes an issue only when there is not enough RAM available, a
 
 #### What is the right swap space size?
 
+https://askubuntu.com/questions/49109/the-swap-needs-to-be-the-double-of-the-amount-of-ram?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+
 Here's a very good recommendation from RedHat: [Recommended System Swap Space](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-disk-partitioning-setup-x86#sect-recommended-partitioning-scheme-x86)
 
 An excerpt from the same link:
