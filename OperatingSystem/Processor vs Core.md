@@ -1,3 +1,5 @@
+https://www.howtogeek.com/194756/cpu-basics-multiple-cpus-cores-and-hyper-threading-explained/
+
 https://stackoverflow.com/questions/19225859/difference-between-core-and-processor?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
 
 ### Difference between core and processor?
