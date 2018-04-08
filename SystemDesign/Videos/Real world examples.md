@@ -21,3 +21,6 @@ https://www.youtube.com/watch?v=IO4teCbHvZw
 
 https://www.infoq.com/presentations/Infrastructure-at-Facebook/
 
+#### Scaling Memcache at Facebook
+
+https://www.usenix.org/conference/nsdi13/technical-sessions/presentation/nishtala
