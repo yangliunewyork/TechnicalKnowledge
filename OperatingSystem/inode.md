@@ -58,3 +58,12 @@ An inode number unambiguously identifies a file or directory on a given device, 
 Every file or directory on a given device has a unique inode number. (If two files on the same device have the same inode number, then they are really the same file with two different names.) On the other hand, a file or directory may be opened several times by the same process or by different processes, and thus have multiple different file descriptors. Additionally, files or directories that are not currently open by any process do not have any file descriptors referring to them.
 
 A valid file descriptor is associated with file mode flags and offset. That is, it grants the possessing process the right to read or write the file (or both), based on how the file descriptor was obtained; it also remembers some position within the file. However, it does not contain any metadata associated with the file itself, such as timestamps or Unix permission bits. An inode contains timestamps and Unix permission bits, but no file mode flags or offset.
+
+#### Linux: how many disk I/O does it take to read a file
+
+This depends on filesystem you plan to use. Before read file data system:
+
+1. Read directory file.
+2. Read inode of your's file
+3. Read sectors of your's file
+
