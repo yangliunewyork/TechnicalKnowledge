@@ -1,6 +1,7 @@
 
 
 * https://www.interviewbit.com/problems/design-messenger/
+* https://www.edureka.co/blog/hbase-tutorial
 
 
 
