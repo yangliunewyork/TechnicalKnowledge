@@ -1,3 +1,5 @@
+* https://www.edureka.co/blog/what-is-jenkins/?utm_campaign=what-is-jenkins-quora&utm_medium=content-link-quora&utm_source=quora
+
 # What is Jenkins?
 
 Continuous Integration is the most important part of DevOps that is used to integrate various DevOps stages. Jenkins is the most famous Continuous Integration tool.
@@ -31,55 +33,9 @@ Let us understand its importance with a use-case.
 I am pretty sure you all have used Nokia phones at some point in your life. In a software product development project at Nokia there was a process called Nightly builds. Nightly builds can be thought of as a predecessor to Continuous Integration. It means that every night an automated system pulls the code added to the shared repository throughout the day and builds that code. The idea is quite similar to Continuous Integration, but since the code that was built at night was quite large, locating and fixing of bugs was a real pain. Due to this, Nokia adopted Continuous Integration (CI). As a result, every commit made to the source code in the repository was built. If the build result shows that there is a bug in the code, then the developers only need to check that particular commit. This significantly reduced the time required to release new software.
 
 <img src="https://d1jnx9ba8s6j9r.cloudfront.net/blog/wp-content/uploads/2016/11/Nightly-build-vs-Continuous-Integration-What-is-Jenkins-Edureka.png">
-
-
- Add to Bookmark  Email this Post  40.4K     11
  
 Continuous Integration is the most important part of DevOps that is used to integrate various DevOps stages. Jenkins is the most famous Continuous Integration tool, I know you are curious to know the reason behind the popularity of Jenkins and I am pretty sure after reading this What is Jenkins blog, all your questions will get answered.
 
-What is Jenkins - Edureka
-What is Jenkins?
-Jenkins is an open source automation tool written in Java with plugins built for Continuous Integration purpose. Jenkins is used to build and test your software projects continuously making it easier for developers to integrate changes to the project, and making it easier for users to obtain a fresh build. It also allows you to continuously deliver your software by integrating with a large number of testing and deployment technologies.
-
-With Jenkins, organizations can accelerate the software development process through automation. Jenkins integrates development life-cycle processes of all kinds, including build, document, test, package, stage, deploy, static analysis and much more.
-
-Jenkins achieves Continuous Integration with the help of plugins. Plugins allows the integration of Various DevOps stages. If you want to integrate a particular tool, you need to install the plugins for that tool. For example: Git, Maven 2 project, Amazon EC2, HTML publisher etc.
-
-The image below depicts that Jenkins is integrating various DevOps stages:
-
-Jenkins integration-What is Jenkins - Edureka
-
-Advantages of Jenkins include:
-
-It is an open source tool with great community support.
-It is easy to install.
-It has 1000+ plugins to ease your work. If a plugin does not exist, you can code it and share with the community.
-It is free of cost.
-It is built with Java and hence, it is portable to all the major platforms.
-There are certain things about Jenkins that separates it from other the Continuous Integration tool. Let us take a look on those points.
-
-What is Jenkins | DevOps Training | Edureka
-
-Jenkins Key Metrics
-
-Following are some facts about Jenkins that makes it better than other Continuous Integration tools:
-
-Adoption: Jenkins is widespread, with more than 147,000 active installations and over 1 million users around the world.
-Plugins: Jenkins is interconnected with well over 1,000 plugins that allow it to integrate with most of the development, testing and deployment tools.
-It is evident from the above points that Jenkins has a very high demand globally. Before we dive into Jenkins it is important to know what is Continuous Integration and why it was introduced.
-
-What is Continuous Integration?
-Continuous Integration is a development practice in which the developers are required to commit changes to the source code in a shared repository several times a day or more frequently. Every commit made in the repository is then built. This allows the teams to detect the problems early. Apart from this, depending on the Continuous Integration tool, there are several other functions like deploying the build application on the test server, providing the concerned teams with the build and test results etc.
-
-Let us understand its importance with a use-case.
-
-Continuous Integration in Nokia
-
-I am pretty sure you all have used Nokia phones at some point in your life. In a software product development project at Nokia there was a process called Nightly builds. Nightly builds can be thought of as a predecessor to Continuous Integration. It means that every night an automated system pulls the code added to the shared repository throughout the day and builds that code. The idea is quite similar to Continuous Integration, but since the code that was built at night was quite large, locating and fixing of bugs was a real pain. Due to this, Nokia adopted Continuous Integration (CI). As a result, every commit made to the source code in the repository was built. If the build result shows that there is a bug in the code, then the developers only need to check that particular commit. This significantly reduced the time required to release new software.
-
-Nightly build vs Continuous Integration - What is Jenkins - Edureka
-
-Now is the correct time to understand how Jenkins achieves Continuous Integration.
 
 #### Continuous Integration With Jenkins
 
