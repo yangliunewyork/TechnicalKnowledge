@@ -45,3 +45,48 @@ The solution for a cloud-based microservice environment is to use a service-disc
 
 ### 4.2.1 The architecture of service discovery
 
+To begin our discussion around service discovery architecture, we need to understand four concepts. These general concepts are shared across all service discovery imple- mentations:
+
+* Service registration—How does a service register with the service discovery agent?  
+* Client lookup of service address—What’s the means by which a service client looks up service information?  
+* Information sharing—How is service information shared across nodes?  
+* Health monitoring—How do services communicate their health back to the service discovery agent?  
+
+<img src="https://github.com/Lelouch-Lamperouge-Code-Geass/TechnicalKnowledge/blob/master/ProgrammingLanguage/Java/Spring%20Microservices%20in%20Action/Photos/Figure%204.2.png">
+
+As service instances start up, they’ll register their physical location, path, and port that they can be accessed by with one or more service discovery instances. While each instance of a service will have a unique IP address and port, each service instance that comes up will register under the same service ID. A service ID is nothing more than a key that uniquely identifies a group of the same service instances.
+
+A service will usually only register with one service discovery service instance. Most service discovery implementations use a peer-to-peer model of data propagation where the data around each service instance is communicated to all the other nodes in the cluster.
+
+Depending on the service discovery implementation, the propagation mechanism might use a hard-coded list of services to propagate to or use a multi-casting protocol like the “gossip”2 or “infection-style”3 protocol to allow other nodes to “discover” changes in the cluster.
+
+Finally, each service instance will push to or have pulled from its status by the ser- vice discovery service. Any services failing to return a good health check will be removed from the pool of available service instances.
+
+Once a service has registered with a service discovery service, it’s ready to be used by an application or service that needs to use its capabilities. Different models exist for a client to “discover” a service. A client can rely solely on the service discovery engine to resolve service locations each time a service is called. With this approach, the ser- vice discovery engine will be invoked every time a call to a registered microservice instance is made. Unfortunately, this approach is brittle because the service client is completely dependent on the service discovery engine to be running to find and invoke a service.
+
+A more robust approach is to use what’s called client-side load balancing.4 Figure 4.3 illustrates this approach.
+
+<img src="https://github.com/Lelouch-Lamperouge-Code-Geass/TechnicalKnowledge/blob/master/ProgrammingLanguage/Java/Spring%20Microservices%20in%20Action/Photos/Figure%204.3.png">
+
+In this model, when a consuming actor needs to invoke a service:
+
+1. It will contact the service discovery service for all the service instances a service consumer is asking for and then cache data locally on the service consumer’s machine.  
+2. Each time a client wants to call the service, the service consumer will look up the location information for the service from the cache. Usually client-side caching will use a simple load balancing algorithm like the “round-robin” load balancing algorithm to ensure that service calls are spread across multiple ser- vice instances.  
+3. The client will then periodically contact the service discovery service and refresh its cache of service instances. The client cache is eventually consistent, but there’s always a risk that between when the client contacts the service dis- covery instance for a refresh and calls are made, calls might be directed to a ser- vice instance that isn’t healthy.
+If, during the course of calling a service, the service call fails, the local service discovery cache is invalidated and the service discovery client will attempt to refresh its entries from the service discovery agent.  
+
+## 4.6 Summary
+
+* The service discovery pattern is used to abstract away the physical location of services.
+* A service discovery engine such as Eureka can seamlessly add and remove ser- vice instances from an environment without the service clients being impacted.
+* Client-side load balancing can provide an extra level of performance and resil-
+iency by caching the physical location of a service on the client making the ser-
+vice call.
+* Eureka is a Netflix project that when used with Spring Cloud, is easy to set up
+and configure.
+* You used three different mechanisms in Spring Cloud, Netflix Eureka, and Netflix Ribbon to invoke a service. These mechanisms included:  
+* Using a Spring Cloud service DiscoveryClient  
+* Using Spring Cloud and Ribbon-backed RestTemplate   
+* Using Spring Cloud and Netflix’s Feign client  
+
+
