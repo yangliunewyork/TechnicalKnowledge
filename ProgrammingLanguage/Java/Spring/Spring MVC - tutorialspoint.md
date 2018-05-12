@@ -1,3 +1,5 @@
+https://www.tutorialspoint.com/spring/index.htm  
+
 The Spring Web MVC framework provides Model-View-Controller (MVC) architecture and ready components that can be used to develop flexible and loosely coupled web applications. The MVC pattern results in separating the different aspects of the application (input logic, business logic, and UI logic), while providing a loose coupling between these elements.
 
 * The Model encapsulates the application data and in general they will consist of POJO.  
@@ -127,4 +129,135 @@ Spring could potentially be a one-stop shop for all your enterprise applications
 The Spring Framework provides about 20 modules which can be used based on an application requirement.
 
 <img src="https://www.tutorialspoint.com/spring/images/spring_architecture.png">
+
+### Core Container
+
+The Core Container consists of the Core, Beans, Context, and Expression Language modules the details of which are as follows：
+
+* The __Core__ module provides the fundamental parts of the framework, including the IoC and Dependency Injection features. 
+* The __Bean__ module provides BeanFactory, which is a sophisticated implementation of the factory pattern. 
+* The __Context__ module builds on the solid base provided by the Core and Beans modules and it is a medium to access any objects defined and configured. The ApplicationContext interface is the focal point of the Context module.  
+* The __SpEL__ module provides a powerful expression language for querying and manipulating an object graph at runtime.  
+
+#### Data Access/Integration
+
+The Data Access/Integration layer consists of the JDBC, ORM, OXM, JMS and Transaction modules whose detail is as follows −
+
+* The JDBC module provides a JDBC-abstraction layer that removes the need for tedious JDBC related coding.  
+* The ORM module provides integration layers for popular object-relational mapping APIs, including JPA, JDO, Hibernate, and iBatis.  
+* The OXM module provides an abstraction layer that supports Object/XML mapping implementations for JAXB, Castor, XMLBeans, JiBX and XStream.  
+* The Java Messaging Service JMS module contains features for producing and consuming messages.  
+* The Transaction module supports programmatic and declarative transaction management for classes that implement special interfaces and for all your POJOs.  
+
+#### Web
+
+The Web layer consists of the Web, Web-MVC, Web-Socket, and Web-Portlet modules the details of which are as follows −
+
+* The Web module provides basic web-oriented integration features such as multipart file-upload functionality and the initialization of the IoC container using servlet listeners and a web-oriented application context.   
+* The Web-MVC module contains Spring's Model-View-Controller (MVC) implementation for web applications.  
+* The Web-Socket module provides support for WebSocket-based, two-way communication between the client and the server in web applications.  
+* The Web-Portlet module provides the MVC implementation to be used in a portlet environment and mirrors the functionality of Web-Servlet module.  
+
+#### Miscellaneous
+
+There are few other important modules like AOP, Aspects, Instrumentation, Web and Test modules the details of which are as follows :
+
+* The AOP module provides an aspect-oriented programming implementation allowing you to define method-interceptors and pointcuts to cleanly decouple code that implements functionality that should be separated.  
+* The Aspects module provides integration with AspectJ, which is again a powerful and mature AOP framework.  
+* The Instrumentation module provides class instrumentation support and class loader implementations to be used in certain application servers.  
+* The Messaging module provides support for STOMP as the WebSocket sub-protocol to use in applications. It also supports an annotation programming model for routing and processing STOMP messages from WebSocket clients.  
+* The Test module supports the testing of Spring components with JUnit or TestNG frameworks.  
+
+### Spring - IoC Containers
+
+__The Spring container is at the core of the Spring Framework. The container will create the objects, wire them together, configure them, and manage their complete life cycle from creation till destruction. The Spring container uses DI to manage the components that make up an application. These objects are called Spring Beans.__
+
+The container gets its instructions on what objects to instantiate, configure, and assemble by reading the configuration metadata provided. The configuration metadata can be represented either by XML, Java annotations, or Java code. The following diagram represents a high-level view of how Spring works. The Spring IoC container makes use of Java POJO classes and configuration metadata to produce a fully configured and executable system or application.
+
+<img src="https://www.tutorialspoint.com/spring/images/spring_ioc_container.jpg">
+
+Spring provides the following two distinct types of containers:
+
+#### Spring BeanFactory Container
+
+This is the simplest container providing the basic support for DI and defined by the org.springframework.beans.factory.BeanFactory interface. The BeanFactory and related interfaces, such as BeanFactoryAware, InitializingBean, DisposableBean, are still present in Spring for the purpose of backward compatibility with a large number of third-party frameworks that integrate with Spring.
+
+There are a number of implementations of the BeanFactory interface that are come straight out-of-the-box with Spring. The most commonly used BeanFactory implementation is the XmlBeanFactory class. This container reads the configuration metadata from an XML file and uses it to create a fully configured system or application.
+
+The BeanFactory is usually preferred where the resources are limited like mobile devices or applet-based applications. Thus, use an ApplicationContext unless you have a good reason for not doing so.
+
+#### Spring ApplicationContext Container
+
+The Application Context is Spring's advanced container. Similar to BeanFactory, it can load bean definitions, wire beans together, and dispense beans upon request. Additionally, it adds more enterprise-specific functionality such as the ability to resolve textual messages from a properties file and the ability to publish application events to interested event listeners. This container is defined by org.springframework.context.ApplicationContext interface.
+
+The ApplicationContext includes all functionality of the BeanFactory, It is generally recommended over BeanFactory. BeanFactory can still be used for lightweight applications like mobile devices or applet-based applications.
+
+The most commonly used ApplicationContext implementations are:
+
+* FileSystemXmlApplicationContext − This container loads the definitions of the beans from an XML file. Here you need to provide the full path of the XML bean configuration file to the constructor.    
+* ClassPathXmlApplicationContext − This container loads the definitions of the beans from an XML file. Here you do not need to provide the full path of the XML file but you need to set CLASSPATH properly because this container will look like bean configuration XML file in CLASSPATH.   
+* WebXmlApplicationContext − This container loads the XML file with definitions of all beans from within a web application.  
+__The ApplicationContext container includes all functionality of the BeanFactorycontainer, so it is generally recommended over BeanFactory.__ BeanFactory can still be used for lightweight applications like mobile devices or applet-based applications where data volume and speed is significant.  
+
+### Spring - Bean Definition
+
+The objects that form the backbone of your application and that are managed by the Spring IoC container are called beans. A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container. These beans are created with the configuration metadata that you supply to the container. For example, in the form of XML <bean/> definitions which you have already seen in the previous chapters.
+
+Bean definition contains the information called configuration metadata, which is needed for the container to know the following :
+
+* How to create a bean  
+* Bean's lifecycle details  
+* Bean's dependencies  
+
+#### Spring Configuration Metadata
+
+Spring IoC container is totally decoupled from the format in which this configuration metadata is actually written. Following are the three important methods to provide configuration metadata to the Spring Container :  
+
+* XML based configuration file.  
+* Annotation-based configuration.  
+* Java-based configuration.  
+
+#### Bean Scopes
+
+When defining a <bean> you have the option of declaring a scope for that bean. For example, to force Spring to produce a new bean instance each time one is needed, you should declare the bean's scope attribute to be prototype. Similarly, if you want Spring to return the same bean instance each time one is needed, you should declare the bean's scope attribute to be singleton.
+   
+* singleton : This scopes the bean definition to a single instance per Spring IoC container (default).  
+* prototype : This scopes a single bean definition to have any number of object instances.  
+* request : This scopes a bean definition to an HTTP request. Only valid in the context of a web-aware Spring ApplicationContext.    
+* session : This scopes a bean definition to an HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.  
+* global-session : This scopes a bean definition to a global HTTP session. Only valid in the context of a web-aware Spring ApplicationContext.  
+
+### Dependency Injection
+
+Every Java-based application has a few objects that work together to present what the end-user sees as a working application. When writing a complex Java application, application classes should be as independent as possible of other Java classes to increase the possibility to reuse these classes and to test them independently of other classes while unit testing. Dependency Injection (or sometime called wiring) helps in gluing these classes together and at the same time keeping them independent.
+
+DI exists in two major variants and the following two sub-chapters will cover both of them with examples :
+
+* Constructor-based DI is accomplished when the container invokes a class constructor with a number of arguments, each representing a dependency on the other class.  
+* Setter-based DI is accomplished by the container calling setter methods on your beans after invoking a no-argument constructor or no-argument static factory method to instantiate your bean.  
+
+#### Injecting Inner Beans
+
+As you know Java inner classes are defined within the scope of other classes, similarly, inner beans are beans that are defined within the scope of another bean. Thus, a <bean/> element inside the <property/> or <constructor-arg/> elements is called inner bean and it is shown below.  
+
+```xml
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <bean id = "outerBean" class = "...">
+      <property name = "target">
+         <bean id = "innerBean" class = "..."/>
+      </property>
+   </bean>
+
+</beans>
+```
+
+### Spring - Beans Auto-Wiring
+
+
 
