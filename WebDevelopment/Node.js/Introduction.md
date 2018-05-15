@@ -14,6 +14,8 @@ Node.js is a Javascript runtime environment that processes incoming requests in 
 
 ### Threading
 
+<img src="https://image.slidesharecdn.com/becomingnodejsninjaoncf-120410170117-phpapp01/95/becoming-nodejs-ninja-on-cloud-foundry-9-728.jpg">
+
 Node.js operates on a single thread, using __non-blocking I/O__ calls, __allowing it to support tens of thousands of concurrent connections without incurring the cost of thread context switching__. The design of sharing a single thread among all the requests that use the observer pattern is intended for building highly concurrent applications, where any function performing I/O must use a __callback__. In order to accommodate the single-threaded event loop, __Node.js utilizes the libuv library that, in turn, uses a fixed-sized thread pool that is responsible for some of the non-blocking asynchronous I/O operations__.
 
 A downside of this single-threaded approach is that Node.js doesn't allow vertical scaling by increasing the number of CPU cores of the machine it is running on without using an additional module, such as cluster, StrongLoop Process Manager, or pm2. However, __developers can increase the default number of threads in the libuv thread pool__; these threads are likely to be distributed across multiple cores by the server operating system.
