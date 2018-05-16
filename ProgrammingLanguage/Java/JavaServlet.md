@@ -1,3 +1,5 @@
+https://www.javatpoint.com/servlet-tutorial
+
 ## What is Java Servlet ?
 A Java servlet is a Java program that extends the capabilities of a server. Although servlets can respond to any types of requests, they most commonly implement applications hosted on __Web servers__. Such Web servlets are the Java counterpart to other dynamic Web content technologies such as PHP and ASP.NET.
 
