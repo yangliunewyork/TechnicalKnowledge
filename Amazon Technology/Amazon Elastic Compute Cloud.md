@@ -12,6 +12,6 @@ Amazon's elastic IP address feature is similar to static IP address in tradition
 
 Amazon's auto-scaling feature of EC2 allows it to automatically adapt computing capacity to site traffic. The schedule-based (e.g. time-of-the-day) and rule-based (e.g. CPU utilization thresholds) auto scaling mechanisms are easy to use and efficient for simple applications. However, one potential problem is that VMs may take up to several minutes to be ready to use, which are not suitable for time critical applications. The VM startup time are dependent on image size, VM type, data center locations, etc.
 
+### Is Amazon EC2 IaaS or PaaS?
 
-
-
+AWS Elastic Compute Service or EC2 is IaaS(Infrastructure as a Service). This is because Amazon takes the responsibility of networking, storage, server and virtualization and the user is responsible for managing the Operating System, middleware, runtime, data and application. In PaaS aka Platform as a Service the user only needs to take care of data and application, the management of rest of the layers lies in hands of the service provider. AWS Elastic BeanStalk is PaaS.
