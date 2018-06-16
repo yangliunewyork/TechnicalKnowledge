@@ -1,0 +1,16 @@
+https://techblog.bozho.net/runtime-classpath-vs-compile-time-classpath/  
+
+So, what is a classpath? A set of all the classes (and jars with classes) that are required by your application. But there are two, or actually three distinct classpaths:
+
+* compile-time classpath. Contains the classes that you’ve added in your IDE (assuming you use an IDE) in order to compile your code. In other words, this is the classpath passed to “javac” (though you may be using another compiler).
+* runtime classpath. Contains the classes that are used when your application is running. That’s the classpath passed to the “java” executable. In the case of web apps this is your /lib folder, plus any other jars provided by the application server/servlet container
+* test classpath – this is also a sort of runtime classpath, but it is used when you run tests. Tests do not run inside your application server/servlet container, so their classpath is a bit different
+
+Maven defines dependency scopes that are really useful for explaining the differences between the different types of classpaths. Read the [short description](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Scope) of each scope.
+
+Many people assume that if they successfully compiled the application with a given jar file present, it means that the application will run fine. But it doesn’t – you need the same jars that you used to compile your application to be present on your runtime classpath as well. Well, not necessarily all of them, and not necessarily only them. A few examples:
+
+* you compile the code with a given library on the compile-time classpath, but forget to add it to the runtime classpath. The JVM throws NoClasDefFoundError, which means that a class is missing, which was present when the code was compiled. This error is a clear sign that you are missing a jar file on your runtime classpath that you have on your compile-time classpath. It is also possible that a jar you depend on in turn depends on a jar that you don’t have anywhere. That’s why libraries (must) have their dependencies declared, so that you know which jars to put on your runtime classpath  
+* containers (servlet containers, application servers) have some libraries built-in. Normally you can’t override the built-in dependencies, and even when you can, it requires additional configuration. So, for example, you use Tomcat, which provides the servlet-api.jar. You compile your application with the servlet-api.jar on your compile-time classpath, so that you can use HttpServletRequest in your classes, but do not include it in your WEB-INF/lib folder, because tomcat will put its own jar in the runtime classpath. If you duplicate the dependency, you may get bizarre results, as classloaders get confused.  
+* a framework you are using (let’s say spring-mvc) relies on another library to do JSON serialization (usually Jackson). You don’t actually need Jackson on your compile-time classpath, because you are not referring to any of its classes or even spring classes that refer to them. But spring needs Jackson internally, so the jackson jar must be in WEB-INF/lib (runtime classpath) for JSON serialization to work.  
+
