@@ -48,3 +48,42 @@ All PHP code must be included inside one of the three special markup tags ATE ar
 <script language = "php"> PHP code goes here </script>
 ```
 
+# PHP - Web Concepts
+
+PHP creates some useful environment variables that can be seen in the phpinfo.php page that was used to setup the PHP environment.
+
+One of the environment variables set by PHP is HTTP_USER_AGENT which identifies the user's browser and operating system.
+
+PHP provides a function getenv() to access the value of all the environment variables. The information contained in the HTTP_USER_AGENT environment variable can be used to create dynamic content appropriate to the browser.
+
+#### The GET Method
+
+The GET method sends the encoded user information appended to the page request. The page and the encoded information are separated by the ? character.
+
+```
+http://www.test.com/index.htm?name1=value1&name2=value2
+```
+
+
+* The GET method produces a long string that appears in your server logs, in the browser's Location: box.
+* The GET method is restricted to send upto 1024 characters only.
+* Never use GET method if you have password or other sensitive information to be sent to the server.
+* GET can't be used to send binary data, like images or word documents, to the server.
+* The data sent by GET method can be accessed using ```QUERY_STRING``` environment variable.
+* The PHP provides ```$_GET``` associative array to access all the sent information using GET method.
+
+#### The POST Method
+
+The POST method transfers information via HTTP headers. The information is encoded as described in case of GET method and put into a header called QUERY_STRING.
+
+* The POST method does not have any restriction on data size to be sent.
+* The POST method can be used to send ASCII as well as binary data.
+* The data sent by POST method goes through HTTP header so security depends on HTTP protocol. By using Secure HTTP you can make sure that your information is secure.
+* The PHP provides ```$_POST``` associative array to access all the sent information using POST method.
+
+#### The $\_REQUEST variable
+
+The PHP ```$_REQUEST``` variable contains the contents of both ```$_GET```, ```$_POST```, and ```$_COOKIE```. \
+
+The PHP ```$_REQUEST``` variable can be used to get the result from form data sent with both the GET and POST methods.
+
