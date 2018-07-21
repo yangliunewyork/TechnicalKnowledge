@@ -1,3 +1,5 @@
+Youtube Tutorial : https://www.youtube.com/watch?v=3fPFTbQuSdc 
+
 In databases and transaction processing, two-phase locking (2PL) is a concurrency control method that guarantees serializability. It is also the name of the resulting set of database transaction schedules (histories). The protocol utilizes locks, applied by a transaction to data, which may block (interpreted as signals to stop) other transactions from accessing the same data during the transaction's life.
 By the 2PL protocol, locks are applied and removed in two phases:
 
