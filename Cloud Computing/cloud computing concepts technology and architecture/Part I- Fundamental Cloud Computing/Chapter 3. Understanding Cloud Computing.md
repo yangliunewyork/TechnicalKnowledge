@@ -27,4 +27,21 @@ Different capacity planning strategies exist:
 
 Planning for capacity can be challenging because it requires estimating usage load fluctuations. There is a constant need to balance peak usage requirements without unnecessary over-expenditure on infrastructure. An example is outfitting IT infrastructure to accommodate maximum usage loads which can impose unreasonable financial investments. In such cases, moderating investments can result in under-provisioning, leading to transaction losses and other usage limitations from lowered usage thresholds.
 
-Excerpt From: Erl, Thomas. “Cloud Computing: Concepts, Technology & Architecture (The Prentice Hall Service Technology Series from Thomas Erl).” iBooks. 
+#### Cost Reduction
+
+A direct alignment between IT costs and business performance can be difficult to maintain. The growth of IT environments often corresponds to the assessment of their maximum usage requirements. This can make the support of new and expanded business automations an ever-increasing investment. Much of this required investment is funneled into infrastructure expansion because the usage potential of a given automation solution will always be limited by the processing power of its underlying infrastructure.
+
+Two costs need to be accounted for: the cost of acquiring new infrastructure, and the cost of its ongoing ownership. Operational overhead represents a considerable share of IT budgets, often exceeding up-front investment costs.
+Common forms of infrastructure-related operating overhead include the following:
+
+* technical personnel required to keep the environment operational  
+* upgrades and patches that introduce additional testing and deployment cycles
+* utility bills and capital expense investments for power and cooling  
+* security and access control measures that need to be maintained and enforced to protect infrastructure resources  
+* administrative and accounts staff that may be required to keep track of licenses and support arrangements  
+
+The on-going ownership of internal technology infrastructure can encompass burdensome responsibilities that impose compound impacts on corporate budgets. An IT department can consequently become a significant—and at times overwhelming—drain on the business, potentially inhibiting its responsiveness, profitability, and overall evolution.
+
+#### Organizational Agility
+
+
