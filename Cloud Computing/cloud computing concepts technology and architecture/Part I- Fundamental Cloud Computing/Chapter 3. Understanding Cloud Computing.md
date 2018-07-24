@@ -81,4 +81,6 @@ Established virtualization technologies can be traced to several cloud character
 * The primary business drivers that exposed the need for cloud computing and led to its formation include capacity planning, cost reduction, and organizational agility.
 * The primary technology innovations that influenced and inspired key distinguishing features and aspects of cloud computing include clustering, grid computing, and traditional forms of virtualization.
 
+## 3.2. Basic Concepts and Terminology
 
+Excerpt From: Erl, Thomas. “Cloud Computing: Concepts, Technology & Architecture (The Prentice Hall Service Technology Series from Thomas Erl).” iBooks. 
