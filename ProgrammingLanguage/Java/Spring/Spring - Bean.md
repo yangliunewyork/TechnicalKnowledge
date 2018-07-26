@@ -22,6 +22,8 @@ All the above configuration metadata translates into a set of the following prop
 
 ##### Example
 
+http://www.java2s.com/Tutorials/Java/Spring/0140__Spring_Map_Properties.htm
+
 ```xml
 <beans>
     <bean id="sessionFactory"
