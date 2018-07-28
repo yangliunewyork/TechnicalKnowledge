@@ -118,3 +118,23 @@ A cloud consumer is generally granted very limited administrative control over a
 * The PaaS cloud delivery model enables a cloud provider to offer a pre-configured environment that cloud consumers can use to build and deploy cloud services and solutions, albeit with decreased administrative control.  
 * SaaS is a cloud delivery model for shared cloud services that can be positioned as commercialized products hosted by clouds.  
 * Different combinations of IaaS, PaaS, and SaaS are possible, depending on how cloud consumers and cloud providers choose to leverage the natural hierarchy established by these base cloud delivery models.  
+
+### 4.4. Cloud Deployment Models
+
+A cloud deployment model represents a specific type of cloud environment, primarily distinguished by ownership, size, and access.
+
+There are four common cloud deployment models:
+
+* Public cloud
+* Community cloud
+* Private cloud
+* Hybrid cloud 
+
+
+### Summary of Key Points
+
+* A public cloud is owned by a third party and generally offers commercialized cloud services and IT resources to cloud consumer organizations.
+* A private cloud is owned by an individual organization and resides within the organization’s premises.
+* A community cloud is normally limited for access by a group of cloud consumers that may also share responsibility in its ownership.
+* A hybrid cloud is a combination of two or more other cloud deployment models.
+
