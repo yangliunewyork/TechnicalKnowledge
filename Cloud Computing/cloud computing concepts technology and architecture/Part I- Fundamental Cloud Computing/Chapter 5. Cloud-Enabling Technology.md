@@ -78,4 +78,61 @@ Data centers require extensive network hardware in order to enable multiple leve
 
 ## 5.3. Virtualization Technology
 
+Virtualization is the process of converting a physical IT resource into a virtual IT resource.
 
+Most types of IT resources can be virtualized, including:
+
+* Servers – A physical server can be abstracted into a virtual server.
+* Storage – A physical storage device can be abstracted into a virtual storage device or a virtual disk.
+* Network – Physical routers and switches can be abstracted into logical network fabrics, such as VLANs.
+* Power – A physical UPS and power distribution units can be abstracted into what are commonly referred to as virtual UPSs.
+
+Virtualization software runs on a physical server called a __host__ or __physical host__, whose underlying hardware is made accessible by the virtualization software. The virtualization software functionality encompasses system services that are specifically related to virtual machine management and not normally found on standard operating systems. This is why this software is sometimes referred to as a virtual machine manager or a virtual machine monitor (VMM), but most commonly known as a hypervisor.
+
+#### Hardware Independence
+
+Virtualization is a conversion process that translates unique IT hardware into emulated and standardized software-based copies. Through hardware independence, virtual servers can easily be moved to another virtualization host, automatically resolving multiple hardware-software incompatibility issues. As a result, cloning and manipulating virtual IT resources is much easier than duplicating physical hardware. 
+
+#### Server Consolidation
+
+The coordination function that is provided by the virtualization software allows multiple virtual servers to be simultaneously created in the same virtualization host. Virtualization technology enables different virtual servers to share one physical server. This process is called server consolidation and is commonly used to increase hardware utilization, load balancing, and optimization of available IT resources. The resulting flexibility is such that different virtual servers can run different guest operating systems on the same host.
+
+This fundamental capability directly supports common cloud features, such as on-demand usage, resource pooling, elasticity, scalability, and resiliency.
+
+#### Resource Replication
+
+Virtual servers are created as virtual disk images that contain binary file copies of hard disk content. These virtual disk images are accessible to the host’s operating system, meaning simple file operations, such as copy, move, and paste, can be used to replicate, migrate, and back up the virtual server. 
+
+#### Operating System-Based Virtualization
+
+Operating system-based virtualization is the installation of virtualization software in a pre-existing operating system, which is called the host operating system. For example, a user whose workstation is installed with a specific version of Windows wants to generate virtual servers and installs virtualization software into the host operating system like any other program. This user needs to use this application to generate and operate one or more virtual servers. The user needs to use virtualization software to enable direct access to any of the generated virtual servers. Since the host operating system can provide hardware devices with the necessary support, operating system virtualization can rectify hardware compatibility issues even if the hardware driver is not available to the virtualization software.
+
+Operating system-based virtualization can introduce demands and issues related to performance overhead such as:
+
+* The host operating system consumes CPU, memory, and other hardware IT resources.  
+* Hardware-related calls from guest operating systems need to traverse several layers to and from the hardware, which decreases overall performance.  
+* Licenses are usually required for host operating systems, in addition to individual licenses for each of their guest operating systems.  
+
+A concern with operating system-based virtualization is the processing overhead required to run the virtualization software and host operating systems. Implementing a virtualization layer will negatively affect overall system performance. Estimating, monitoring, and managing the resulting impact can be challenging because it requires expertise in system workloads, software and hardware environments, and sophisticated monitoring tools.
+
+#### Hardware-Based Virtualization
+
+Allowing the virtual servers to interact with hardware without requiring intermediary action from the host operating system generally makes hardware-based virtualization more efficient.
+
+Virtualization software is typically referred to as a hypervisor for this type of processing. A hypervisor has a simple user-interface that requires a negligible amount of storage space. It exists as a thin layer of software that handles hardware management functions to establish a virtualization management layer. Device drivers and system services are optimized for the provisioning of virtual servers, although many standard operating system functions are not implemented. This type of virtualization system is essentially used to optimize performance overhead inherent to the coordination that enables multiple virtual servers to interact with the same hardware platform.
+
+One of the main issues of hardware-based virtualization concerns compatibility with hardware devices. The virtualization layer is designed to communicate directly with the host hardware, meaning all of the associated device drivers and support software need to be compatible with the hypervisor. Hardware device drivers may not be as available to hypervisor platforms as they are to operating systems. Host management and administration features may further not include the range of advanced functions that are common to operating systems.
+
+#### Virtualization Management
+
+Many administrative tasks can be performed more easily using virtual servers as opposed to using their physical counterparts. Modern virtualization software provides several advanced management functions that can automate administration tasks and reduce the overall operational burden on virtualized IT resources.
+
+Virtualized IT resource management is often supported by virtualization infrastructure management (VIM) tools that collectively manage virtual IT resources and rely on a centralized management module, otherwise known as a controller, that runs on a dedicated computer.
+
+### Summary of Key Points
+
+* Server virtualization is the process of abstracting IT hardware into virtual servers using virtualization software.
+* Virtualization provides hardware independence, server consolidation, and resource replication, and further supports resource pooling and elastic scalability.
+* Virtual servers are realized through either operating system-based or hardware-based virtualization.”
+
+## 5.4. Web Technology
