@@ -136,3 +136,60 @@ Virtualized IT resource management is often supported by virtualization infrastr
 * Virtual servers are realized through either operating system-based or hardware-based virtualization.”
 
 ## 5.4. Web Technology
+
+### Summary of Key Points
+
+* Web technology is very commonly used for cloud service implementations and for front-ends used to remotely manage cloud-based IT resources.
+* Fundamental technologies of Web architecture include the URL, HTTP, HTML, and XML.”
+
+## 5.5. Multitenant Technology
+
+The multitenant application design was created to enable multiple users (tenants) to access the same application logic simultaneously. Each tenant has its own view of the application that it uses, administers, and customizes as a dedicated instance of the software while remaining unaware of other tenants that are using the same application.
+
+Multitenant applications ensure that tenants do not have access to data and configuration information that is not their own. Tenants can individually customize features of the application, such as:
+
+* User Interface – Tenants can define a specialized “look and feel” for their application interface.
+* Business Process – Tenants can customize the rules, logic, and workflows of the business processes that are implemented in the application.
+* Data Model – Tenants can extend the data schema of the application to include, exclude, or rename fields in the application data structures.
+* Access Control – Tenants can independently control the access rights for users and groups.
+
+#### Multitenancy vs. Virtualization
+
+Multitenancy is sometimes mistaken for virtualization because the concept of multiple tenants is similar to the concept of virtualized instances.
+
+The differences lie in what is multiplied within a physical server acting as a host:
+
+* With virtualization: Multiple virtual copies of the server environment can be hosted by a single physical server. Each copy can be provided to different users, can be configured independently, and can contain its own operating systems and applications.
+* With multitenancy: A physical or virtual server hosting an application is designed to allow usage by multiple different users. Each user feels as though they have exclusive usage of the application.
+
+## 5.6. Service Technology
+
+#### REST Services
+
+REST services are designed according to a set of constraints that shape the service architecture to emulate the properties of the World Wide Web, resulting in service implementations that rely on the use of core Web technologies.
+
+Unlike Web services, REST services do not have individual technical interfaces but instead share a common technical interface that is known as the uniform contract, which is typically established via the use of HTTP methods.
+
+The six REST design constraints are:
+
+* Client-Server
+* Stateless
+* Cache
+* Interface/Uniform Contract
+* Layered System
+* Code-On-Demand
+
+#### Service Middleware
+
+Falling under the umbrella of service technology is the large market of middleware platforms that evolved from messaging-oriented middleware (MOM) platforms used primarily to facilitate integration, to sophisticated service middleware platforms designed to accommodate complex service compositions.
+
+The two most common types of middleware platforms relevant to services computing are the enterprise service bus (ESB) and the orchestration platform. The ESB encompasses a range of intermediary processing features, including service brokerage, routing, and message queuing. Orchestration environments are designed to host and execute workflow logic that drives the runtime composition of services.
+
+Both forms of service middleware can be deployed and operated within cloud-based environments.
+
+### Summary of Key Points
+
+* Web-based services, such as Web services and REST services, rely on non-proprietary communications and technical interface definitions to establish standardized communications frameworks based on Web technology.
+* Service agents provide event-driven runtime processing that can be applied to numerous functional areas within clouds. Many are deployed automatically as part of operating systems and cloud-based products.
+* Service middleware, such as ESBs and orchestration platforms, can be deployed on clouds.
+
