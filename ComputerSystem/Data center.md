@@ -1,0 +1,6 @@
+A data center is a facility used to house computer systems and associated components, such as telecommunications and storage systems. It generally includes redundantor backup power supplies, redundant data communications connections, environmental controls (e.g. air conditioning, fire suppression) and various security devices. A large data center is an industrial-scale operation using as much electricity as a small town.
+
+### Requirements for modern data centers
+
+IT operations are a crucial aspect of most organizational operations around the world. One of the main concerns is business continuity; companies rely on their information systems to run their operations. If a system becomes unavailable, company operations may be impaired or stopped completely. It is necessary to provide a reliable infrastructure for IT operations, in order to minimize any chance of disruption. Information security is also a concern, and for this reason a data center has to offer a secure environment which minimizes the chances of a security breach. A data center must therefore keep high standards for assuring the integrity and functionality of its hosted computer environment. This is accomplished through redundancy of mechanical cooling and power systems (including emergency backup power generators) serving the data center along with fiber optic cables. 
+
