@@ -52,3 +52,9 @@ Security controls are countermeasures used to prevent or respond to security thr
 
 ## 6.3. Cloud Security Threats
 
+### Summary of Key Points
+
+* Traffic eavesdropping and malicious intermediary attacks are usually carried out by malicious service agents that intercept network traffic.  
+* A denial of service attack occurs when a targeted IT resource is overloaded with requests in an attempt to cripple or render it unavailable. The insufficient authorization attack occurs when access is granted to an attacker erroneously or too broadly, or when weak passwords are used.  
+* A virtualization attack exploits vulnerabilities within virtualized environments to gain unauthorized access to underlying physical hardware. Overlapping trust boundaries represent a threat whereby attackers can exploit cloud-based IT resources shared by multiple cloud consumers.  
+
