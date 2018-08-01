@@ -16,3 +16,22 @@ As the names suggest, the 'private' key should be kept strictly protected and sh
 
 ### What is a HTTPS certificate?
 
+When you request a HTTPS connection to a webpage, the website will initially send its SSL certificate to your browser. This certificate contains the public key needed to begin the secure session. Based on this initial exchange, your browser and the website then initiate the 'SSL handshake'. The SSL handshake involves the generation of shared secrets to establish a uniquely secure connection between yourself and the website.
+
+When a trusted SSL Digital Certificate is used during a HTTPS connection, users will see a padlock icon in the browser address bar. When an Extended Validation Certificate is installed on a web site, the address bar will turn green.
+
+<img src="https://www.instantssl.com/images/https-browsers.png">
+
+### Why Is an SSL Certificate Required?
+
+All communications sent over regular HTTP connections are in 'plain text' and can be read by any hacker that manages to break into the connection between your browser and the website. This presents a clear danger if the 'communication' is on an order form and includes your credit card details or social security number. With a HTTPS connection, all communications are securely encrypted. This means that even if somebody managed to break into the connection, they would not be able decrypt any of the data which passes between you and the website.
+
+### Benefits of Hypertext Transfer Protocol Secure
+
+The major benefits of a HTTPS certificate are:
+
+* Customer information, like credit card numbers, is encrypted and cannot be intercepted
+* Visitors can verify you are a registered business and that you own the domain
+* Customers are more likely to trust and complete purchases from sites that use HTTPS
+
+
