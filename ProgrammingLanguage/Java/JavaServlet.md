@@ -104,3 +104,16 @@ The following figure depicts a typical servlet life-cycle scenario.
 * The servlet container loads the servlet before invoking the service() method.  
 * Then the servlet container handles multiple requests by spawning multiple threads, each thread executing the service() method of a single instance of the servlet.  
 
+
+# Q & A
+
+##### How many objects of a servlet are created for multiple requests?
+
+Servlet is instanciated as singleton in servlet container, thats why we can't declare global variables in it.
+
+Servlets are managed resources in the servlet container, whenever a request comes for the servlet for the first time, servlet is loaded and instantiated and used for request processing.
+
+A Servlet is instantiated only once in the container, and this Servelt object is used for any further request processing, be it another 15-20 different requests, this servlet object is shared among the different requests.
+
+So is there any thing that is shared amongst requests you need to manage synchronization.
+
