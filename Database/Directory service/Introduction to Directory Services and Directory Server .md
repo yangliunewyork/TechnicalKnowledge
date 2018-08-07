@@ -22,6 +22,15 @@ Whereas the DNS server stores only two types of information: names and IP addres
 * Datastore optimized for reads : The storage mechanism in a directory service is generally designed to support a high ratio of reads to writes.
 * Extensible schema : The schema describes the type of data stored in the directory. Directory services generally support the extension of schema, meaning that new data types can be added to the directory.
 
+<img src="https://slideplayer.com/9276053/28/images/2/What+is+Directory+Service.jpg">
+
+目录服务对于网络的作用就像白页对电话系统的作用一样。目录服务将有关现实世界中的事物（如人、计算机、打印机等等）的信息存储为具有描述性属性的对象。人们可以使用该服务按名称查找对象或者像使用黄页一样，可使用它们查找服务
+
+网络上，特别是互联网中有各型各类的主机。有各种各样的资源, 这些东西杂散在网络中,，需要有一定的机制来访问这些资源,，得到相关的服务， 于是就有了目录服务。
+早期的目录服务主要是提供文件检索,，NOVELL就是广为使用的目录服务器系统；随着互联网的发展,，网站的定位又成了难题， 于是有了DNS服务,它也是典型的目录服务,即帮你做域名与IP地址之间的转换.。NETMEETING也是目录服务器的服务内容之一,，对NetMetting来说，其目录服务器主要是帮助定位用户状态信息的。
+在WINDOWS体系中，AD(活动目录)功能强大，是符合工业标准的目录服务器。在UNIX或LINUX中，也有相应的目录服务器。
+总结一下，目录服务器的主要功能是提供资源与地址的对应关系，比如你想找一台网上的共享打印机或主机时，你只需要知道名字就可以了，而不必去关心它真正的物理位置。而目录服务器帮助维护这样的资源-地址映射。
+
 ###  About Enterprise-Wide Directory Services
 
 Directory Server provides enterprise-wide directory services, meaning it provides information to a wide variety of applications. Until recently, many applications came bundled with their own proprietary user databases, with information about the users specific to that application. While a proprietary database can be convenient if you use only one application, multiple databases become an administrative burden if the databases manage the same information.
