@@ -53,3 +53,19 @@ Resource management systems typically expose APIs that allow cloud providers to 
 
 ## 9.3. SLA Management System
 
+The SLA management system mechanism represents a range of commercially available cloud management products that provide features pertaining to the administration, collection, storage, reporting, and runtime notification of SLA data.
+
+An SLA management system deployment will generally include a repository used to store and retrieve collected SLA data based on pre-defined metrics and reporting parameters. It will further rely on one or more SLA monitor mechanisms to collect the SLA data that can then be made available in near-real time to usage and administration portals to provide on-going feedback regarding active cloud services. The metrics monitored for individual cloud services are aligned with the SLA guarantees in corresponding cloud provisioning contracts.
+
+<img src="https://image.slidesharecdn.com/chapter9-141009042024-conversion-gate01/95/cloud-management-mechanisms-17-638.jpg?cb=1412828533">
+
+## 9.4. Billing Management System
+
+The billing management system mechanism is dedicated to the collection and processing of usage data as it pertains to cloud provider accounting and cloud consumer billing. Specifically, the billing management system relies on pay-per-use monitors to gather runtime usage data that is stored in a repository that the system components then draw from for billing, reporting, and invoicing purposes.
+
+<img src="https://image.slidesharecdn.com/chapter9-141009042024-conversion-gate01/95/cloud-management-mechanisms-19-638.jpg">
+
+The billing management system allows for the definition of different pricing policies, as well as custom pricing models on a per cloud consumer and/or per IT resource basis. Pricing models can vary from the traditional pay-per-use models, to flat-rate or pay-per-allocation modes, or combinations thereof.
+
+Billing arrangements be based on pre-usage and post-usage payments. The latter type can include pre-defined limits or it can be set up (with the mutual agreement of the cloud consumer) to allow for unlimited usage (and, consequently, no limit on subsequent billing). When limits are established, they are usually in the form of usage quotas. When quotas are exceeded, the billing management system can block further usage requests by cloud consumers.
+
