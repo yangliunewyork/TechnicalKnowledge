@@ -24,3 +24,5 @@ Unfortunately, the last URL cannot be easily understood by a server without some
 
 ### Platforms and Tools
 
+http://httpd.apache.org/docs/2.0/misc/rewriteguide.html
+
