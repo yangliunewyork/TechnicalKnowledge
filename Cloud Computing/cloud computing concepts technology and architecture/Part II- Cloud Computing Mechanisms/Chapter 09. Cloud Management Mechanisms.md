@@ -10,7 +10,7 @@ These systems typically provide integrated APIs and can be offered as individual
 
 ## 9.1. Remote Administration System
 
-<img src=https://github.com/Lelouch-Lamperouge-Code-Geass/TechnicalKnowledge/blob/master/Cloud%20Computing/cloud%20computing%20concepts%20technology%20and%20architecture/Pictures/Figure%209.2.png">
+<img src="https://github.com/Lelouch-Lamperouge-Code-Geass/TechnicalKnowledge/blob/master/Cloud%20Computing/cloud%20computing%20concepts%20technology%20and%20architecture/Pictures/Figure%209.2.png">
 
 The remote administration system mechanism  provides tools and user-interfaces for external cloud resource administrators to configure and administer cloud-based IT resources.
 
