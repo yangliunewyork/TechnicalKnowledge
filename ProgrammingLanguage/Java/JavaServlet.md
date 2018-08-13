@@ -117,3 +117,8 @@ A Servlet is instantiated only once in the container, and this Servelt object is
 
 So is there any thing that is shared amongst requests you need to manage synchronization.
 
+##### Why Servlets are not thread Safe?
+
+Servlets are normal java classes and thus are NOT Thread Safe.
+
+But that said, Java classes are Thread safe if you do not have instance variables. Only instance variables need to synchronize. (Instance variable are variables declared in the class and not in within its methods.
