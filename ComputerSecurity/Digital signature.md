@@ -10,3 +10,28 @@ Digital signatures employ asymmetric cryptography. In many instances they provid
 
 In this example the message is only signed and not encrypted. 1) Alice signs a message with her private key. 2) Bob can verify that Alice sent the message and that the message has not been modified.
 
+### How does a Digital Signature Work?
+
+The digital signature can be considered as a numerical value that is represented as a sequence of characters. The creation of a digital signature is a complex mathematical process that can only be created by a computer.
+
+Consider a scenario where Alice has to digitally sign a file or an email and send it to Bob.
+
+1. Alice selects the file to be digitally signed or clicks on 'sign' in her email application  
+2. The hash value of the file content or the message is calculated by Alice's computer  
+3. This hash value is encrypted with Alice's Signing Key (which is a Private Key) to create the Digital Signature.  
+4. Now, the original file or email message along with its Digital Signature are sent to Bob.  
+5. After Bob receives the signed message, the associated application (such as email application) identifies that the message has been signed. Bob's computer then proceeds to:  
+  * Decrypt the Digital Signature using Alice's Public Key
+  * Calculate the hash of the original message
+  * Compare the (a) hash it has computed from the received message with the (b) decrypted hash received with Alice's message.
+6. Any difference in the hash values would reveal tampering of the message.  
+
+<img src="https://www.instantssl.com/images/digital-signature.png">
+
+#### How do I create a Digital Signature?
+
+You can obtain a digital signature from a reputable certificate authority such as Comodo, or you can create it yourself. You need a digital certificate to digitally sign a document. However, if you create and use a self-signed certificate the recipients of your documents will not be able to verify the authenticity of your digital signature. They will have to manually trust your self-signed certificate.
+
+If you want the recipients of your documents to be able to verify the authenticity of your digital signature then you must obtain a digital certificate from a reputable CA. After downloading and installing the certificate - you will be able to use the 'Sign' and 'Encrypt' buttons on your mail client to encrypt and digitally sign your emails. This makes more sense in a business scenario, as it assures the recipient that it was genuinely sent by you and not by some impersonator.
+
+
