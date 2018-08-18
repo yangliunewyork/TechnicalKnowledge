@@ -41,4 +41,30 @@ Both hashing and asymmetrical encryption are involved in the creation of a digit
 
 ## 10.4. Public Key Infrastructure (PKI)
 
+A common approach for managing the issuance of asymmetric keys is based on the public key infrastructure (PKI) mechanism, which exists as a system of protocols, data formats, rules, and practices that enable large-scale systems to securely use public key cryptography. This system is used to associate public keys with their corresponding key owners (known as public key identification) while enabling the verification of key validity. PKIs rely on the use of digital certificates, which are digitally signed data structures that bind public keys to certificate owner identities, as well as to related information, such as validity periods. Digital certificates are usually digitally signed by a third-party certificate authority (CA).
+
+## 10.5. Identity and Access Management (IAM)
+
+The identity and access management (IAM) mechanism encompasses the components and policies necessary to control and track user identities and access privileges for IT resources, environments, and systems.
+
+Specifically, IAM mechanisms exist as systems comprised of four main components:
+
+* Authentication – Username and password combinations remain the most common forms of user authentication credentials managed by the IAM system, which also can support digital signatures, digital certificates, biometric hardware (fingerprint readers), specialized software (such as voice analysis programs), and locking user accounts to registered IP or MAC addresses.  
+* Authorization – The authorization component defines the correct granularity for access controls and oversees the relationships between identities, access control rights, and IT resource availability.  
+* User Management – Related to the administrative capabilities of the system, the user management program is responsible for creating new user identities and access groups, resetting passwords, defining password policies, and managing privileges.
+* Credential Management – The credential management system establishes identities and access control rules for defined user accounts, which mitigates the threat of insufficient authorization.  
+
+Although its objectives are similar to those of the PKI mechanism, the IAM mechanism’s scope of PKI mechanism, the IAM mechanism’s scope of implementation is distinct because its structure encompasses access controls and policies in addition to assigning specific levels of user privileges.
+
+The IAM mechanism is primarily used to counter the insufficient authorization, denial of service, and overlapping trust boundaries threats.
+
+## 10.6. Single Sign-On (SSO)
+
+Propagating the authentication and authorization information for a cloud service consumer across multiple cloud services can be a challenge, especially if numerous cloud services or cloud-based IT resources need to be invoked as part of the same overall runtime activity. The single sign-on (SSO) mechanism enables one cloud service consumer to be authenticated by a security broker, which establishes a security context that is persisted while the cloud service consumer accesses other cloud services or cloud-based IT resources. Otherwise, the cloud service consumer would need to re-authenticate itself with every subsequent request.
+
+The SSO mechanism essentially enables mutually independent cloud services and IT resources to generate and circulate runtime authentication and authorization credentials. The credentials initially provided by the cloud service consumer remain valid for the duration of a session, while its security context information is shared. The SSO mechanism’s security broker is especially useful when a cloud service consumer needs to access cloud services residing on different clouds.
+
+<img src="https://github.com/Lelouch-Lamperouge-Code-Geass/TechnicalKnowledge/blob/master/Cloud%20Computing/cloud%20computing%20concepts%20technology%20and%20architecture/Pictures/Figure%2010.9.png">
+
+Figure 10.9. A cloud service consumer provides the security broker with login credentials (1). The security broker responds with an authentication token (message with small lock symbol) upon successful authentication, which contains cloud service consumer identity information (2) that is used to automatically authenticate the cloud service consumer acoss Cloud Services A, B, and C (3).
 
