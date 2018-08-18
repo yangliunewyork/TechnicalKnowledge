@@ -68,3 +68,25 @@ The SSO mechanism essentially enables mutually independent cloud services and IT
 
 Figure 10.9. A cloud service consumer provides the security broker with login credentials (1). The security broker responds with an authentication token (message with small lock symbol) upon successful authentication, which contains cloud service consumer identity information (2) that is used to automatically authenticate the cloud service consumer acoss Cloud Services A, B, and C (3).
 
+## 10.7. Cloud-Based Security Groups
+
+<img src="https://image.slidesharecdn.com/chapter10-141009081040-conversion-gate01/95/cloud-security-mechanisms-26-638.jpg?cb=1412842480">
+
+Similar to constructing dykes and levees that separate land from water, data protection is increased by placing barriers between IT resources. Cloud resource segmentation is a process by which separate physical and virtual IT environments are created for different users and groups. For example, an organization’s WAN can be partitioned according to individual network security requirements. One network can be established with a resilient firewall for external Internet access, while a second is deployed without a firewall because its users are internal and unable to access the Internet.
+
+Resource segmentation is used to enable virtualization by allocating a variety of physical IT resources to virtual machines. It needs to be optimized for public cloud environments, since organizational trust boundaries from different cloud consumers overlap when sharing the same underlying physical IT resources.
+
+The cloud-based resource segmentation process creates cloud-based security group mechanisms that are determined through security policies. Networks are segmented into logical cloud-based security groups that form logical network perimeters. Each cloud-based IT resource is assigned to at least one logical cloud-based security group. Each logical cloud-based security group is assigned specific rules that govern the communication between the security groups.
+
+Multiple virtual servers running on the same physical server can become members of different logical cloud-based security groups. Virtual servers can further be separated into public-private groups, development-production groups, or any other designation configured by the cloud resource administrator.
+
+Cloud-based security groups delineate areas where different security measures can be applied. Properly implemented cloud-based security groups help limit unauthorized access to IT resources in the event of a security breach. This mechanism can be used to help counter the denial of service, insufficient authorization, and overlapping trust boundaries threats, and is closely related to the logical network perimeter mechanism.
+
+## 10.8. Hardened Virtual Server Images
+
+As previously discussed, a virtual server is created from a template configuration called a virtual server image (or virtual machine image). Hardening is the process of stripping unnecessary software from a system to limit potential vulnerabilities that can be exploited by attackers. Removing redundant programs, closing unnecessary server ports, and disabling unused services, internal root accounts, and guest access are all examples of hardening.
+
+A __hardened virtual server image__ is a template for virtual service instance creation that has been subjected to a hardening process. This generally results in a virtual server template that is significantly more secure than the original standard image.
+
+Hardened virtual server images help counter the denial of service, insufficient authorization, and overlapping trust boundaries threats.
+
