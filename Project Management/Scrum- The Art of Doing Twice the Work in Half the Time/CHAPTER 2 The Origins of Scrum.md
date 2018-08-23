@@ -16,6 +16,11 @@ This was the formal birth of “Scrum.” We delivered the product at Easel on s
 
 I got so excited about the possibilities of this new form of project management that all my future work focused on refining Scrum for companies. In 1995 I presented a paper with Ken Schwaber, called “SCRUM Development Process,” which codified those practices at an Association for Computing Machinery research conference. Since then we have dropped the all-caps and tweaked the idea a little bit, but the fundamental principles are the same—and those companies that embrace the process typically see immediate benefits.
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+# THE TAKEAWAY
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+* Hesitation Is Death. Observe, Orient, Decide, Act. Know where you are, assess your options, make a decision, and act!
+* Look Outward for Answers. Complex adaptive systems follow a few simple rules, which they learn from their environment.
+* Great Teams Are. They are cross-functional, autonomous, and empowered, with a transcendent purpose.
+* Don’t Guess. Plan, Do, Check, Act. Plan what you’re going to do. Do it. Check whether it did what you wanted. Act on that and change how you’re doing things. Repeat in regular cycles, and, by doing so, achieve continuous improvement.
+* Shu Ha Ri. First, learn the rules and the forms, and once you’ve mastered them, make innovations. Finally, in a heightened state of mastery, discard the forms and just be—with all the learning internalized and decisions made almost unconsciously.
+
