@@ -1,3 +1,5 @@
+https://lonesysadmin.net/2011/12/04/leave-some-ram-for-filesystem-cache/
+
 Many system administrators don’t realize it, but in most OSes RAM that’s unused by applications goes towards filesystem cache, which speeds disk operations. Some VM “right-sizing” tools don’t take this into account, and recommend pretty tight memory allocations which end up causing more disk I/O in the long term. Trading some RAM for better I/O performance is often a very good move, both for an individual VM and for the virtual environment as a whole.
 
 To understand what’s happening on a Linux VM and make a decision about how much RAM we should leave for filesystem cache we need to understand the ‘free’ command:
