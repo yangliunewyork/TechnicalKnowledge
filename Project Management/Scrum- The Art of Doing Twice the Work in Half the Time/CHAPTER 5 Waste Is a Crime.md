@@ -66,6 +66,52 @@ I’m sure you’ve had this experience yourself in your own work, and the lesso
 
 ### Working Too Hard Makes More Work
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+A lot of companies don’t practice [work-hour limits],” says Scott. “But there is a direct correlation. You get more done. You are happier. And you have higher quality.” It’s a no-brainer. Working less helps you get more done with higher quality.
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+Scott says the curve is different for different people, even for the same person at different times in their lives. “I’ve noticed as I’ve gotten older and in different roles that the peak output for me is at a lower number of hours than it was twenty years ago,” he says. Physical fitness, diet, personal issues, and other factors all play a role, he thinks. But he also believes that his output reaches its peak faster as he has grown and thought quite deeply about how to work. “I’ve been able to attack more and more important-impact opportunities.”
+
+Why is it that if you work fewer hours, you get more done? It doesn’t really seem to make sense on the face of it. Scott says that people who work too many hours start making mistakes, which, as we’ve seen, can actually take more effort to fix than to create. Overworked employees get more distracted and begin distracting others. Soon they’re making bad decisions.
+Jon Katzenbach’s instincts were right. The disturbing evidence reveals that we have a very limited capability to make decisions, and the more energy-depleted we are, and the less downtime we get, the worse we are at it.
+
+When we don’t have any energy reserves left, we’re prone to start making unsound decisions.
+
+This phenomenon has been labeled “ego depletion.” The idea is that making any choice involves an energy cost. It’s an odd sort of exhaustion—you don’t feel physically tired, but your capacity to make good decisions diminishes. What really changes is your self-control—your ability to be disciplined, thoughtful, and prescient.
+
+Scrum asks those who engage in it to break from the mind-set of measuring merely hours. Hours themselves represent a cost. Instead, measure output. Who cares how many hours someone worked on something? All that matters is how fast it’s delivered and how good it is.
+
+### Be Reasonable
+
+There are three types of waste identified by Taiichi Ohno that lead to people working harder, and for more hours, than necessary. I’ve just pointed out why that’s an incredibly bad idea, but recognizing these types of waste, which Ohno called Muri, or “Unreasonableness,” is perhaps the most powerful lever for change we can reach.
+
+The first is “Absurdity.” You want to give your team challenging goals—to push them to reach for more. But you don’t want them striving for absurd, impossible goals.
+
+The second is “Unreasonable Expectations.” How many times have you heard someone brag that through their own heroic efforts they saved a project? Usually this is greeted with backslaps, cheers, and congratulations. I see this as a fundamental flaw in the process. A team that depends on regular heroic actions to make its deadlines is not working the way it’s supposed to work. Constantly moving from one crisis to the next causes burnout, and it doesn’t allow for reasoned, continuous improvement. It’s the difference between a cowboy riding in and rescuing the girl from the bad guys and a disciplined Marine platoon clearing the kill zone.
+
+Ohno called the third type of waste “Overburden.” It’s the sort of behavior that Scott Adams regularly lampoons in his Dilbert cartoons. It includes onerous company policies that get in the way, unnecessary reporting that has people filling out forms for the sake of filling out forms, and meaningless meetings that suck up time and don’t deliver any value.
+While Ohno didn’t mention a fourth type of waste, one comes to mind—i.e., “Emotional Waste.” That type of waste is generated when a company has an asshole in its midst—someone who likes spinning up other people and putting them in a tizzy. Assholes often justify their behavior by claiming they’re simply trying to make people work better. But they’re merely indulging the negative aspects of their personality, and nothing is more undermining of a team’s ability to excel.
+
+Don’t be an asshole—and don’t allow, abet, or accept that behavior in others.
+
+### Flow
+
+In a theoretically perfect world, there would be no process, no meetings, no forms, no reporting. Instead, there’d be the creation of exactly what the customer wants, even if the customer didn’t know they wanted it yet. Any “process” that people use is wasteful, and that includes Scrum.
+
+But we don’t live in a perfect world, and bad processes are so ingrained in our thinking that, as an alternative, we need the lightest-weight process with the greatest impact on work. What Scrum does is focus us on trying to eliminate the pointless waste that seems part and parcel of work. I’ve tried to make it so that the process itself is the least disturbing framework you can have and still keep people focused.
+
+What you really want in your work is effortless “flow.” In the martial arts or in meditative practice, when you reach a sense of oneness with a motion, it is no longer an effort; it is energy effortlessly flowing through you. When you watch great dancers or singers, you sense that they’re surrendering to a force greater than themselves as they let their art move through them. Reaching that spot in our work is what we should all seek.
+
+But as the kung fu master, the monk, the dancer, or the opera star will all tell you, at the root of flow is discipline. There can be no wasted movement—nothing extraneous—just focused application of human capability. Waste is anything that distracts you from that. If you start thinking about work in terms of discipline and flow, you might just do something amazing.
+
+# THE TAKEAWAY
+
+* Multitasking Makes You Stupid. Doing more than one thing at a time makes you slower and worse at both tasks. Don’t do it. If you think this doesn’t apply to you, you’re wrong—it does.  
+* Half-Done Is Not Done. A half-built car simply ties up resources that could be used to create value or save money. Anything that’s “in process” costs money and energy without delivering anything.  
+* Do It Right the First Time. When you make a mistake, fix it right away. Stop everything else and address it. Fixing it later can take you more than twenty times longer than if you fix it now.  
+* Working Too Hard Only Makes More Work. Working long hours doesn’t get more done; it gets less done. Working too much results in fatigue, which leads to errors, which leads to having to fix the thing you just finished. Rather than work late or on the weekends, work weekdays only at a sustainable pace. And take a vacation.  
+* Don’t Be Unreasonable. Goals that are challenging are motivators; goals that are impossible are just depressing.  
+* No Heroics. If you need a hero to get things done, you have a problem. Heroic effort should be viewed as a failure of planning.  
+* Enough with the Stupid Policies. Any policy that seems ridiculous likely is. Stupid forms, stupid meetings, stupid approvals, stupid standards are just that—stupid. If your office seems like a Dilbert cartoon, fix it.  
+* No Assholes. Don’t be one, and don’t allow the behavior. Anyone who causes emotional chaos, inspires fear or dread, or demeans or diminishes people needs to be stopped cold.  
+* Strive for Flow. Choose the smoothest, most trouble-free way to get things done. Scrum is about enabling the most flow possible.  
+
+
