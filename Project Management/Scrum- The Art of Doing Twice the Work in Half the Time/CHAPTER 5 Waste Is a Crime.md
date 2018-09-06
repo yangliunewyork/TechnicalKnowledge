@@ -38,6 +38,34 @@ Some research has actually been done that shows that multitasking not only waste
 
 ### Half Done Isn’t Done at All
 
+As I’ve mentioned, Scrum takes a lot of its thinking from the Japanese manufacturing model that was codified in the classic book Toyota Production System by Taiichi Ohno. In the United States this model has been interpreted as “Lean” manufacturing. Basically, the idea is to eliminate as much waste as possible on the factory floor. Now, most of us aren’t looking to improve flow through an automobile plant, but some of the ideas are applicable to any kind of work at all.
+
+One idea I want to address here is called “Work in Process,” or sometimes just “inventory.” The idea is that it’s wasteful to have a bunch of stuff lying around that isn’t being used to build something. That stuff, whether it be car doors or widgets, actually costs money, and if it’s sitting around on the factory floor, it means that huge amounts of money are bound up in inventory that isn’t actually needed right then. This changes how you look at things that are in process. If, for example, all an auto company has is a bunch of half-built cars, it has expended a lot of money and effort but hasn’t created anything of real value. In Lean manufacturing, the idea is to minimize the amount of half-built stuff lying around.
+
+As I’ve said, in Scrum there is a rhythm to the work. Every iteration, or Sprint, the team tries to get a number of things done. But that “Done” implies a complete, deliverable product that can be used by a customer. If something is half done at the end of the Sprint, you’re worse off than if you hadn’t started at all. You’ve expended resources, effort, and time and gotten nothing to a deliverable state. You have a half-constructed car. It might have been better to create something smaller—something that really works.
+
+Jobs that aren’t done and products that aren’t being used are two aspects of the same thing: invested effort with no positive outcome. Don’t do it.
+
+### Do It Right the First Time
+
+In a Toyota plant when a problem shows up on the line, every worker has the ability to stop the whole line. When that happens, everyone swarms around where the line stopped—not to yell at the guy for stopping the line, but to fix whatever problem is there. They don’t want any cars coming out the other end with things that have to be fixed. They fix the problem once, and it’s solved forever. If they don’t, that same defect could go into hundreds of vehicles.
+
+At European luxury-car makers there was a different way of doing things. At the end of the production line were dozens of people in white lab coats going around fixing all the problems. They made sure the car door had that BMW clunk when the door closed, or the engine purred with exactly the right tone. They made sure all the parts meshed together properly. They viewed themselves not as manufacturers but as craftsmen, artisans making a thing of beauty. That’s great when you’re making a few cars, but when you’re making millions, those costs add up. As Womack reports in his book:
+
+> … the German plant was expending more effort to fix the problems it had just created than the Japanese plant required to make a nearly perfect car the first time.
+
+You read that right. The Germans spent more time fixing a car they’d just made than the Japanese did making one in the first place. There’s a reason Toyota became the number one car manufacturer on the planet. They did it right the first time.
+
+But we don’t always do things perfectly the first time. We’re human; we make mistakes. How you deal with those mistakes can have an extraordinary impact on how fast you can get things done, and at what level of quality. At Toyota, as I said, every worker in the factory can stop the line. The idea is that the process is being continuously improved, and that the right moment to fix a problem is when it is observed, not after the fact.
+
+It took twenty-four times longer. If a bug was addressed on the day it was created, it would take an hour to fix; three weeks later, it would take twenty-four hours. It didn’t even matter if the bug was big or small, complicated or simple—it always took twenty-four times longer three weeks later. As you can imagine, every software developer in the company was soon required to test and fix their code on the same day.
+
+The human mind has limits. We can only remember so many things; we can really only concentrate on one thing at a time. This tendency—for the process of fixing things to get harder as more time elapses—represents a similar limitation. When you’re working on a project, there’s a whole mind space that you create around it. You know all the different reasons why something is being done. You’re holding a pretty complicated construct in your head. Re-creating that construct a week later is hard. You have to remember all the factors that you were considering when you made that choice. You have to re-create the thought process that led you to that decision. You have to become your past self again, put yourself back inside a mind that no longer exists. Doing that takes time. A long time. Twenty-four times as long as it would take if you had fixed the problem when you first discovered it.
+
+I’m sure you’ve had this experience yourself in your own work, and the lesson is one you were probably taught as a child: Do things right the first time. The only thing the data now adds is that if you do make a mistake—and we all make them—fix it as soon as you notice it. If you don’t, you’ll pay for it.
+
+### Working Too Hard Makes More Work
+
 Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
 
 Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
