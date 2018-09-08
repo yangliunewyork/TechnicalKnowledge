@@ -33,3 +33,35 @@ The other well-known problem is what’s called the “halo effect.” This is w
 > 晕轮效应又称“光环效应”，属于心理学范畴，是指当认知者对一个人的某种特征形成好或坏的印象后，他还倾向于据此推论该人其他方面的特征。本质上是一种以偏概全的认知上的偏误。晕轮效应愈来愈多地被应用在企业管理上，其对组织管理的负面影响主要是体现在各种组织决策上。
 
 ### Planning Poker
+
+So the advantage of Delphi is that it takes a broad array of opinions, attempts to remove as much bias as possible, and with informed, yet anonymous, statements narrows down opinions into a generally accepted estimate. The bad part, for our purposes, is that it takes a long time. When I sat down with the teams at Medco, I didn’t spend any time with anonymous surveys. I wanted all those hundreds of items estimated within hours, not days, and certainly not weeks.
+
+Fortunately, there is a way of gathering estimates that is fairly quick and accurate. It’s called “Planning Poker.”
+
+The idea is simple. Each person has a deck of cards with those oh-so-interesting Fibonacci numbers on them—1, 3, 5, 8, 13, and so on. Each item that needs to be estimated is brought to the table. Then everyone pulls the card they think represents the right amount of effort and puts it facedown on the table. At the same time everyone flips the cards over. If everyone is within two cards of each other (say a five, two eights, and a thirteen), the team just adds them all up and takes the average (in that case 6.6) and moves on to the next item. Remember, we’re talking estimates, not ironbound schedules. And estimates on small pieces of the project.
+
+If people are more than three cards apart, then the high and the low cards talk about why they think what they do. Then everyone does another round of Planning Poker. Otherwise they just average the estimates, which will approximate the numbers that the statisticians at the Rand Corporation came up with.
+
+This incredibly simple method is a way to avoid any kind of anchoring behavior, such as the bandwagon or halo effects, and it allows the whole team to share knowledge on a particular task. It’s crucial, though, that you have the team who’s actually doing the work do the estimating, not some expert “ideal” estimators.
+
+What I took away from that was that only the people doing the work know how long and how much effort it will take. Maybe their team is really good at one kind of thing but terrible at another. Maybe they have one expert who can be helpful in a particular area, but no one on the team knows about a different area. Teams, as I’ve discussed before, are individual and unique. Each has its own pace and rhythm. Forcing them into cookie-cutter processes is a recipe for disaster.
+
+### There Are No Tasks; There Are Only Stories
+
+How many times at work have you been given a job where you don’t understand the reason you’re doing it? Someone asks you to determine how much sales changed from month to month in Region A, looking at stores with more than 600 square feet. You do it, but you don’t know why it needs to be done. And because of that, you might provide the wrong kind of data, you might misinterpret the question, or you might just get resentful at being given a bunch of what seems like busywork. Or if you’re the manager, you might be astounded that your people don’t understand immediately that you’re looking at closing down small stores and opening up big ones.
+
+The problem is that you’re not getting, or giving, enough information to actually do the job right. People think in narratives, in stories. That’s how we understand the world. We have an intimate grasp of characters, desires, and motivations. Where we get into trouble is when we try to abstract out of the main through-line discrete parts and deal with them out of context.
+
+So the first thing you want to think about when you’re considering a task is character or role—for example, a customer, a bride, a reader, an employee. Who is this task being done for? Whose lens on the world is the one we need to gaze through when we’re building this thing, making that decision, or delivering this piece?
+
+Then you need to think of the what—what we want done in the first place. This is usually where we start and stop. But it’s only the middle of the process we should be following.
+
+Finally, you need to think of motivation. Why does this character want this thing? How is it going to serve and delight this particular customer? And, in a way, this is the key part. Motivation colors everything.
+
+Often, needs will change with different characters. Imagine, for example, a story with the back two-thirds: “…  I want a car so that I can drive to work.” Now, if you start that sentence with “As a suburban commuter …” versus “As a farmer in the South Dakota Badlands … ,” you are going to end up with a very different interpretation of what the ideal vehicle is.
+
+So before you prioritize what needs to be done for your business, you need to define the character, the user, the customer—the person who’s going to use what you’re going to do. You need to know their likes, dislikes, passions, enthusiasms, frustrations, and joys. And then you need to understand their motivations. How do those character types feed what they want? Why do they need a car? What are they going to do with that captain’s log?
+
+This will also influence how you’ll estimate things. Oh, they want a simple calendar function; that’s easy. An unalterable time stamp for legal purposes—that’s a bit trickier.
+
+### Write Short Stories
