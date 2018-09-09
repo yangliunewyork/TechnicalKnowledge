@@ -65,3 +65,39 @@ So before you prioritize what needs to be done for your business, you need to de
 This will also influence how you’ll estimate things. Oh, they want a simple calendar function; that’s easy. An unalterable time stamp for legal purposes—that’s a bit trickier.
 
 ### Write Short Stories
+
+When you’re writing your stories, though, you want to make sure that they’re small enough that you can actually estimate them. Imagine the story about Amazon.com: As a customer, I want the world’s biggest online bookseller so that I can buy any book I want at any time I want. Now, that certainly encapsulates Amazon, but it’s really too big to actually do anything with. You need to break it down. Really down.
+
+You might write stories like these for an online bookstore:
+
+“As a customer, I want to be able to browse books by genre, so that I can find the type of books I like.”
+
+“As a customer, I want to put a book into a shopping cart, so that I can buy it.”
+
+“As a product manager, I want to be able to track a customer’s purchases, so that I can market specific books to her based on past purchases.”
+
+Those stories are ones that a team can wrap its head around. A discussion can actually ensue about how to implement them. They’re specific enough to be actionable but don’t prescribe how they’re going to be done. Remember, the team decides how the work will be accomplished, but what will be accomplished is decided by business value. The whole collection of stories that might make up that idea of an online bookstore is often referred to as an “Epic”—a story too big to do by itself but that includes a number of smaller stories that add up to a single idea.
+
+### Be Ready and Be Done
+
+When you’re writing stories or making a list of work to be done, it’s important to ask two questions: Is the story ready? And how will you know when it’s done?
+
+Let’s take Tim’s story as an example:
+
+As a Special Forces medic, I must teach basic physiology to my students, so they can understand the human body.
+
+There is a mnemonic I always use to tell whether a story is ready. It was created by Bill Wake, who’s a deep thinker on software design. Bill says that for any story to be ready it needs to meet the INVEST criteria:
+
+* Independent. The story must be actionable and “completable” on its own. It shouldn’t be inherently dependent on another story.  
+* Negotiable. Until it’s actually being done, it needs to be able to be rewritten. Allowance for change is built in.  
+* Valuable. It actually delivers value to a customer or user or stakeholder.  
+* Estimable. You have to be able to size it.  
+* Small. The story needs to be small enough to be able to estimate and plan for easily. If it is too big, rewrite it or break it down into smaller stories.  
+* Testable. The story must have a test it is supposed to pass in order to be complete. Write the test before you do the story.  
+
+For each story pursued there should be both a “definition of Ready” (as in “Does it meet the INVEST criteria?”) and finally “a definition of Done” (as in “What conditions need to be met, what tests need to be passed, to call it a wrap?”). We find in real projects that if stories are really Ready, the team will double the speed of implementation. And if the stories are really Done at the end of a Sprint, teams can double speed again. This is one of the tricks needed to get twice as much work done in half the time.
+
+### Sprint Planning
+
+
+
