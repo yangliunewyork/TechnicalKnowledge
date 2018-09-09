@@ -99,5 +99,25 @@ For each story pursued there should be both a “definition of Ready” (as in �
 
 ### Sprint Planning
 
+In Scrum this kind of planning happens with each and every Sprint at what is called the “Sprint Planning” meeting. Everyone gets together and looks at the list of stories that have to be done and says, “Okay, what can we accomplish at this Sprint? Are these stories ready? Can they be done by the end of this iteration? Can we then demo them to the customer and show real value?” The key to answering those questions lies in just how fast the team is going.
 
+### Know Your Velocity
+
+We can finally start answering the question as to when things will be done, because we now know how to measure what the team is actually doing. We have all these stories—these things that need to be done. And we’ve estimated them—this one is an eight, this one a three, and so on. And then we start on our first Sprint. Let’s say it’s a week long. At the end of the week we count up all the stories we’ve completed, total the points they were estimated at, and that number tells us how fast the team is going, their velocity. And once you have a velocity, you can look at how many stories you have left and how many points they represent, and then you know when you’ll be done.
+
+Also once you have your velocity, you can figure out the most important thing in Scrum: what is keeping you from going faster? What is keeping you from accelerating? In the last chapter I talked about waste, about the things that will slow you down. This is how you see if you really are getting rid of waste.
+
+They wouldn’t have allowed us to do it enterprise wide. But we had the confidence of the entire organization: Development, Operations, Finance, Clinical. We were able to make a new culture.” And that, he says, is the most important part of Scrum: it changes the culture people work in, which can be scary for some. Indeed, the company had to get rid of employees who couldn’t make the switch, he says—not because they were incompetent, but because they were hoarding information and knowledge for their own benefit, to ensure their own indispensability rather than helping the team and the company. Changing that culture, though, is what allows true excellence to emerge.
+
+# THE TAKEAWAY
+
+* The Map Is Not the Terrain. Don’t fall in love with your plan. It’s almost certainly wrong.  
+* Only Plan What You Need To. Don’t try to project everything out years in advance. Just plan enough to keep your teams busy.  
+* What Kind of Dog Is It? Don’t estimate in absolute terms like hours—it’s been proven that humans are terrible at that. Size things relatively, by what breed of dog the problem is, or T-shirt size (S, M, L, XL, XXL), or, more commonly, the Fibonacci sequence.  
+* Ask the Oracle. Use a blind technique, like the Delphi method, to avoid anchoring biases such as the halo effect or bandwagon effect or just plain stupid groupthink.  
+* Plan with Poker. Use Planning Poker to quickly estimate work that needs to be done.  
+* Work Is a Story. Think first about who’ll be getting value from something, then about what it is, and then why they need it. Humans think in narratives, so give them one. As an X, I want Y, so that Z.    
+* Know Your Velocity. Every team should know exactly how much work they can get done in each Sprint. And they should know how much they can improve that velocity by working smarter and removing barriers that are slowing them down.    
+* Velocity × Time = Delivery. Once you know how fast you’re going, you’ll know how soon you’ll get there.  
+* Set Audacious Goals. With Scrum it is not that hard to double production or cut delivery time in half. If you do it in the right way, your revenue and stock price should double as well.  
 
