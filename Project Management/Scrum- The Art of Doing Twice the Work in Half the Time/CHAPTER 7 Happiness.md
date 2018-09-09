@@ -26,3 +26,30 @@ I’m going to give you a tool kit to measure your happiness and the happiness o
 
 ### Quantifying Happiness
 
+How do we make ourselves, our employees, and our fellow team members happy? How do we channel that happiness into greater productivity and revenue?
+
+To answer those questions, I need to take you back to Toyota and Taiichi Ohno’s crusade to eliminate waste. That goal led him to the idea of “continuous improvement.” It isn’t enough to reach a certain level of productivity and stay there; the idea is to constantly examine your processes so as to improve them constantly and forever. Perfection can never be reached, of course, but every increment in that direction counts.
+
+Just as work needs to be broken down into manageable chunks and time needs to be broken down into manageable pieces, improvement needs to be sliced to a step at a time. In Japanese the word used is kaizen, or “improvement.” What is the little improvement that can be done right away that will make things better?
+
+In Scrum this is captured at the end of each Sprint in what I call the “Sprint Retrospective.” After the team has shown what they’ve accomplished during the last Sprint—that thing that is “Done” and can potentially be shipped to customers for feedback—they sit down and think about what went right, what could have gone better, and what can be made better in the next Sprint. What is the improvement in the process that they, as a team, can implement right away?
+
+To be effective, this meeting requires a certain amount of emotional maturity and an atmosphere of trust. The key thing to remember is that you’re not seeking someone to blame; you’re looking at the process. Why did that happen that way? Why did we miss that? What could make us faster? It is crucial that people as a team take responsibility for their process and outcomes, and seek solutions as a team. At the same time, people have to have the fortitude to bring up the issues that are really bothering them in a way that is solution oriented rather than accusatory. And the rest of the team has to have the maturity to hear the feedback, take it in, and look for a solution rather than get defensive.
+
+The Retrospective meeting is the “Check” part of Deming’s Plan-Do-Check-Act cycle. The key is getting to that “Act” step, that kaizen, which will actually change the process and make it better the next time. It’s not good enough merely to share how you feel; you need to be able to act.
+
+The best way I’ve found to capture all this is with what I call the “Happiness Metric.” It’s a simple but very effective way of getting at what the kaizen should be, but also which kaizen will make people the happiest. And I’ve used it with pretty remarkable results.
+
+Here’s how it works. At the end of each Sprint each person on the team answers just a few questions:”
+
+1. On a scale from 1 to 5, how do you feel about your role in the company?  
+2. On the same scale, how do you feel about the company as a whole?  
+3. Why do you feel that way?  
+4. What one thing would make you happier in the next Sprint?  
+
+That’s it. It can be done in just a few minutes. Every person on the team takes a turn, and it sparks really insightful conversations. Together the team usually comes up with a kaizen quite quickly. The method exposes what is most important to each team member, and what they think is most important for the company.
+
+And here’s the crucial piece. The team takes that one top improvement and makes it the most important thing to do in the next Sprint—with acceptance tests. How can you prove you’ve made that improvement? You need to define what success is in a concrete, actionable way, so that in the next Sprint Retrospective it’s really easy to see if you achieved the kaizen.
+
+### Make Everything Visible
+
