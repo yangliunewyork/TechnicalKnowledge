@@ -75,20 +75,47 @@ That’s what Zappos wants, what any company should want. It’s what I want. I 
 
 ### Pop the Happy Bubble
 
+The Harvard Business Review focused its entire 2012 January–February issue on happiness. What they found was
+
+> … that the only route to employee happiness that also benefits shareholders is through a sense of fulfillment resulting from an important job done well. We should aspire not just to make employees “happy,” but to do so by helping them achieve great things. In short, we should earn our employees’ passionate advocacy for the company’s mission and success by helping them earn the passionate advocacy of customers.
+
+What these “thrivers” share is what I’ve been writing about throughout this chapter—each thriver is vital and passionate, and each is trying to perfect their craft, whether they belong to an airplane crew or are a busboy in a restaurant. What can companies do to create an atmosphere in which people thrive? Managers can encourage autonomy by letting people make their own decisions about their job. And they can make sure that employees know everything that’s going on, because, as they put it, “Doing your job in an information vacuum is tedious and uninspiring.” Managers should also have zero tolerance for incivility and never allow an employee to poison corporate culture through abuse or disrespect. And, finally, they should give quick and direct feedback.
+
+Scrum gives people all those things. It’s set up to make them happen, especially the direct feedback, which happens every day in the Daily Stand-up meeting, and which is what the Sprint Retrospective and the Happiness Metric are designed to illuminate.
+
+There’s one caution I’d like to lay out, though. It’s possible—heck, it happens often enough that I’ve spent significant time studying it—for a “happy bubble” to develop. This usually happens after a team has achieved some big success or increased their productivity greatly by using Scrum. They’ve self-organized, and they feel proud of their progress. And that’s when complacency can set in. They say to themselves, Hey, we’ve improved so much, we don’t need to improve any more. They hit a productivity plateau and pretty soon thereafter cease to do great work. But they’re good enough that, for a time, they live in this happy bubble that insulates them from unpleasant truths. They don’t realize that continuous improvement means just that: it never, ever stops. When I was a fighter pilot we used to say after three thousand hours in the cockpit you need to quit because you become complacent, and that could kill you. While a complacent team might be less risky in business, ongoing team performance is at risk.
+
+### Happy Today, Happy Tomorrow
+
+The first type, the “Hedonist,” is someone who is doing what makes them happy right now. Tomorrow? Let tomorrow worry about tomorrow. I’ll just enjoy today. I see this kind of behavior a lot in start-ups: a bunch of people in the figurative garage just making stuff, because it’s cool and it’s fun. But there isn’t a lot of attention paid to creating a sustainable product. Very little mental energy is channeled into how this thing will be working in a month, let alone a year down the road.
+
+And what usually happens is that the investors in these guys get worried. So they hire a bunch of managers to ride herd on the hackers. And, suddenly, the hackers find that the world they enjoyed so much now sucks. There are now all sorts of rules and tests and reports. It sucks today, and they think it will suck forever. Call them now the “Nihilists.”
+
+Then there are the guys who were brought in to run the place. They’re the ones willing to put in eighty-hour weeks (and willing to whip others to do so), because they think they’ll get promoted later, and they’ll be happier. Of course, when they do get promoted, they just have a new set of headaches to contend with that require more time. They enjoy the rat race.
+
+The fourth type of person is the one that Scrum tries to identify and encourage—the individual who is working at stuff that is fun today but has an eye toward a better future and who is convinced it will be fun forever. This sort of person rarely experiences burnout or disillusionment. He’s spared the negative feelings toward work suffered by the hedonists, the nihilists, and the rat-race-addicted managers who strive to make everybody toe the line.
+
+What Scrum does is promote a single, galvanizing mind-set. By having everyone work together, the team helps the hedonist look ahead, convinces the nihilist there is a future without whining, and tells those managers stuck in an unending rat race that there actually is a better way.
+
+That’s why I implemented the Happiness Metric in my company. It helps the team help its members become better people. It removes the causes of unhappiness systematically, carefully, and incrementally. It empowers people to change themselves and attaches an incentive to doing so.
+
+Remember the Fundamental Attribution Error? When you’re surrounded by assholes, don’t look for bad people; look for bad systems that reward them for acting that way. Then you use the Happiness Metric to fix it.
+
+In high school or college many of us studied the American psychologist Abraham Maslow’s “hierarchy of needs.” It laid out, in pyramid form, the needs that humans take care of first and then those that become more pressing as lower ones are satisfied. At the pyramid’s base are physiological needs: air, water, food, clothing, and shelter. If we don’t have those, we can’t even begin to think about anything else. The next layer is safety—not just physical and financial, but also the assurance of good health. It’s important to have some access to medical care. Interestingly, many people stop there, even though the next layer holds what we absolutely need as humans but that society often ignores: love and belonging—that connectedness Zappos talks about. Above that is the need for self-esteem and respect from others. And at the pyramid’s very top is the need to achieve one’s full potential.
+
+It’s that top layer that Maslow was most interested in, and that Scrum focuses on: helping people achieve personal growth and fulfillment. People high up on that pyramid are not only happier and more fulfilled, they’re more effective and innovative. And they’re able to deliver greatness.
+
+“It’s not enough just to be happy. Happiness needs to be harnessed to produce results. All the elements of Scrum come together to help a person do just that. The real trick? Priorities. 
 
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+### THE TAKEAWAY
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+* It’s the Journey, Not the Destination. True happiness is found in the process, not the result. Often we only reward results, but what we really want to reward is people striving toward greatness.   
+* Happy Is the New Black. It helps you make smarter decisions. Plus, when you’re happy, you’re more creative, less likely to leave your job, and more likely to accomplish far more than you ever anticipated.   
+* Quantify Happiness. It’s not enough just to feel good; you need to measure that feeling and compare it to actual performance. Other metrics look backward. Happiness is a future-looking metric.    
+* Get Better Every Day—and Measure It. At the end of each Sprint, the team should pick one small improvement, or kaizen, that will make them happier. And that should become the most important thing they’ll accomplish in the next Sprint.    
+* Secrecy Is Poison. Nothing should be secret. Everyone should know everything, and that includes salaries and financials. Obfuscation only serves people who serve themselves.    
+* “Make Work Visible. Have a board that shows all the work that needs to be done, what is being worked on, and what is actually done. Everyone should see it, and everyone should update it every day.  
+* Happiness Is Autonomy, Mastery, and Purpose. Everyone wants to control their own destiny, get better at what they do, and serve a purpose greater than themselves.  
+* Pop the Happy Bubble. Don’t get so happy that you start believing your own bullshit. Make sure happiness is measured against performance, and if there is a disconnect, be prepared to act. Complacency is the enemy of success.  
 
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
-
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
-
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
-
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
-
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
-
-Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
