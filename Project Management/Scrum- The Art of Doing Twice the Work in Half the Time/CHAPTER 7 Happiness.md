@@ -53,3 +53,42 @@ And here’s the crucial piece. The team takes that one top improvement and make
 
 ### Make Everything Visible
 
+What are the things that actually make people happy? They’re the same things that make great teams: autonomy, mastery, and purpose. Or to say it more expansively, it’s the ability to control your own destiny, it’s the feeling that you’re getting better at something, and it’s knowing that you’re serving something bigger than yourself. But there are also some easy, concrete steps management can take to get the culture of the company to encourage those qualities.
+
+One element of Scrum that’s often a prelude to achieving autonomy, mastery, and purpose is transparency. The idea is that there should be no secret cabal, no hidden agendas, nothing behind the curtain. Far too often in a company it isn’t really clear what everyone is working on, or how each person’s daily activity advances the goals of the company.
+
+As I’ve said before, I’m not very interested in individual performance; I’m only interested in team performance. I can double a team’s productivity in a month, but an individual? That could take a year. And a whole bunch of individuals? A whole division? A whole company? That could take forever. So I use transparency to focus on improving the team. I find that the team itself usually can address individual performance issues. They actually know what people are doing, who is helping, who is hurting, who makes the team great, and who makes it painful.
+
+Now, there is software out there that can measure all sorts of things, give you all sorts of metrics and analysis, but a Scrum board is just a bunch of sticky notes on a whiteboard. There are three task-status levels: To Do, Doing, and Done. When someone signs out a story, everyone knows who’s working on it. And everyone knows when it’s done. And because the board has sticky notes that represent everything that needs to be done in a single Sprint, everyone knows how the Sprint is going. Anyone can walk into the room, glance at the board, and know exactly how the team is doing.
+
+Because the team knows what has been done and what still needs to be done, they can regulate themselves. They know what they have to do, they can see if a colleague is in trouble, if a story has been in the Doing column too long. The team can self-organize to defeat problems that become obvious once everything is transparent.
+
+### Delivering Happiness
+
+In talking to executives at Zappos, one of the words you hear a lot is connection. Their research shows that the more connected people are to other people at work, the happier they are—and, apparently, the more productive and innovative as well. So the company execs have set out deliberately to create these connections—not only on one team, or in one department, but across the whole company. And not just between people at one level, but between different levels, everyone from VPs to Accounts Receivable clerks.
+
+Another way that Zappos keeps people happy is by giving employees a chance to learn and grow. The company almost always prefers to hire internally. Say a job in HR is posted, and someone in accounting, who has always thought he might like that kind of work, sees it. That person who is curious about HR might then be brought into an “apprenticeship.” It gives the employee the chance to see if he really does like that work, and it gives the manager a chance to see if he’d make a good fit with the team. The company also offers free classes taught by other employees—Finance 101, Coding for Beginners, whatever. Zappos wants people to grow at and within the company.
+
+As I mentioned in chapter three, on teams, people want to grow; they want to get better at what they’re doing and find what else they can get better at. The idea is that mastering work motivates people. Giving people the chance to find out where they fit helps Zappos keep employees happy, excited, and engaged.
+
+That’s what Zappos wants, what any company should want. It’s what I want. I want people to love coming to work. It’s a change in mind-set. From working for a company to working with my company. 
+
+### Pop the Happy Bubble
+
+
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
+
+Excerpt From: Jeff Sutherland. “Scrum.” iBooks. 
