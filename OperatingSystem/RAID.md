@@ -2,6 +2,34 @@ RAID (Redundant Array of Independent Disks, originally Redundant Array of Inexpe
 
 Data is distributed across the drives in one of several ways, referred to as RAID levels, depending on the required level of redundancy and performance. The different schemes, or data distribution layouts, are named by the word "RAID" followed by a number, for example RAID 0 or RAID 1. Each scheme, or RAID level, provides a different balance among the key goals: reliability, availability, performance, and capacity. RAID levels greater than RAID 0 provide protection against unrecoverable sector read errors, as well as against failures of whole physical drives.
 
+### Data striping
+
+In computer data storage, data striping is the technique of segmenting logically sequential data, such as a file, so that consecutive segments are stored on different physical storage devices.
+
+Striping is useful when a processing device requests data more quickly than a single storage device can provide it. By spreading segments across multiple devices which can be accessed concurrently, total data throughput is increased. It is also a useful method for balancing I/O load across an array of disks. Striping is used across disk drives in redundant array of independent disks (RAID) storage, network interface controllers, different computers in clustered file systems and grid-oriented storage, and RAM in some systems.
+
+<img src="http://www.maxtronic.com/images/stories/Product/RAID-Level/raid-0.png">
+
+##### Advantages and disadvantages
+
+Advantages of striping include performance and throughput. Sequential time interleaving of data accesses allows the lesser data access throughput of each storage devices to be cumulatively multiplied by the number of storage devices employed. Increased throughput allows the data processing device to continue its work without interruption, and thereby finish its procedures more quickly. This is manifested in improved performance of the data processing.
+
+Because different segments of data are kept on different storage devices, the failure of one device causes the corruption of the full data sequence. In effect, the failure rate of the array of storage devices is equal to the sum of the failure rate of each storage device. This disadvantage of striping can be overcome by the storage of redundant information, such as parity, for the purpose of error correction. In such a system, the disadvantage is overcome at the cost of requiring extra storage.
+
+### Disk mirroring
+
+<img src="http://cottagedata.com/sysadmin/raid/raid1_1.jpg">
+
+In data storage, disk mirroring is the replication of logical disk volumes onto separate physical hard disks in real time to ensure continuous availability. It is most commonly used in RAID 1. A mirrored volume is a complete logical representation of separate volume copies.
+
+In a disaster recovery context, mirroring data over long distance is referred to as storage replication. Depending on the technologies used, replication can be performed synchronously, asynchronously, semi-synchronously, or point-in-time. Replication is enabled via microcode on the disk array controller or via server software. It is typically a proprietary solution, not compatible between various data storage device vendors.
+
+Mirroring is typically only synchronous. Synchronous writing typically achieves a recovery point objective (RPO) of zero lost data. Asynchronous replication can achieve an RPO of just a few seconds while the remaining methodologies provide an RPO of a few minutes to perhaps several hours.
+
+Disk mirroring differs from file shadowing that operates on the file level, and disk snapshots where data images are never re-synced with their origins.
+
+
+
 ### What Is A RAID?
 
 RAID set-ups are software and hardware systems that are capable of  writing or reading data to and from numerous hard drives, in a modern  system various levels of RAID systems may be nested or joined to provide  more data redundancy & integrity or for more read/write speed, The  level of a RAID is consistently indicated with a number from 0-6 for  example RAID 0 or RAID 1 an instance of a nested RAID would be RAID 1+0  the 1 means a RAID 1 and the 0 means a RAID 0.
