@@ -55,9 +55,3 @@ There is a growing list of emergent behaviors we have come to expect with Kanban
 * Kanban is acting as a permission giver in the software development profession, encouraging teams to devise context-specific process solutions rather than dogmatically following a software development lifecycle process definition or template.  
 
 
-
-Excerpt From: Anderson, David J. “Kanban: Successful Evolutionary Change for Your Technology Business.” iBooks. 
-
-Excerpt From: Anderson, David J. “Kanban: Successful Evolutionary Change for Your Technology Business.” iBooks. 
-
-
