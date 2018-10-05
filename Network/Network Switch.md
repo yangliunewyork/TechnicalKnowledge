@@ -2,7 +2,9 @@ A network switch (also called switching hub, bridging hub, officially MAC bridge
 
 A network switch is a multiport network bridge that uses hardware addresses to process and forward data at the data link layer (layer 2) of the OSI model. Some switches can also process data at the network layer (layer 3) by additionally incorporating routing functionality that most commonly uses IP addresses to perform packet forwarding; such switches are commonly known as layer-3 switches or multilayer switches.
 
-# Router vs Switch
+# Router vs Switch vs Hub
+
+<img src="https://www.oreilly.com/library/view/packet-guide-to/9781449311315/assets/pgrs_0406.png">
 
 ##### What is a Router?
 
