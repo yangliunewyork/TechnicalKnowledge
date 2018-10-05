@@ -1,0 +1,3 @@
+In computing, a system image is a serialized copy of the entire state of a computer system stored in some non-volatile form such as a file. A system is said to be capable of using system images if it can be shut down and later restored to exactly the same state. In such cases, system images can be used for backup.
+
+If a system has all its state written to a disk, then a system image can be produced by simply copying that disk to a file elsewhere, often with disk cloning applications. On many systems a complete system image cannot be created by a disk cloning program running within that system because information can be held outside of disks and volatile memory, for example in non-volatile memory like boot ROMs.
