@@ -1,3 +1,5 @@
+<img src="https://slideplayer.com/slide/6620225/23/images/35/File+System+Mounting+%28p406%29.jpg">
+
 Mounting is a process by which the operating system makes files and directories on a storage device (such as hard drive, CD-ROM, or network share) available for users to access via the computer's file system.
 
 In general, the process of mounting comprises operating system acquiring access to the storage medium; recognizing, reading, processing file system structure and metadata on it; before registering them to the virtual file system (VFS) component.
